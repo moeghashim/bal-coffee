@@ -1,11 +1,14 @@
 :root {
   --cream: #f4efe6;
   --cream-2: #ebe3d4;
+  --cream-3: #faf6ef;
   --ink: #2a1f17;
   --ink-2: #4a3a2c;
   --ink-soft: #6b5a48;
-  --terra: #b8653a;
-  --terra-deep: #8f4a26;
+  --terra: #c1583a;
+  --terra-deep: #a3472d;
+  --olive: #4d4d33;
+  --olive-deep: #3d3d28;
   --line: rgba(42, 31, 23, 0.18);
   --line-soft: rgba(42, 31, 23, 0.09);
   --paper-grain: rgba(42, 31, 23, 0.03);
@@ -29,20 +32,6 @@ body {
   color: var(--ink);
   font-family: var(--font-inter-tight);
   -webkit-font-smoothing: antialiased;
-}
-
-body {
-  background-image:
-    radial-gradient(
-      1200px 600px at 80% -10%,
-      rgba(184, 101, 58, 0.06),
-      transparent 60%
-    ),
-    radial-gradient(
-      900px 500px at -10% 60%,
-      rgba(42, 31, 23, 0.04),
-      transparent 60%
-    );
 }
 
 .serif {
@@ -69,13 +58,17 @@ a {
   text-decoration: none;
 }
 
+input {
+  font-family: inherit;
+}
+
 .grain {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 9000;
   mix-blend-mode: multiply;
-  opacity: 0.35;
+  opacity: 0.25;
 }
 .grain svg {
   width: 100%;
@@ -99,20 +92,6 @@ a {
   color: var(--cream);
 }
 
-@keyframes scrollPulse {
-  0%,
-  100% {
-    transform: scaleY(1);
-    opacity: 1;
-    transform-origin: top;
-  }
-  50% {
-    transform: scaleY(0.3);
-    opacity: 0.5;
-    transform-origin: top;
-  }
-}
-
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -121,14 +100,5 @@ a {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-33.333%);
   }
 }
