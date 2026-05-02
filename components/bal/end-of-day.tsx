@@ -207,7 +207,7 @@ export function EndOfDay() {
       style={{
         position: "relative",
         background: "var(--cream)",
-        padding: "0",
+        padding: "0 0 80px",
         overflow: "hidden",
       }}
     >

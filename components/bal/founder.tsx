@@ -38,6 +38,8 @@ export function Founder() {
       style={{
         position: "relative",
         background: "var(--cream)",
+        paddingTop: 80,
+        paddingBottom: 80,
         overflow: "hidden",
       }}
     >
