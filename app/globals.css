@@ -170,8 +170,9 @@ input {
     grid-template-columns: 1fr !important;
   }
   .bal-founder-image {
-    min-height: 320px !important;
-    aspect-ratio: 4 / 3;
+    min-height: 0 !important;
+    aspect-ratio: 3 / 4;
+    max-height: 540px;
   }
   .bal-founder-inner {
     grid-template-columns: 1fr !important;
