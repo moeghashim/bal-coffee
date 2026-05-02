@@ -191,6 +191,14 @@ input {
   .bal-subscription-perks {
     justify-content: center;
   }
+  .bal-product-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .bal-search-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
   .bal-footer {
     padding: 48px 24px 24px !important;
   }
@@ -261,5 +269,8 @@ input {
   }
   .bal-founder-quote {
     transform: none !important;
+  }
+  .bal-search-grid {
+    grid-template-columns: 1fr !important;
   }
 }

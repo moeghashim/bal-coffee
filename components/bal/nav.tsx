@@ -1,10 +1,12 @@
 "use client";
 
+import CartModal from "components/cart/modal";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 function Logo() {
   return (
-    <a
+    <Link
       href="/"
       style={{
         display: "flex",
@@ -37,19 +39,19 @@ function Logo() {
       >
         coffee
       </span>
-    </a>
+    </Link>
   );
 }
 
-function CartIcon() {
+function CartIconVisual({ count }: { count: number }) {
   return (
-    <button
-      aria-label="Cart"
+    <span
+      aria-hidden
       style={{
         position: "relative",
         width: 36,
         height: 36,
-        display: "flex",
+        display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
         color: "var(--ink)",
@@ -68,28 +70,30 @@ function CartIcon() {
         <path d="M6 7h12l-1.2 11a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7z" />
         <path d="M9 7V5.5A3 3 0 0 1 12 2.5 3 3 0 0 1 15 5.5V7" />
       </svg>
-      <span
-        className="mono"
-        style={{
-          position: "absolute",
-          top: 2,
-          right: 0,
-          minWidth: 16,
-          height: 16,
-          borderRadius: 999,
-          background: "var(--terra)",
-          color: "var(--cream)",
-          fontSize: 9,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "0 4px",
-          fontWeight: 500,
-        }}
-      >
-        0
-      </span>
-    </button>
+      {count > 0 && (
+        <span
+          className="mono"
+          style={{
+            position: "absolute",
+            top: 2,
+            right: 0,
+            minWidth: 16,
+            height: 16,
+            borderRadius: 999,
+            background: "var(--terra)",
+            color: "var(--cream)",
+            fontSize: 9,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0 4px",
+            fontWeight: 500,
+          }}
+        >
+          {count}
+        </span>
+      )}
+    </span>
   );
 }
 
@@ -132,12 +136,12 @@ export function Nav() {
   }, []);
 
   const links = [
-    { href: "#shop", label: "Shop" },
-    { href: "#about", label: "About" },
-    { href: "#process", label: "Process" },
-    { href: "#journal", label: "Journal" },
-    { href: "#subscription", label: "Subscription" },
-    { href: "#contact", label: "Contact" },
+    { href: "/search", label: "Shop" },
+    { href: "/#about", label: "About" },
+    { href: "/#process", label: "Process" },
+    { href: "/#journal", label: "Journal" },
+    { href: "/#subscription", label: "Subscription" },
+    { href: "/#contact", label: "Contact" },
   ];
 
   return (
@@ -172,7 +176,7 @@ export function Nav() {
         }}
       >
         {links.map((l) => (
-          <a
+          <Link
             key={l.href}
             href={l.href}
             onClick={() => setMenuOpen(false)}
@@ -185,7 +189,7 @@ export function Nav() {
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-2)")}
           >
             {l.label}
-          </a>
+          </Link>
         ))}
       </div>
       <div
@@ -197,7 +201,9 @@ export function Nav() {
           gap: 8,
         }}
       >
-        <CartIcon />
+        <CartModal
+          renderTrigger={(count) => <CartIconVisual count={count} />}
+        />
         <button
           type="button"
           className="bal-nav-mobile-toggle"

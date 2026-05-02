@@ -14,7 +14,7 @@ export const metadata = {
     "A naturally caffeine-free coffee, made from date seeds. Roasted in small batches.",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <>
       <Nav />
