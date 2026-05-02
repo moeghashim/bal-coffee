@@ -93,8 +93,37 @@ function CartIcon() {
   );
 }
 
+function MenuIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      aria-hidden
+    >
+      {open ? (
+        <>
+          <path d="M6 6 L 18 18" />
+          <path d="M18 6 L 6 18" />
+        </>
+      ) : (
+        <>
+          <path d="M4 7h16" />
+          <path d="M4 12h16" />
+          <path d="M4 17h16" />
+        </>
+      )}
+    </svg>
+  );
+}
+
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -113,6 +142,7 @@ export function Nav() {
 
   return (
     <nav
+      className="bal-nav"
       style={{
         position: "sticky",
         top: 0,
@@ -133,6 +163,7 @@ export function Nav() {
         <Logo />
       </div>
       <div
+        className={`bal-nav-links${menuOpen ? " bal-nav-links-open" : ""}`}
         style={{
           display: "flex",
           gap: 36,
@@ -144,6 +175,7 @@ export function Nav() {
           <a
             key={l.href}
             href={l.href}
+            onClick={() => setMenuOpen(false)}
             style={{
               transition: "color .2s ease",
             }}
@@ -157,13 +189,24 @@ export function Nav() {
         ))}
       </div>
       <div
+        className="bal-nav-cart"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
+          gap: 8,
         }}
       >
         <CartIcon />
+        <button
+          type="button"
+          className="bal-nav-mobile-toggle"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <MenuIcon open={menuOpen} />
+        </button>
       </div>
     </nav>
   );

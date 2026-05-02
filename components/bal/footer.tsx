@@ -126,6 +126,7 @@ export function Footer() {
   return (
     <footer
       id="contact"
+      className="bal-footer"
       style={{
         background: "var(--cream)",
         color: "var(--ink)",
@@ -134,6 +135,7 @@ export function Footer() {
       }}
     >
       <div
+        className="bal-footer-grid"
         style={{
           maxWidth: 1280,
           margin: "0 auto",
@@ -303,6 +305,7 @@ export function Footer() {
       </div>
 
       <div
+        className="bal-footer-bottom"
         style={{
           maxWidth: 1280,
           margin: "48px auto 0",

@@ -160,6 +160,7 @@ function BotanicalRight() {
       stroke="var(--ink-2)"
       strokeWidth="1"
       strokeLinecap="round"
+      className="bal-endofday-botanical"
       style={{
         position: "absolute",
         right: 0,
@@ -212,6 +213,7 @@ export function EndOfDay() {
     >
       <BotanicalRight />
       <div
+        className="bal-endofday-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
@@ -225,6 +227,7 @@ export function EndOfDay() {
           <CoffeeBookArt />
         </div>
         <div
+          className="bal-endofday-copy"
           style={{
             padding: "70px 56px 70px 64px",
             display: "flex",

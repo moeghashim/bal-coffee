@@ -388,12 +388,14 @@ export function Bestsellers() {
   return (
     <section
       id="shop"
+      className="bal-bestsellers"
       style={{
         padding: "100px 56px",
         background: "var(--cream)",
       }}
     >
       <div
+        className="bal-bestsellers-grid"
         style={{
           maxWidth: 1280,
           margin: "0 auto",

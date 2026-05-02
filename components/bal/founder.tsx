@@ -42,6 +42,7 @@ export function Founder() {
       }}
     >
       <div
+        className="bal-founder-outer"
         style={{
           display: "grid",
           gridTemplateColumns: "0.85fr 1.4fr",
@@ -51,6 +52,7 @@ export function Founder() {
         }}
       >
         <div
+          className="bal-founder-image"
           style={{
             position: "relative",
             minHeight: 460,
@@ -66,6 +68,7 @@ export function Founder() {
           />
         </div>
         <div
+          className="bal-founder-inner"
           style={{
             padding: "80px 56px",
             display: "grid",
@@ -140,6 +143,7 @@ export function Founder() {
             </p>
           </div>
           <div
+            className="bal-founder-quote"
             style={{
               position: "relative",
               padding: "32px 36px",
