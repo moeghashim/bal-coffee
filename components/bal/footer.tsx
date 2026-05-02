@@ -2,24 +2,44 @@
 
 import { FormEvent } from "react";
 
-const linkColumns: { title: string; links: string[] }[] = [
+// Update these with the real handles before launch.
+const SOCIAL_LINKS = {
+  instagram: "https://instagram.com/balcoffee",
+  facebook: "https://facebook.com/balcoffee",
+  tiktok: "https://tiktok.com/@balcoffee",
+  email: "mailto:hello@balcoffee.com",
+};
+
+type FooterLink = { label: string; href: string };
+
+const linkColumns: { title: string; links: FooterLink[] }[] = [
   {
     title: "Shop",
     links: [
-      "All Products",
-      "Eastern Brew",
-      "GrounDate",
-      "DateSpresso",
-      "Gift cards",
+      { label: "All Products", href: "/search" },
+      { label: "Eastern Brew", href: "/#shop" },
+      { label: "GrounDate", href: "/#shop" },
+      { label: "DateSpresso", href: "/#shop" },
+      { label: "Gift cards", href: "/search" },
     ],
   },
   {
     title: "About",
-    links: ["Our Story", "Our Process", "Sustainability", "FAQ"],
+    links: [
+      { label: "Our Story", href: "/#about" },
+      { label: "Our Process", href: "/#process" },
+      { label: "Sustainability", href: "/#process" },
+      { label: "FAQ", href: "/#contact" },
+    ],
   },
   {
     title: "Help",
-    links: ["Shipping & Returns", "Subscriptions", "Contact Us", "Wholesale"],
+    links: [
+      { label: "Shipping & Returns", href: "/#contact" },
+      { label: "Subscriptions", href: "/#subscription" },
+      { label: "Contact Us", href: "/#contact" },
+      { label: "Wholesale", href: "mailto:hello@balcoffee.com" },
+    ],
   },
 ];
 
@@ -191,16 +211,31 @@ export function Footer() {
               color: "var(--ink-2)",
             }}
           >
-            <a href="#instagram" aria-label="Instagram">
+            <a
+              href={SOCIAL_LINKS.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
               <InstagramIcon />
             </a>
-            <a href="#facebook" aria-label="Facebook">
+            <a
+              href={SOCIAL_LINKS.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
               <FacebookIcon />
             </a>
-            <a href="#tiktok" aria-label="TikTok">
+            <a
+              href={SOCIAL_LINKS.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TikTok"
+            >
               <TikTokIcon />
             </a>
-            <a href="#email" aria-label="Email">
+            <a href={SOCIAL_LINKS.email} aria-label="Email">
               <MailIcon />
             </a>
           </div>
@@ -222,8 +257,8 @@ export function Footer() {
             </div>
             {col.links.map((l) => (
               <a
-                key={l}
-                href="#"
+                key={l.label}
+                href={l.href}
                 style={{
                   display: "block",
                   fontSize: 13.5,
@@ -231,7 +266,7 @@ export function Footer() {
                   marginBottom: 10,
                 }}
               >
-                {l}
+                {l.label}
               </a>
             ))}
           </div>
@@ -340,8 +375,8 @@ export function Footer() {
             color: "var(--ink-soft)",
           }}
         >
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#terms">Terms of Service</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
         </div>
       </div>
     </footer>

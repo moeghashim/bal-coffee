@@ -57,8 +57,10 @@ function BotanicalAccent() {
   );
 }
 
+// Hand-drawn illustration of the mug + Eastern Brew bag, used as the hero
+// image until product photography is shot. To swap in a real photo, replace
+// this component with `<Image src="/images/hero.jpg" ... />` from `next/image`.
 function HeroImage() {
-  // TODO: replace with real product photography (mug + bag)
   return (
     <div
       style={{
