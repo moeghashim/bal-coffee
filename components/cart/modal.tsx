@@ -56,7 +56,21 @@ export default function CartModal({ renderTrigger }: CartModalProps = {}) {
       <button
         aria-label="Open cart"
         onClick={openCart}
-        style={renderTrigger ? { all: "unset", cursor: "pointer" } : undefined}
+        style={
+          renderTrigger
+            ? {
+                background: "none",
+                border: "none",
+                padding: 0,
+                margin: 0,
+                font: "inherit",
+                color: "inherit",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+              }
+            : undefined
+        }
       >
         {renderTrigger ? (
           renderTrigger(cart?.totalQuantity ?? 0)
