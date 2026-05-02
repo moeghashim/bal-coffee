@@ -1,55 +1,212 @@
+"use client";
+
+import { FormEvent } from "react";
+
+const linkColumns: { title: string; links: string[] }[] = [
+  {
+    title: "Shop",
+    links: [
+      "All Products",
+      "Eastern Brew",
+      "GrounDate",
+      "DateSpresso",
+      "Gift cards",
+    ],
+  },
+  {
+    title: "About",
+    links: ["Our Story", "Our Process", "Sustainability", "FAQ"],
+  },
+  {
+    title: "Help",
+    links: ["Shipping & Returns", "Subscriptions", "Contact Us", "Wholesale"],
+  },
+];
+
+function InstagramIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M14 9h3V5h-3a4 4 0 0 0-4 4v3H7v4h3v8h4v-8h3l1-4h-4V9z" />
+    </svg>
+  );
+}
+
+function TikTokIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M14 4v10.2a3.5 3.5 0 1 1-3.5-3.5" />
+      <path d="M14 4c.4 2.6 2.4 4.5 5 4.6" />
+    </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 7l9 7 9-7" />
+    </svg>
+  );
+}
+
+function LeafMark() {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 32 32"
+      fill="none"
+      stroke="var(--ink)"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M6 26 C 10 14, 18 8, 26 6 C 26 16, 20 24, 8 26 Z" />
+      <path d="M6 26 L 22 10" />
+    </svg>
+  );
+}
+
 export function Footer() {
-  const cols = [
-    { title: "Read", links: ["The story", "The process", "Journal", "Lot log"] },
-    {
-      title: "Acquire",
-      links: ["No. 01 · Medium", "No. 02 · Dark", "Brewing kit", "Gift a bag"],
-    },
-    { title: "Company", links: ["About", "The farm", "Press", "Contact"] },
-  ];
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
 
   return (
     <footer
+      id="contact"
+      className="bal-footer"
       style={{
-        background: "var(--ink)",
-        color: "var(--cream)",
-        padding: "80px 48px 32px",
+        background: "var(--cream)",
+        color: "var(--ink)",
+        padding: "60px 56px 28px",
+        borderTop: "1px solid var(--line-soft)",
       }}
     >
       <div
+        className="bal-footer-grid"
         style={{
+          maxWidth: 1280,
+          margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "2fr 1fr 1fr 1fr",
-          gap: 60,
-          marginBottom: 80,
+          gridTemplateColumns: "1.2fr 1fr 1fr 1fr 1.4fr",
+          gap: 48,
         }}
       >
         <div>
-          <div
-            className="serif"
-            style={{
-              fontSize: 64,
-              fontStyle: "italic",
-              fontWeight: 300,
-              lineHeight: 1,
-            }}
-          >
-            Bal.
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span
+              className="serif"
+              style={{
+                fontSize: 30,
+                fontWeight: 600,
+                letterSpacing: "-0.02em",
+                color: "var(--ink)",
+                lineHeight: 1,
+              }}
+            >
+              BAL
+            </span>
+            <span
+              className="mono"
+              style={{
+                fontSize: 9,
+                letterSpacing: "0.32em",
+                textTransform: "uppercase",
+                color: "var(--ink-2)",
+                marginTop: 8,
+              }}
+            >
+              coffee
+            </span>
           </div>
           <p
             style={{
               marginTop: 20,
-              fontSize: 14,
+              fontSize: 13.5,
               lineHeight: 1.6,
-              opacity: 0.7,
-              maxWidth: 360,
+              color: "var(--ink-2)",
+              maxWidth: 240,
             }}
           >
-            A coffee from a seed. Naturally caffeine-free. Made slowly, in small
-            lots, by people who prefer to sleep.
+            Naturally caffeine-free coffee made from date seeds. Rooted in
+            tradition. Roasted with care.
           </p>
+          <div
+            style={{
+              marginTop: 22,
+              display: "flex",
+              gap: 16,
+              color: "var(--ink-2)",
+            }}
+          >
+            <a href="#instagram" aria-label="Instagram">
+              <InstagramIcon />
+            </a>
+            <a href="#facebook" aria-label="Facebook">
+              <FacebookIcon />
+            </a>
+            <a href="#tiktok" aria-label="TikTok">
+              <TikTokIcon />
+            </a>
+            <a href="#email" aria-label="Email">
+              <MailIcon />
+            </a>
+          </div>
         </div>
-        {cols.map((col) => (
+
+        {linkColumns.map((col) => (
           <div key={col.title}>
             <div
               className="mono"
@@ -57,50 +214,135 @@ export function Footer() {
                 fontSize: 10,
                 letterSpacing: "0.22em",
                 textTransform: "uppercase",
-                opacity: 0.5,
+                color: "var(--ink-soft)",
                 marginBottom: 16,
               }}
             >
               {col.title}
             </div>
             {col.links.map((l) => (
-              <div
+              <a
                 key={l}
+                href="#"
                 style={{
-                  fontFamily: "var(--font-fraunces)",
-                  fontSize: 17,
-                  fontStyle: "italic",
-                  fontWeight: 400,
-                  marginBottom: 8,
-                  opacity: 0.85,
+                  display: "block",
+                  fontSize: 13.5,
+                  color: "var(--ink-2)",
+                  marginBottom: 10,
                 }}
               >
                 {l}
-              </div>
+              </a>
             ))}
           </div>
         ))}
+
+        <div>
+          <div
+            className="mono"
+            style={{
+              fontSize: 10,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "var(--ink-soft)",
+              marginBottom: 16,
+            }}
+          >
+            Stay in touch
+          </div>
+          <p
+            style={{
+              fontSize: 13.5,
+              lineHeight: 1.55,
+              color: "var(--ink-2)",
+              marginBottom: 16,
+            }}
+          >
+            Join our community for brewing tips, stories, and exclusive offers.
+          </p>
+          <form
+            onSubmit={onSubmit}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr auto",
+              border: "1px solid var(--line)",
+              borderRadius: 2,
+              overflow: "hidden",
+              background: "var(--cream-3)",
+            }}
+          >
+            <input
+              type="email"
+              required
+              placeholder="Enter your email"
+              aria-label="Email address"
+              style={{
+                border: "none",
+                outline: "none",
+                padding: "12px 14px",
+                fontSize: 13.5,
+                background: "transparent",
+                color: "var(--ink)",
+              }}
+            />
+            <button
+              type="submit"
+              className="mono"
+              style={{
+                padding: "12px 20px",
+                background: "var(--ink)",
+                color: "var(--cream)",
+                fontSize: 11,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                borderRadius: 0,
+              }}
+            >
+              Join
+            </button>
+          </form>
+        </div>
       </div>
+
       <div
+        className="bal-footer-bottom"
         style={{
+          maxWidth: 1280,
+          margin: "48px auto 0",
+          paddingTop: 22,
+          borderTop: "1px solid var(--line-soft)",
           display: "flex",
           justifyContent: "space-between",
-          paddingTop: 32,
-          borderTop: "1px solid rgba(244,239,230,0.15)",
+          alignItems: "center",
+          gap: 24,
         }}
       >
-        <span
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <LeafMark />
+          <span
+            className="mono"
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.16em",
+              color: "var(--ink-soft)",
+            }}
+          >
+            © 2024 BAL Coffee. All rights reserved.
+          </span>
+        </div>
+        <div
           className="mono"
-          style={{ fontSize: 10, letterSpacing: "0.2em", opacity: 0.5 }}
+          style={{
+            display: "flex",
+            gap: 28,
+            fontSize: 11,
+            letterSpacing: "0.16em",
+            color: "var(--ink-soft)",
+          }}
         >
-          © Bal. 2026 · The seed was here first.
-        </span>
-        <span
-          className="mono"
-          style={{ fontSize: 10, letterSpacing: "0.2em", opacity: 0.5 }}
-        >
-          Brewed in N. America · Served worldwide
-        </span>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Service</a>
+        </div>
       </div>
     </footer>
   );

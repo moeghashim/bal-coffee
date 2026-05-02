@@ -1,336 +1,190 @@
+import Image from "next/image";
+
+function BeansAccent() {
+  return (
+    <svg
+      width="160"
+      height="120"
+      viewBox="0 0 160 120"
+      fill="none"
+      stroke="var(--ink-2)"
+      strokeWidth="1"
+      style={{
+        position: "absolute",
+        right: -10,
+        bottom: -28,
+        opacity: 0.45,
+        pointerEvents: "none",
+      }}
+      aria-hidden
+    >
+      <ellipse cx="50" cy="70" rx="22" ry="10" transform="rotate(-20 50 70)" />
+      <path d="M30 75 C 50 60, 60 60, 70 70" transform="rotate(-20 50 70)" />
+      <ellipse cx="100" cy="60" rx="24" ry="11" transform="rotate(15 100 60)" />
+      <path d="M76 64 C 100 50, 116 56, 124 64" transform="rotate(15 100 60)" />
+      <ellipse cx="120" cy="92" rx="20" ry="9" transform="rotate(-10 120 92)" />
+      <path
+        d="M100 95 C 120 84, 130 86, 140 92"
+        transform="rotate(-10 120 92)"
+      />
+    </svg>
+  );
+}
+
 export function Founder() {
   return (
     <section
-      id="founder"
+      id="about"
       style={{
-        padding: "140px 48px",
-        background: "var(--cream)",
         position: "relative",
+        background: "var(--cream)",
+        paddingTop: 80,
+        paddingBottom: 80,
         overflow: "hidden",
       }}
     >
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "baseline",
-          marginBottom: 80,
-          borderBottom: "1px solid var(--line)",
-          paddingBottom: 24,
-        }}
-      >
-        <span
-          className="mono"
-          style={{
-            fontSize: 11,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "var(--terra-deep)",
-          }}
-        >
-          § VI — The Maker
-        </span>
-        <h2
-          className="serif"
-          style={{
-            fontSize: "clamp(32px,4vw,56px)",
-            fontWeight: 300,
-            fontStyle: "italic",
-          }}
-        >
-          A hand behind the seed.
-        </h2>
-        <span
-          className="mono"
-          style={{
-            fontSize: 11,
-            letterSpacing: "0.22em",
-            color: "var(--ink-2)",
-          }}
-        >
-          portrait · est. 2021
-        </span>
-      </header>
-
       <div
+        className="bal-founder-outer"
         style={{
           display: "grid",
-          gridTemplateColumns: "0.9fr 1.1fr",
-          gap: 80,
-          alignItems: "center",
+          gridTemplateColumns: "0.85fr 1.4fr",
+          alignItems: "stretch",
+          maxWidth: 1280,
+          margin: "0 auto",
         }}
       >
-        <div style={{ position: "relative" }}>
-          <div
-            style={{
-              aspectRatio: "4/5",
-              position: "relative",
-              border: "1px solid var(--line)",
-              background: "var(--cream-2)",
-              overflow: "hidden",
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/founder.png"
-              alt="Judy Ghashim, founder of Bal Coffee"
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                filter: "contrast(1.02) saturate(0.92)",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(180deg, rgba(42,31,23,0.08) 0%, rgba(42,31,23,0) 40%, rgba(42,31,23,0.55) 100%)",
-                pointerEvents: "none",
-              }}
-            />
-
-            <div
-              style={{
-                position: "absolute",
-                bottom: 16,
-                left: 16,
-                right: 16,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-end",
-                color: "var(--cream)",
-              }}
-            >
-              <div>
-                <div
-                  className="mono"
-                  style={{
-                    fontSize: 9,
-                    letterSpacing: "0.22em",
-                    opacity: 0.8,
-                    marginBottom: 4,
-                  }}
-                >
-                  PLATE I.
-                </div>
-                <div
-                  className="serif"
-                  style={{
-                    fontSize: 20,
-                    fontStyle: "italic",
-                    fontWeight: 300,
-                  }}
-                >
-                  Judy Ghashim
-                </div>
-              </div>
-              <span
-                className="mono"
-                style={{
-                  fontSize: 9,
-                  letterSpacing: "0.2em",
-                  opacity: 0.8,
-                }}
-              >
-                the roastery · morning
-              </span>
-            </div>
-
-            <div
-              style={{
-                position: "absolute",
-                top: 16,
-                left: 16,
-                padding: "4px 10px",
-                border: "1px solid var(--cream)",
-                fontFamily: "var(--font-plex-mono)",
-                fontSize: 9,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--cream)",
-                background: "rgba(42,31,23,0.4)",
-                backdropFilter: "blur(4px)",
-              }}
-            >
-              founder · roaster
-            </div>
-          </div>
-
-          <div
-            style={{
-              marginTop: 12,
-              padding: "16px 20px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              border: "1px solid var(--line)",
-              background: "rgba(255,255,255,0.35)",
-            }}
-          >
-            <div
+        <div
+          className="bal-founder-image"
+          style={{
+            position: "relative",
+            minHeight: 460,
+            background: "#caa988",
+          }}
+        >
+          <Image
+            src="/founder.png"
+            alt="Batool, founder of BAL Coffee"
+            fill
+            sizes="(max-width: 1024px) 100vw, 40vw"
+            style={{ objectFit: "cover", objectPosition: "center 20%" }}
+          />
+        </div>
+        <div
+          className="bal-founder-inner"
+          style={{
+            padding: "80px 56px",
+            display: "grid",
+            gridTemplateColumns: "1.05fr 1fr",
+            gap: 48,
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
+          <div>
+            <p
               className="mono"
               style={{
                 fontSize: 10,
-                letterSpacing: "0.2em",
+                letterSpacing: "0.24em",
                 textTransform: "uppercase",
-                color: "var(--ink-2)",
+                color: "var(--ink-soft)",
               }}
             >
-              Signed, the roaster —
-            </div>
-            <div
+              Our story
+            </p>
+            <h2
               className="serif"
               style={{
-                fontSize: 28,
-                fontStyle: "italic",
-                fontWeight: 400,
-                color: "var(--terra-deep)",
-                transform: "rotate(-4deg)",
-                letterSpacing: "-0.02em",
+                marginTop: 14,
+                fontSize: "clamp(30px, 2.8vw, 40px)",
+                lineHeight: 1.1,
+                fontWeight: 500,
+                letterSpacing: "-0.01em",
+                color: "var(--ink)",
               }}
             >
-              J. Ghashim
-            </div>
+              Rooted in heritage,
+              <br />
+              crafted with heart
+            </h2>
+            <p
+              style={{
+                marginTop: 22,
+                fontSize: 14,
+                lineHeight: 1.65,
+                color: "var(--ink-2)",
+                maxWidth: 360,
+              }}
+            >
+              BAL Coffee was born from a simple belief: the best rituals come
+              from nature. As a mother and coffee lover, I created a brew that
+              brings people together—anytime, day or night.
+            </p>
+            <p
+              className="serif"
+              style={{
+                marginTop: 22,
+                fontSize: 18,
+                fontStyle: "italic",
+                color: "var(--ink)",
+              }}
+            >
+              — Batool
+            </p>
+            <p
+              className="mono"
+              style={{
+                marginTop: 4,
+                fontSize: 10,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: "var(--ink-soft)",
+              }}
+            >
+              Founder, BAL Coffee
+            </p>
           </div>
-        </div>
-
-        <div>
-          <span
-            className="serif"
-            style={{
-              display: "block",
-              fontSize: "clamp(32px, 3.4vw, 44px)",
-              fontWeight: 300,
-              fontStyle: "italic",
-              lineHeight: 1.15,
-              color: "var(--ink)",
-              marginBottom: 28,
-            }}
-          >
-            &ldquo;I wanted the ritual of coffee
-            <br />
-            without losing the night that
-            <br />
-            came after it.&rdquo;
-          </span>
-
           <div
+            className="bal-founder-quote"
             style={{
-              display: "grid",
-              gridTemplateColumns: "auto 1fr",
-              gap: 28,
-              alignItems: "start",
+              position: "relative",
+              padding: "32px 36px",
+              background: "var(--cream-3)",
+              border: "1px solid var(--line-soft)",
+              boxShadow: "0 18px 40px -28px rgba(42,31,23,0.3)",
+              transform: "rotate(-1deg)",
             }}
           >
             <span
               className="serif"
               style={{
+                position: "absolute",
+                top: 6,
+                left: 16,
                 fontSize: 56,
-                lineHeight: 0.9,
+                color: "var(--ink-soft)",
+                lineHeight: 1,
                 fontStyle: "italic",
-                fontWeight: 300,
-                color: "var(--terra)",
               }}
+              aria-hidden
             >
-              J
+              &ldquo;
             </span>
             <p
+              className="serif"
               style={{
-                fontSize: 16,
-                lineHeight: 1.75,
-                color: "var(--ink-2)",
+                marginTop: 22,
+                fontSize: 17,
+                lineHeight: 1.55,
+                color: "var(--ink)",
+                fontStyle: "italic",
+                fontWeight: 400,
               }}
             >
-              udy Ghashim grew up between two coffee cultures — the long,
-              patient cardamom-laced brews of home, and the sharp, hurried
-              espressos of the city she moved to. Both left her awake. Neither
-              left her rested.
+              I wanted to create a coffee that my family could enjoy at any time
+              of day—one that honors our heritage and the goodness of the land.
             </p>
-          </div>
-
-          <p
-            style={{
-              fontSize: 16,
-              lineHeight: 1.75,
-              color: "var(--ink-2)",
-              marginTop: 24,
-              maxWidth: 560,
-            }}
-          >
-            She started reading, then asking, then traveling. She learned about
-            a seed — not a bean — that had been roasted and brewed for centuries
-            in her own grandmother&rsquo;s village. A coffee that never held
-            caffeine to begin with. Judy roasted her first small lot in a
-            borrowed drum in the autumn of 2021.
-          </p>
-
-          <p
-            style={{
-              fontSize: 16,
-              lineHeight: 1.75,
-              color: "var(--ink-2)",
-              marginTop: 20,
-              maxWidth: 560,
-            }}
-          >
-            Bal is what came out of that drum. A coffee without the coffee.
-            Still made, still slow, still in small lots — now shared past the
-            farm gate, into cups that prefer to sleep.
-          </p>
-
-          <div
-            style={{
-              marginTop: 48,
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 0,
-              border: "1px solid var(--line)",
-              background: "rgba(255,255,255,0.35)",
-            }}
-          >
-            {(
-              [
-                ["Roasting since", "2014"],
-                ["Bal founded", "October 2021"],
-                ["Lots to date", "27 · small"],
-              ] as const
-            ).map(([k, v], i) => (
-              <div
-                key={i}
-                style={{
-                  padding: "20px 22px",
-                  borderRight: i < 2 ? "1px solid var(--line)" : "none",
-                }}
-              >
-                <div
-                  className="mono"
-                  style={{
-                    fontSize: 9,
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    color: "var(--ink-2)",
-                    marginBottom: 8,
-                  }}
-                >
-                  {k}
-                </div>
-                <div
-                  className="serif"
-                  style={{
-                    fontSize: 24,
-                    fontStyle: "italic",
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                  }}
-                >
-                  {v}
-                </div>
-              </div>
-            ))}
+            <BeansAccent />
           </div>
         </div>
       </div>

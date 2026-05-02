@@ -1,32 +1,30 @@
-import { Comparison } from "components/bal/comparison";
+import { Bestsellers } from "components/bal/bestsellers";
+import { EndOfDay } from "components/bal/end-of-day";
+import { Features } from "components/bal/features";
 import { Footer } from "components/bal/footer";
 import { Founder } from "components/bal/founder";
 import { Grain } from "components/bal/grain";
 import { Hero } from "components/bal/hero";
-import { Manifesto } from "components/bal/manifesto";
 import { Nav } from "components/bal/nav";
-import { Product } from "components/bal/product";
-import { Ritual } from "components/bal/ritual";
-import { RoastSlider } from "components/bal/roast-slider";
-import { Story } from "components/bal/story";
+import { Process } from "components/bal/process";
+import { SubscriptionCTA } from "components/bal/subscription-cta";
 
 export const metadata = {
   description:
-    "A naturally caffeine-free coffee, made from a single native seed. Hand-roasted in small lots.",
+    "A naturally caffeine-free coffee, made from date seeds. Roasted in small batches.",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <>
       <Nav />
       <Hero />
-      <Manifesto />
-      <Story />
-      <Comparison />
-      <RoastSlider />
-      <Ritual />
+      <Features />
+      <Bestsellers />
+      <Process />
+      <EndOfDay />
       <Founder />
-      <Product />
+      <SubscriptionCTA />
       <Footer />
       <Grain />
     </>

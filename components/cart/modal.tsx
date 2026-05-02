@@ -9,7 +9,7 @@ import { DEFAULT_OPTION } from "lib/constants";
 import { createUrl } from "lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { createCartAndSetCookie, redirectToCheckout } from "./actions";
 import { useCart } from "./cart-context";
@@ -21,7 +21,11 @@ type MerchandiseSearchParams = {
   [key: string]: string;
 };
 
-export default function CartModal() {
+type CartModalProps = {
+  renderTrigger?: (totalQuantity: number) => ReactNode;
+};
+
+export default function CartModal({ renderTrigger }: CartModalProps = {}) {
   const { cart, updateCartItem } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const quantityRef = useRef(cart?.totalQuantity);
@@ -49,8 +53,16 @@ export default function CartModal() {
 
   return (
     <>
-      <button aria-label="Open cart" onClick={openCart}>
-        <OpenCart quantity={cart?.totalQuantity} />
+      <button
+        aria-label="Open cart"
+        onClick={openCart}
+        style={renderTrigger ? { all: "unset", cursor: "pointer" } : undefined}
+      >
+        {renderTrigger ? (
+          renderTrigger(cart?.totalQuantity ?? 0)
+        ) : (
+          <OpenCart quantity={cart?.totalQuantity} />
+        )}
       </button>
       <Transition show={isOpen}>
         <Dialog onClose={closeCart} className="relative z-50">
