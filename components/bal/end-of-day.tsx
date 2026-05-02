@@ -1,5 +1,7 @@
+// Hand-drawn illustration (mug + open book, warm lamp light) used until real
+// photography is shot. To swap in a real photo, replace this component with
+// `<Image src="/images/end-of-day.jpg" ... />` from `next/image`.
 function CoffeeBookArt() {
-  // TODO: replace with real photograph (mug + open book, warm lamp light)
   return (
     <svg
       viewBox="0 0 600 480"

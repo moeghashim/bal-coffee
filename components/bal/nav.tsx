@@ -139,7 +139,7 @@ export function Nav() {
     { href: "/search", label: "Shop" },
     { href: "/#about", label: "About" },
     { href: "/#process", label: "Process" },
-    { href: "/#journal", label: "Journal" },
+    { href: "/journal", label: "Journal" },
     { href: "/#subscription", label: "Subscription" },
     { href: "/#contact", label: "Contact" },
   ];
