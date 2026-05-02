@@ -12,6 +12,18 @@ import { updateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+async function ensureCartId(): Promise<string> {
+  const cookieStore = await cookies();
+  const existing = cookieStore.get("cartId")?.value;
+  if (existing) return existing;
+  const cart = await createCart();
+  if (!cart.id) {
+    throw new Error("Failed to create cart");
+  }
+  cookieStore.set("cartId", cart.id);
+  return cart.id;
+}
+
 export async function addItem(
   prevState: any,
   selectedVariantId: string | undefined,
@@ -21,9 +33,11 @@ export async function addItem(
   }
 
   try {
+    await ensureCartId();
     await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
     updateTag(TAGS.cart);
   } catch (e) {
+    console.error("addItem failed:", e);
     return "Error adding item to cart";
   }
 }
