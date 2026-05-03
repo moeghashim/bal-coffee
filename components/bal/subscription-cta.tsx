@@ -72,7 +72,6 @@ export function SubscriptionCTA() {
   return (
     <section
       id="subscription"
-      className="bal-subscription"
       style={{
         background: "var(--terra)",
         color: "var(--cream)",
@@ -80,7 +79,6 @@ export function SubscriptionCTA() {
       }}
     >
       <div
-        className="bal-subscription-grid"
         style={{
           maxWidth: 1280,
           margin: "0 auto",
@@ -118,7 +116,6 @@ export function SubscriptionCTA() {
           </p>
         </div>
         <div
-          className="bal-subscription-perks"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, auto)",

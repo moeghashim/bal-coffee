@@ -2,25 +2,19 @@
 
 import { FormEvent } from "react";
 
-// Update these with the real handles before launch.
-const SOCIAL_LINKS = {
-  instagram: "https://instagram.com/balcoffee",
-  facebook: "https://facebook.com/balcoffee",
-  tiktok: "https://tiktok.com/@balcoffee",
-  email: "mailto:hello@balcoffee.com",
-};
-
-type FooterLink = { label: string; href: string };
-
-const linkColumns: { title: string; links: FooterLink[] }[] = [
+const linkColumns: {
+  title: string;
+  links: { label: string; href: string }[];
+}[] = [
   {
     title: "Shop",
     links: [
-      { label: "All Products", href: "/search" },
-      { label: "Eastern Brew", href: "/#shop" },
-      { label: "GrounDate", href: "/#shop" },
-      { label: "DateSpresso", href: "/#shop" },
-      { label: "Gift cards", href: "/search" },
+      { label: "All Products", href: "/products" },
+      { label: "Eastern Brew", href: "/products/eastern-brew" },
+      { label: "GrounDate", href: "/products/groundate" },
+      { label: "DateSpresso", href: "/products/datespresso" },
+      { label: "Gift cards", href: "/#subscription" },
+      { label: "Subscription", href: "/#subscription" },
     ],
   },
   {
@@ -29,16 +23,18 @@ const linkColumns: { title: string; links: FooterLink[] }[] = [
       { label: "Our Story", href: "/#about" },
       { label: "Our Process", href: "/#process" },
       { label: "Sustainability", href: "/#process" },
-      { label: "FAQ", href: "/#contact" },
+      { label: "Wholesale", href: "/#contact" },
+      { label: "Careers", href: "/#contact" },
     ],
   },
   {
     title: "Help",
     links: [
-      { label: "Shipping & Returns", href: "/#contact" },
-      { label: "Subscriptions", href: "/#subscription" },
+      { label: "FAQ", href: "/#contact" },
+      { label: "Shipping & Delivery", href: "/#contact" },
+      { label: "Returns & Exchanges", href: "/#contact" },
+      { label: "Track Your Order", href: "/#contact" },
       { label: "Contact Us", href: "/#contact" },
-      { label: "Wholesale", href: "mailto:hello@balcoffee.com" },
     ],
   },
 ];
@@ -126,7 +122,7 @@ function LeafMark() {
       height="22"
       viewBox="0 0 32 32"
       fill="none"
-      stroke="var(--ink)"
+      stroke="currentColor"
       strokeWidth="1.4"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -146,22 +142,21 @@ export function Footer() {
   return (
     <footer
       id="contact"
-      className="bal-footer"
       style={{
-        background: "var(--cream)",
-        color: "var(--ink)",
-        padding: "60px 56px 28px",
-        borderTop: "1px solid var(--line-soft)",
+        background:
+          "radial-gradient(circle at 28% 0%, rgba(127,85,47,0.22), transparent 36%), linear-gradient(105deg, #211109 0%, #321b0f 52%, #1a0e08 100%)",
+        color: "#ead8bd",
+        padding: "34px 56px 20px",
+        borderTop: "1px solid rgba(238,216,185,0.14)",
       }}
     >
       <div
-        className="bal-footer-grid"
         style={{
           maxWidth: 1280,
           margin: "0 auto",
           display: "grid",
           gridTemplateColumns: "1.2fr 1fr 1fr 1fr 1.4fr",
-          gap: 48,
+          gap: 44,
         }}
       >
         <div>
@@ -172,7 +167,7 @@ export function Footer() {
                 fontSize: 30,
                 fontWeight: 600,
                 letterSpacing: "-0.02em",
-                color: "var(--ink)",
+                color: "#f1d9b6",
                 lineHeight: 1,
               }}
             >
@@ -184,7 +179,7 @@ export function Footer() {
                 fontSize: 9,
                 letterSpacing: "0.32em",
                 textTransform: "uppercase",
-                color: "var(--ink-2)",
+                color: "#d0b890",
                 marginTop: 8,
               }}
             >
@@ -196,7 +191,7 @@ export function Footer() {
               marginTop: 20,
               fontSize: 13.5,
               lineHeight: 1.6,
-              color: "var(--ink-2)",
+              color: "#d0b890",
               maxWidth: 240,
             }}
           >
@@ -208,34 +203,19 @@ export function Footer() {
               marginTop: 22,
               display: "flex",
               gap: 16,
-              color: "var(--ink-2)",
+              color: "#d0b890",
             }}
           >
-            <a
-              href={SOCIAL_LINKS.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
+            <a href="#instagram" aria-label="Instagram">
               <InstagramIcon />
             </a>
-            <a
-              href={SOCIAL_LINKS.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-            >
+            <a href="#facebook" aria-label="Facebook">
               <FacebookIcon />
             </a>
-            <a
-              href={SOCIAL_LINKS.tiktok}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="TikTok"
-            >
+            <a href="#tiktok" aria-label="TikTok">
               <TikTokIcon />
             </a>
-            <a href={SOCIAL_LINKS.email} aria-label="Email">
+            <a href="#email" aria-label="Email">
               <MailIcon />
             </a>
           </div>
@@ -249,7 +229,7 @@ export function Footer() {
                 fontSize: 10,
                 letterSpacing: "0.22em",
                 textTransform: "uppercase",
-                color: "var(--ink-soft)",
+                color: "#e7c896",
                 marginBottom: 16,
               }}
             >
@@ -262,7 +242,7 @@ export function Footer() {
                 style={{
                   display: "block",
                   fontSize: 13.5,
-                  color: "var(--ink-2)",
+                  color: "#d0b890",
                   marginBottom: 10,
                 }}
               >
@@ -279,7 +259,7 @@ export function Footer() {
               fontSize: 10,
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "var(--ink-soft)",
+              color: "#e7c896",
               marginBottom: 16,
             }}
           >
@@ -289,7 +269,7 @@ export function Footer() {
             style={{
               fontSize: 13.5,
               lineHeight: 1.55,
-              color: "var(--ink-2)",
+              color: "#d0b890",
               marginBottom: 16,
             }}
           >
@@ -300,10 +280,10 @@ export function Footer() {
             style={{
               display: "grid",
               gridTemplateColumns: "1fr auto",
-              border: "1px solid var(--line)",
-              borderRadius: 2,
+              border: "1px solid rgba(238,216,185,0.22)",
+              borderRadius: 8,
               overflow: "hidden",
-              background: "var(--cream-3)",
+              background: "rgba(255,246,231,0.05)",
             }}
           >
             <input
@@ -317,7 +297,7 @@ export function Footer() {
                 padding: "12px 14px",
                 fontSize: 13.5,
                 background: "transparent",
-                color: "var(--ink)",
+                color: "#f1d9b6",
               }}
             />
             <button
@@ -325,41 +305,46 @@ export function Footer() {
               className="mono"
               style={{
                 padding: "12px 20px",
-                background: "var(--ink)",
-                color: "var(--cream)",
+                background: "#77783a",
+                color: "#fff4e8",
                 fontSize: 11,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
+                letterSpacing: 0,
                 borderRadius: 0,
               }}
             >
-              Join
+              Subscribe
             </button>
           </form>
         </div>
       </div>
 
       <div
-        className="bal-footer-bottom"
         style={{
           maxWidth: 1280,
-          margin: "48px auto 0",
-          paddingTop: 22,
-          borderTop: "1px solid var(--line-soft)",
+          margin: "28px auto 0",
+          paddingTop: 18,
+          borderTop: "1px solid rgba(238,216,185,0.14)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           gap: 24,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            color: "#bfa887",
+          }}
+        >
           <LeafMark />
           <span
             className="mono"
             style={{
               fontSize: 11,
               letterSpacing: "0.16em",
-              color: "var(--ink-soft)",
+              color: "#bfa887",
             }}
           >
             © 2024 BAL Coffee. All rights reserved.
@@ -372,11 +357,11 @@ export function Footer() {
             gap: 28,
             fontSize: 11,
             letterSpacing: "0.16em",
-            color: "var(--ink-soft)",
+            color: "#bfa887",
           }}
         >
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms of Service</a>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Service</a>
         </div>
       </div>
     </footer>

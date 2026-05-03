@@ -1,5 +1,3 @@
-"use client";
-
 function BotanicalAccent() {
   return (
     <svg
@@ -10,7 +8,6 @@ function BotanicalAccent() {
       stroke="var(--ink-2)"
       strokeWidth="1"
       strokeLinecap="round"
-      className="bal-hero-botanical"
       style={{
         position: "absolute",
         left: -10,
@@ -57,9 +54,6 @@ function BotanicalAccent() {
   );
 }
 
-// Hand-drawn illustration of the mug + Eastern Brew bag, used as the hero
-// image until product photography is shot. To swap in a real photo, replace
-// this component with `<Image src="/images/hero.jpg" ... />` from `next/image`.
 function HeroImage() {
   return (
     <div
@@ -67,188 +61,22 @@ function HeroImage() {
         position: "relative",
         width: "100%",
         aspectRatio: "5 / 4",
-        background:
-          "linear-gradient(135deg, #ece2d2 0%, #d9cab2 60%, #b89a73 100%)",
         borderRadius: 4,
         overflow: "hidden",
         boxShadow: "0 30px 60px -30px rgba(42,31,23,0.35)",
+        background: "var(--cream-2)",
       }}
-      aria-label="Bal coffee mug and Eastern Brew bag"
     >
-      <svg
-        viewBox="0 0 600 480"
-        width="100%"
-        height="100%"
-        style={{ display: "block" }}
-        aria-hidden
-      >
-        <defs>
-          <linearGradient id="wallGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#efe6d6" />
-            <stop offset="100%" stopColor="#cdb999" />
-          </linearGradient>
-          <linearGradient id="brewGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#3a1f0f" />
-            <stop offset="100%" stopColor="#1d0e06" />
-          </linearGradient>
-          <linearGradient id="bagGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#e9d6b1" />
-            <stop offset="100%" stopColor="#b48a55" />
-          </linearGradient>
-          <linearGradient id="cremaGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#a87650" />
-            <stop offset="100%" stopColor="#7a4828" />
-          </linearGradient>
-        </defs>
-        <rect width="600" height="480" fill="url(#wallGrad)" />
-        <rect y="380" width="600" height="100" fill="#a78866" opacity="0.4" />
-
-        {/* plant pot */}
-        <rect x="240" y="90" width="120" height="80" fill="#e3d5b9" />
-        <ellipse cx="300" cy="90" rx="60" ry="14" fill="#cbb88f" />
-        <path
-          d="M300 90 C 270 50, 240 30, 210 20 C 240 50, 260 80, 280 90"
-          fill="#5a6a3a"
-          opacity="0.85"
-        />
-        <path
-          d="M300 90 C 320 40, 360 20, 400 14 C 380 50, 350 80, 320 90"
-          fill="#6f7d44"
-          opacity="0.9"
-        />
-        <path
-          d="M300 90 C 290 40, 290 14, 296 0 C 308 30, 312 60, 308 90"
-          fill="#7c8a4f"
-          opacity="0.9"
-        />
-
-        {/* mug saucer */}
-        <ellipse
-          cx="180"
-          cy="370"
-          rx="120"
-          ry="18"
-          fill="#5e3a22"
-          opacity="0.25"
-        />
-        {/* mug body */}
-        <path
-          d="M100 240 Q 100 220 130 220 L 230 220 Q 260 220 260 240 L 260 350 Q 260 380 220 380 L 140 380 Q 100 380 100 350 Z"
-          fill="#f6efe2"
-          stroke="#a48a6a"
-          strokeWidth="2"
-        />
-        {/* mug interior brew */}
-        <ellipse cx="180" cy="232" rx="74" ry="14" fill="url(#brewGrad)" />
-        <ellipse
-          cx="180"
-          cy="230"
-          rx="74"
-          ry="14"
-          fill="url(#cremaGrad)"
-          opacity="0.85"
-        />
-        <ellipse
-          cx="180"
-          cy="228"
-          rx="56"
-          ry="9"
-          fill="#caa17a"
-          opacity="0.55"
-        />
-        {/* handle */}
-        <path
-          d="M260 250 Q 305 260 305 295 Q 305 330 260 340"
-          fill="none"
-          stroke="#a48a6a"
-          strokeWidth="6"
-        />
-        <path
-          d="M260 262 Q 290 270 290 295 Q 290 320 260 328"
-          fill="none"
-          stroke="#f6efe2"
-          strokeWidth="3"
-        />
-
-        {/* coffee bag */}
-        <path
-          d="M380 130 L 540 130 Q 555 130 555 150 L 555 380 Q 555 400 535 400 L 385 400 Q 365 400 365 380 L 365 150 Q 365 130 380 130 Z"
-          fill="url(#bagGrad)"
-          stroke="#8a6638"
-          strokeWidth="1.5"
-        />
-        <path
-          d="M380 130 L 460 110 L 540 130"
-          fill="#c8a778"
-          stroke="#8a6638"
-          strokeWidth="1.5"
-        />
-        {/* bag label */}
-        <rect
-          x="395"
-          y="200"
-          width="130"
-          height="150"
-          fill="#f4ead6"
-          stroke="#7a5a34"
-          strokeWidth="1"
-        />
-        <text
-          x="460"
-          y="230"
-          textAnchor="middle"
-          fill="#2a1f17"
-          fontFamily="Fraunces, serif"
-          fontSize="16"
-          fontWeight="600"
-          letterSpacing="2"
-        >
-          BAL
-        </text>
-        <line
-          x1="410"
-          y1="244"
-          x2="510"
-          y2="244"
-          stroke="#7a5a34"
-          strokeWidth="0.5"
-        />
-        <text
-          x="460"
-          y="278"
-          textAnchor="middle"
-          fill="#2a1f17"
-          fontFamily="Fraunces, serif"
-          fontSize="14"
-          fontWeight="600"
-        >
-          EASTERN BREW
-        </text>
-        <text
-          x="460"
-          y="296"
-          textAnchor="middle"
-          fill="#7a5a34"
-          fontFamily="IBM Plex Mono, monospace"
-          fontSize="7"
-          letterSpacing="2"
-        >
-          TURKISH COFFEE STYLE
-        </text>
-        <circle cx="430" cy="320" r="10" fill="#7a5a34" opacity="0.3" />
-        <circle cx="448" cy="328" r="8" fill="#7a5a34" opacity="0.25" />
-        <circle cx="486" cy="320" r="9" fill="#7a5a34" opacity="0.3" />
-        <text
-          x="460"
-          y="346"
-          textAnchor="middle"
-          fill="#7a5a34"
-          fontFamily="IBM Plex Mono, monospace"
-          fontSize="7"
-        >
-          250g
-        </text>
-      </svg>
+      <img
+        src="/product-ritual.svg"
+        alt="Bal Coffee bag beside a filled mug and date seeds"
+        style={{
+          display: "block",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+      />
     </div>
   );
 }
@@ -256,7 +84,6 @@ function HeroImage() {
 export function Hero() {
   return (
     <section
-      className="bal-hero"
       style={{
         position: "relative",
         padding: "40px 56px 80px",
@@ -265,7 +92,6 @@ export function Hero() {
     >
       <BotanicalAccent />
       <div
-        className="bal-hero-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1.1fr",
@@ -275,10 +101,7 @@ export function Hero() {
           margin: "0 auto",
         }}
       >
-        <div
-          className="bal-hero-copy"
-          style={{ paddingLeft: 80, paddingRight: 20 }}
-        >
+        <div style={{ paddingLeft: 80, paddingRight: 20 }}>
           <h1
             className="serif"
             style={{
@@ -315,10 +138,7 @@ export function Hero() {
             <br />
             Warm. Grounding. Yours, any time of day.
           </p>
-          <div
-            className="bal-hero-buttons"
-            style={{ marginTop: 36, display: "flex", gap: 14 }}
-          >
+          <div style={{ marginTop: 36, display: "flex", gap: 14 }}>
             <a
               href="#shop"
               className="mono"

@@ -1,8 +1,6 @@
-import { CartProvider } from "components/cart/cart-context";
-import { getCart } from "lib/shopify";
-import { baseUrl } from "lib/utils";
 import { ReactNode } from "react";
 import "./globals.css";
+import { baseUrl } from "lib/utils";
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -16,13 +14,7 @@ export const metadata = {
   robots: { follow: true, index: true },
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  const cart = getCart();
-
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -37,9 +29,7 @@ export default async function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>
-        <CartProvider cartPromise={cart}>{children}</CartProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

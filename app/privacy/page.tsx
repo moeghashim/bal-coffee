@@ -30,8 +30,8 @@ export default function PrivacyPage() {
         How we use it
       </h2>
       <p style={{ marginTop: 12 }}>
-        We use this information to process orders, send shipping updates, and
-        — only if you opt in — share occasional news and offers.
+        We use this information to process orders, send shipping updates, and —
+        only if you opt in — share occasional news and offers.
       </p>
       <h2
         className="serif"
@@ -41,7 +41,10 @@ export default function PrivacyPage() {
       </h2>
       <p style={{ marginTop: 12 }}>
         Questions about this policy? Reach us at{" "}
-        <a href="mailto:hello@balcoffee.com" style={{ color: "var(--terra-deep)" }}>
+        <a
+          href="mailto:hello@balcoffee.com"
+          style={{ color: "var(--terra-deep)" }}
+        >
           hello@balcoffee.com
         </a>
         .

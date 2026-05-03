@@ -38,13 +38,10 @@ export function Founder() {
       style={{
         position: "relative",
         background: "var(--cream)",
-        paddingTop: 80,
-        paddingBottom: 80,
         overflow: "hidden",
       }}
     >
       <div
-        className="bal-founder-outer"
         style={{
           display: "grid",
           gridTemplateColumns: "0.85fr 1.4fr",
@@ -54,7 +51,6 @@ export function Founder() {
         }}
       >
         <div
-          className="bal-founder-image"
           style={{
             position: "relative",
             minHeight: 460,
@@ -66,11 +62,10 @@ export function Founder() {
             alt="Batool, founder of BAL Coffee"
             fill
             sizes="(max-width: 1024px) 100vw, 40vw"
-            style={{ objectFit: "cover", objectPosition: "center 20%" }}
+            style={{ objectFit: "cover", objectPosition: "center" }}
           />
         </div>
         <div
-          className="bal-founder-inner"
           style={{
             padding: "80px 56px",
             display: "grid",
@@ -145,7 +140,6 @@ export function Founder() {
             </p>
           </div>
           <div
-            className="bal-founder-quote"
             style={{
               position: "relative",
               padding: "32px 36px",

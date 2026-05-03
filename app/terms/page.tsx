@@ -42,7 +42,10 @@ export default function TermsPage() {
       </h2>
       <p style={{ marginTop: 12 }}>
         Questions about these terms? Reach us at{" "}
-        <a href="mailto:hello@balcoffee.com" style={{ color: "var(--terra-deep)" }}>
+        <a
+          href="mailto:hello@balcoffee.com"
+          style={{ color: "var(--terra-deep)" }}
+        >
           hello@balcoffee.com
         </a>
         .

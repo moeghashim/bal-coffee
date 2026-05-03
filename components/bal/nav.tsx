@@ -1,12 +1,10 @@
 "use client";
 
-import CartModal from "components/cart/modal";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 function Logo() {
   return (
-    <Link
+    <a
       href="/"
       style={{
         display: "flex",
@@ -39,19 +37,20 @@ function Logo() {
       >
         coffee
       </span>
-    </Link>
+    </a>
   );
 }
 
-function CartIconVisual({ count }: { count: number }) {
+function CartIcon() {
   return (
-    <span
-      aria-hidden
+    <a
+      href="/cart"
+      aria-label="View cart"
       style={{
         position: "relative",
         width: 36,
         height: 36,
-        display: "inline-flex",
+        display: "flex",
         alignItems: "center",
         justifyContent: "center",
         color: "var(--ink)",
@@ -70,64 +69,43 @@ function CartIconVisual({ count }: { count: number }) {
         <path d="M6 7h12l-1.2 11a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7z" />
         <path d="M9 7V5.5A3 3 0 0 1 12 2.5 3 3 0 0 1 15 5.5V7" />
       </svg>
-      {count > 0 && (
-        <span
-          className="mono"
-          style={{
-            position: "absolute",
-            top: 2,
-            right: 0,
-            minWidth: 16,
-            height: 16,
-            borderRadius: 999,
-            background: "var(--terra)",
-            color: "var(--cream)",
-            fontSize: 9,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0 4px",
-            fontWeight: 500,
-          }}
-        >
-          {count}
-        </span>
-      )}
-    </span>
+    </a>
   );
 }
 
-function MenuIcon({ open }: { open: boolean }) {
+function SearchIcon() {
   return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      aria-hidden
+    <a
+      href="/products"
+      aria-label="Search products"
+      style={{
+        width: 36,
+        height: 36,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "var(--ink)",
+      }}
     >
-      {open ? (
-        <>
-          <path d="M6 6 L 18 18" />
-          <path d="M18 6 L 6 18" />
-        </>
-      ) : (
-        <>
-          <path d="M4 7h16" />
-          <path d="M4 12h16" />
-          <path d="M4 17h16" />
-        </>
-      )}
-    </svg>
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="11" cy="11" r="7" />
+        <path d="M16.5 16.5 L21 21" />
+      </svg>
+    </a>
   );
 }
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -136,17 +114,16 @@ export function Nav() {
   }, []);
 
   const links = [
-    { href: "/search", label: "Shop" },
+    { href: "/products", label: "Shop" },
     { href: "/#about", label: "About" },
     { href: "/#process", label: "Process" },
-    { href: "/journal", label: "Journal" },
+    { href: "/#journal", label: "Journal" },
     { href: "/#subscription", label: "Subscription" },
     { href: "/#contact", label: "Contact" },
   ];
 
   return (
     <nav
-      className="bal-nav"
       style={{
         position: "sticky",
         top: 0,
@@ -167,7 +144,6 @@ export function Nav() {
         <Logo />
       </div>
       <div
-        className={`bal-nav-links${menuOpen ? " bal-nav-links-open" : ""}`}
         style={{
           display: "flex",
           gap: 36,
@@ -176,10 +152,9 @@ export function Nav() {
         }}
       >
         {links.map((l) => (
-          <Link
+          <a
             key={l.href}
             href={l.href}
-            onClick={() => setMenuOpen(false)}
             style={{
               transition: "color .2s ease",
             }}
@@ -189,30 +164,19 @@ export function Nav() {
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-2)")}
           >
             {l.label}
-          </Link>
+          </a>
         ))}
       </div>
       <div
-        className="bal-nav-cart"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
-          gap: 8,
+          gap: 10,
         }}
       >
-        <CartModal
-          renderTrigger={(count) => <CartIconVisual count={count} />}
-        />
-        <button
-          type="button"
-          className="bal-nav-mobile-toggle"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          <MenuIcon open={menuOpen} />
-        </button>
+        <SearchIcon />
+        <CartIcon />
       </div>
     </nav>
   );
