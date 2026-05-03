@@ -199,6 +199,69 @@ input {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 20px !important;
   }
+  .bal-products-hero-section {
+    padding: 0 24px !important;
+  }
+  .bal-products-hero {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+    padding: 42px 0 !important;
+  }
+  .bal-products-hero-visual {
+    height: auto !important;
+    aspect-ratio: 4 / 3 !important;
+    max-height: 320px !important;
+  }
+  .bal-products-seal {
+    right: 0 !important;
+    top: 18px !important;
+    transform: scale(0.78);
+    transform-origin: top right;
+  }
+  .bal-products-shop,
+  .bal-product-detail-section,
+  .bal-product-related-section,
+  .bal-product-reviews-section {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+  .bal-products-toolbar {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .bal-products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .bal-benefits-strip {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .bal-benefits-item {
+    border-left: none !important;
+    border-top: 1px solid rgba(77, 56, 36, 0.18);
+  }
+  .bal-benefits-item:nth-child(-n + 2) {
+    border-top: none !important;
+  }
+  .bal-benefits-item:nth-child(even) {
+    border-left: 1px solid rgba(77, 56, 36, 0.18) !important;
+  }
+  .bal-product-detail-grid,
+  .bal-product-info-grid,
+  .bal-product-story-grid,
+  .bal-product-reviews-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bal-product-purchase-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .bal-product-related-grid,
+  .bal-product-testimonials-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bal-product-card-horizontal {
+    grid-template-columns: 1fr !important;
+  }
   .bal-footer {
     padding: 48px 24px 24px !important;
   }
@@ -216,13 +279,14 @@ input {
 @media (max-width: 640px) {
   .bal-nav {
     padding: 16px 20px !important;
-    grid-template-columns: 1fr auto !important;
+    grid-template-columns: auto 1fr !important;
   }
   .bal-nav-links {
     display: none !important;
   }
   .bal-nav-cart {
     grid-column: 2;
+    gap: 4px !important;
   }
   .bal-nav-mobile-toggle {
     display: inline-flex;
@@ -272,5 +336,123 @@ input {
   }
   .bal-search-grid {
     grid-template-columns: 1fr !important;
+  }
+  .bal-products-hero {
+    min-height: 0 !important;
+    padding: 34px 0 30px !important;
+  }
+  .bal-products-hero h1 {
+    font-size: 48px !important;
+  }
+  .bal-products-hero p {
+    font-size: 16px !important;
+  }
+  .bal-products-hero-visual {
+    max-height: 260px !important;
+  }
+  .bal-products-seal {
+    display: none !important;
+  }
+  .bal-products-shop,
+  .bal-product-detail-section,
+  .bal-product-related-section,
+  .bal-product-reviews-section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .bal-products-toolbar-divider {
+    display: none !important;
+  }
+  .bal-products-chip-row,
+  .bal-products-sort-row {
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .bal-products-chip-row::-webkit-scrollbar,
+  .bal-products-sort-row::-webkit-scrollbar {
+    display: none;
+  }
+  .bal-products-chip-row button,
+  .bal-products-sort-row button {
+    flex: 0 0 auto;
+  }
+  .bal-products-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bal-product-card {
+    border-radius: 10px !important;
+  }
+  .bal-benefits-strip {
+    grid-template-columns: 1fr !important;
+    margin-top: 20px !important;
+  }
+  .bal-benefits-item,
+  .bal-benefits-item:nth-child(even),
+  .bal-benefits-item:nth-child(-n + 2) {
+    border-left: none !important;
+    border-top: 1px solid rgba(77, 56, 36, 0.18) !important;
+    grid-template-columns: 52px 1fr !important;
+    padding: 16px !important;
+  }
+  .bal-benefits-item:first-child {
+    border-top: none !important;
+  }
+  .bal-product-detail-grid {
+    gap: 24px !important;
+  }
+  .bal-product-detail-container nav {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 4px;
+  }
+  .bal-product-main-visual {
+    aspect-ratio: 1 / 0.86 !important;
+  }
+  .bal-product-thumbs {
+    gap: 8px !important;
+  }
+  .bal-add-to-cart-row {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .bal-product-info-grid {
+    gap: 12px !important;
+  }
+  .bal-product-info-grid section {
+    padding: 18px !important;
+  }
+  .bal-product-info-grid h2,
+  .bal-product-section-heading h2 {
+    font-size: 22px !important;
+  }
+  .bal-product-story-grid {
+    min-height: 0 !important;
+    gap: 0 !important;
+  }
+  .bal-product-story-grid > div:first-child {
+    height: 150px !important;
+  }
+  .bal-product-story-grid > div:last-child {
+    padding: 24px 16px !important;
+  }
+  .bal-product-section-heading {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .bal-product-reviews-grid {
+    gap: 18px !important;
+  }
+  .bal-footer form {
+    grid-template-columns: 1fr !important;
+  }
+  .bal-footer form button {
+    width: 100%;
+  }
+  .bal-footer-bottom > div:last-child {
+    flex-wrap: wrap;
+    gap: 14px !important;
   }
 }

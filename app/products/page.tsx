@@ -101,6 +101,7 @@ export default function ProductsPage() {
       <Nav />
       <main>
         <section
+          className="bal-products-hero-section"
           style={{
             borderTop: "1px solid rgba(77,56,36,0.12)",
             borderBottom: "1px solid rgba(77,56,36,0.14)",
@@ -109,6 +110,7 @@ export default function ProductsPage() {
           }}
         >
           <div
+            className="bal-products-hero"
             style={{
               maxWidth: 1180,
               minHeight: 310,
@@ -166,21 +168,27 @@ export default function ProductsPage() {
               </div>
             </div>
             <div
+              className="bal-products-hero-visual"
               style={{ height: 280, position: "relative", overflow: "hidden" }}
             >
               {heroProduct ? <ProductVisual product={heroProduct} /> : null}
             </div>
-            <div style={{ position: "absolute", right: 18, top: 28 }}>
+            <div
+              className="bal-products-seal"
+              style={{ position: "absolute", right: 18, top: 28 }}
+            >
               <Seal />
             </div>
           </div>
         </section>
 
         <section
+          className="bal-products-shop"
           style={{ padding: "18px 56px 20px", background: "var(--cream)" }}
         >
           <div style={{ maxWidth: 1180, margin: "0 auto" }}>
             <div
+              className="bal-products-toolbar"
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr auto",
@@ -188,7 +196,10 @@ export default function ProductsPage() {
                 gap: 24,
               }}
             >
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+              <div
+                className="bal-products-chip-row"
+                style={{ display: "flex", flexWrap: "wrap", gap: 10 }}
+              >
                 {[
                   "All Products",
                   "Eastern Brew",
@@ -214,6 +225,7 @@ export default function ProductsPage() {
                   </button>
                 ))}
                 <span
+                  className="bal-products-toolbar-divider"
                   style={{
                     width: 1,
                     height: 36,
@@ -239,7 +251,10 @@ export default function ProductsPage() {
                   </button>
                 ))}
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div
+                className="bal-products-sort-row"
+                style={{ display: "flex", alignItems: "center", gap: 12 }}
+              >
                 <button
                   type="button"
                   style={{
@@ -259,6 +274,7 @@ export default function ProductsPage() {
             </div>
 
             <div
+              className="bal-products-grid"
               style={{
                 marginTop: 22,
                 display: "grid",

@@ -11,6 +11,7 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
   return (
     <article
       id={`product-${product.slug}`}
+      className={`bal-product-card ${horizontal ? "bal-product-card-horizontal" : ""}`}
       style={{
         display: horizontal ? "grid" : "flex",
         gridTemplateColumns: horizontal ? "1fr 0.95fr" : undefined,

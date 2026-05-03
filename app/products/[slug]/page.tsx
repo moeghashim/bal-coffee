@@ -104,6 +104,7 @@ function BrewIcon({ index }: { index: number }) {
 function StoryBand() {
   return (
     <section
+      className="bal-product-story-band"
       style={{
         marginTop: 12,
         background:
@@ -111,6 +112,7 @@ function StoryBand() {
       }}
     >
       <div
+        className="bal-product-story-grid"
         style={{
           maxWidth: 1180,
           margin: "0 auto",
@@ -203,8 +205,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <>
       <Nav />
       <main style={{ background: "var(--cream)" }}>
-        <section style={{ padding: "14px 56px 18px" }}>
-          <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+        <section
+          className="bal-product-detail-section"
+          style={{ padding: "14px 56px 18px" }}
+        >
+          <div
+            className="bal-product-detail-container"
+            style={{ maxWidth: 1180, margin: "0 auto" }}
+          >
             <nav style={{ fontSize: 12, color: "var(--ink-soft)" }}>
               <a href="/">Home</a>
               <span style={{ margin: "0 12px" }}>/</span>
@@ -214,6 +222,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </nav>
 
             <div
+              className="bal-product-detail-grid"
               style={{
                 marginTop: 14,
                 display: "grid",
@@ -224,6 +233,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             >
               <div>
                 <div
+                  className="bal-product-main-visual"
                   style={{
                     position: "relative",
                     overflow: "hidden",
@@ -257,6 +267,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </span>
                 </div>
                 <div
+                  className="bal-product-thumbs"
                   style={{
                     marginTop: 12,
                     display: "grid",
@@ -297,6 +308,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   {product.name}
                 </h1>
                 <div
+                  className="bal-product-purchase-grid"
                   style={{
                     marginTop: 12,
                     display: "flex",
@@ -474,6 +486,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <BenefitsStrip />
 
             <div
+              className="bal-product-info-grid"
               style={{
                 marginTop: 18,
                 display: "grid",
@@ -638,9 +651,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         <StoryBand />
 
-        <section style={{ padding: "18px 56px 0" }}>
+        <section
+          className="bal-product-related-section"
+          style={{ padding: "18px 56px 0" }}
+        >
           <div style={{ maxWidth: 1180, margin: "0 auto" }}>
             <div
+              className="bal-product-section-heading"
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -663,6 +680,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </a>
             </div>
             <div
+              className="bal-product-related-grid"
               style={{
                 marginTop: 12,
                 display: "grid",
@@ -677,8 +695,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </section>
 
-        <section style={{ padding: "18px 56px 0" }}>
+        <section
+          className="bal-product-reviews-section"
+          style={{ padding: "18px 56px 0" }}
+        >
           <div
+            className="bal-product-reviews-grid"
             style={{
               maxWidth: 1180,
               margin: "0 auto",
@@ -688,7 +710,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             }}
           >
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div
+                className="bal-product-section-heading"
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
                 <h2
                   className="serif"
                   style={{
@@ -708,6 +733,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </a>
               </div>
               <div
+                className="bal-product-testimonials-grid"
                 style={{
                   marginTop: 12,
                   display: "grid",

@@ -142,6 +142,7 @@ export function Footer() {
   return (
     <footer
       id="contact"
+      className="bal-footer"
       style={{
         background:
           "radial-gradient(circle at 28% 0%, rgba(127,85,47,0.22), transparent 36%), linear-gradient(105deg, #211109 0%, #321b0f 52%, #1a0e08 100%)",
@@ -151,6 +152,7 @@ export function Footer() {
       }}
     >
       <div
+        className="bal-footer-grid"
         style={{
           maxWidth: 1280,
           margin: "0 auto",
@@ -319,6 +321,7 @@ export function Footer() {
       </div>
 
       <div
+        className="bal-footer-bottom"
         style={{
           maxWidth: 1280,
           margin: "28px auto 0",

@@ -74,6 +74,7 @@ function BenefitIcon({ icon }: { icon: string }) {
 export function BenefitsStrip() {
   return (
     <div
+      className="bal-benefits-strip"
       style={{
         maxWidth: 1180,
         margin: "28px auto 0",
@@ -88,6 +89,7 @@ export function BenefitsStrip() {
       {benefits.map((benefit, index) => (
         <div
           key={benefit.title}
+          className="bal-benefits-item"
           style={{
             display: "grid",
             gridTemplateColumns: "64px 1fr",

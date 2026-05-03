@@ -57,6 +57,7 @@ export function AddToCartButton({
       <input type="hidden" name="productSlug" value={productSlug} />
       <input type="hidden" name="quantity" value={quantity} />
       <div
+        className="bal-add-to-cart-row"
         style={{
           display: showQuantity ? "grid" : "block",
           gridTemplateColumns: showQuantity ? "108px 1fr" : undefined,
