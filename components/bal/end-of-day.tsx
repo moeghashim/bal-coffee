@@ -78,6 +78,7 @@ function TreeIcon() {
 function BotanicalRight() {
   return (
     <svg
+      className="bal-endofday-botanical"
       width="200"
       height="260"
       viewBox="0 0 200 260"
@@ -137,6 +138,7 @@ export function EndOfDay() {
     >
       <BotanicalRight />
       <div
+        className="bal-endofday-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
@@ -150,6 +152,7 @@ export function EndOfDay() {
           <CoffeeBookArt />
         </div>
         <div
+          className="bal-endofday-copy"
           style={{
             padding: "70px 56px 70px 64px",
             display: "flex",
@@ -196,6 +199,7 @@ export function EndOfDay() {
             unwind and reconnect with what matters.
           </p>
           <div
+            className="bal-endofday-perks"
             style={{
               marginTop: 36,
               display: "grid",

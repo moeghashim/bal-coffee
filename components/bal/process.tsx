@@ -99,6 +99,7 @@ function StepBrew() {
 function BotanicalRight() {
   return (
     <svg
+      className="bal-process-botanical"
       width="180"
       height="200"
       viewBox="0 0 180 200"
@@ -158,6 +159,7 @@ export function Process() {
   return (
     <section
       id="process"
+      className="bal-process"
       style={{
         position: "relative",
         background: "var(--olive)",
@@ -168,6 +170,7 @@ export function Process() {
     >
       <BotanicalRight />
       <div
+        className="bal-process-grid"
         style={{
           maxWidth: 1180,
           margin: "0 auto",
@@ -207,6 +210,7 @@ export function Process() {
           </h2>
         </div>
         <div
+          className="bal-process-divider"
           style={{
             width: 1,
             height: "100%",

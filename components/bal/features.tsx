@@ -115,6 +115,7 @@ const features: Feature[] = [
 export function Features() {
   return (
     <section
+      className="bal-features"
       style={{
         background: "var(--cream-2)",
         padding: "44px 56px",
@@ -123,6 +124,7 @@ export function Features() {
       }}
     >
       <div
+        className="bal-features-grid"
         style={{
           maxWidth: 1180,
           margin: "0 auto",

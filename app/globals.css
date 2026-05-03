@@ -111,6 +111,14 @@ input {
   display: none;
 }
 
+#shop,
+#process,
+#about,
+#subscription,
+#contact {
+  scroll-margin-top: 88px;
+}
+
 @media (max-width: 1024px) {
   .bal-nav-links {
     gap: 22px !important;
@@ -329,10 +337,45 @@ input {
     gap: 20px !important;
   }
   .bal-hero-buttons {
-    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100%;
+  }
+  .bal-hero-buttons a {
+    width: 100%;
+    justify-content: center;
+  }
+  .bal-hero h1 {
+    font-size: 44px !important;
+  }
+  .bal-hero p {
+    font-size: 15px !important;
+  }
+  .bal-bestsellers-grid {
+    scroll-margin-top: 80px !important;
+  }
+  .bal-endofday-perks,
+  .bal-subscription-perks {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    width: 100%;
+  }
+  .bal-endofday-perks > div,
+  .bal-subscription-perks > div {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    align-items: center;
+    text-align: left !important;
+    gap: 12px;
+  }
+  .bal-endofday-perks > div > div,
+  .bal-subscription-perks > div > div {
+    justify-content: flex-start !important;
   }
   .bal-founder-quote {
     transform: none !important;
+  }
+  .bal-subscription-grid > a {
+    width: 100%;
   }
   .bal-search-grid {
     grid-template-columns: 1fr !important;

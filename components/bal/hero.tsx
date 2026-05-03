@@ -1,6 +1,7 @@
 function BotanicalAccent() {
   return (
     <svg
+      className="bal-hero-botanical"
       width="160"
       height="320"
       viewBox="0 0 160 320"
@@ -84,6 +85,7 @@ function HeroImage() {
 export function Hero() {
   return (
     <section
+      className="bal-hero"
       style={{
         position: "relative",
         padding: "40px 56px 80px",
@@ -92,6 +94,7 @@ export function Hero() {
     >
       <BotanicalAccent />
       <div
+        className="bal-hero-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1.1fr",
@@ -101,7 +104,10 @@ export function Hero() {
           margin: "0 auto",
         }}
       >
-        <div style={{ paddingLeft: 80, paddingRight: 20 }}>
+        <div
+          className="bal-hero-copy"
+          style={{ paddingLeft: 80, paddingRight: 20 }}
+        >
           <h1
             className="serif"
             style={{
@@ -138,7 +144,10 @@ export function Hero() {
             <br />
             Warm. Grounding. Yours, any time of day.
           </p>
-          <div style={{ marginTop: 36, display: "flex", gap: 14 }}>
+          <div
+            className="bal-hero-buttons"
+            style={{ marginTop: 36, display: "flex", gap: 14 }}
+          >
             <a
               href="#shop"
               className="mono"
