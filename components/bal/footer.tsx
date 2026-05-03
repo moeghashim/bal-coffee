@@ -2,24 +2,37 @@
 
 import { FormEvent } from "react";
 
-const linkColumns: { title: string; links: string[] }[] = [
+const linkColumns: {
+  title: string;
+  links: { label: string; href: string }[];
+}[] = [
   {
     title: "Shop",
     links: [
-      "All Products",
-      "Eastern Brew",
-      "GrounDate",
-      "DateSpresso",
-      "Gift cards",
+      { label: "All Products", href: "/#all-products" },
+      { label: "Eastern Brew", href: "/products/eastern-brew" },
+      { label: "GrounDate", href: "/products/groundate" },
+      { label: "DateSpresso", href: "/products/datespresso" },
+      { label: "Gift cards", href: "/#subscription" },
     ],
   },
   {
     title: "About",
-    links: ["Our Story", "Our Process", "Sustainability", "FAQ"],
+    links: [
+      { label: "Our Story", href: "/#about" },
+      { label: "Our Process", href: "/#process" },
+      { label: "Sustainability", href: "/#process" },
+      { label: "FAQ", href: "/#contact" },
+    ],
   },
   {
     title: "Help",
-    links: ["Shipping & Returns", "Subscriptions", "Contact Us", "Wholesale"],
+    links: [
+      { label: "Shipping & Returns", href: "/#contact" },
+      { label: "Subscriptions", href: "/#subscription" },
+      { label: "Contact Us", href: "/#contact" },
+      { label: "Wholesale", href: "/#contact" },
+    ],
   },
 ];
 
@@ -220,8 +233,8 @@ export function Footer() {
             </div>
             {col.links.map((l) => (
               <a
-                key={l}
-                href="#"
+                key={l.label}
+                href={l.href}
                 style={{
                   display: "block",
                   fontSize: 13.5,
@@ -229,7 +242,7 @@ export function Footer() {
                   marginBottom: 10,
                 }}
               >
-                {l}
+                {l.label}
               </a>
             ))}
           </div>

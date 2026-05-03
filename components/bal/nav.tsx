@@ -43,8 +43,9 @@ function Logo() {
 
 function CartIcon() {
   return (
-    <button
-      aria-label="Cart"
+    <a
+      href="/cart"
+      aria-label="View cart"
       style={{
         position: "relative",
         width: 36,
@@ -68,28 +69,7 @@ function CartIcon() {
         <path d="M6 7h12l-1.2 11a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7z" />
         <path d="M9 7V5.5A3 3 0 0 1 12 2.5 3 3 0 0 1 15 5.5V7" />
       </svg>
-      <span
-        className="mono"
-        style={{
-          position: "absolute",
-          top: 2,
-          right: 0,
-          minWidth: 16,
-          height: 16,
-          borderRadius: 999,
-          background: "var(--terra)",
-          color: "var(--cream)",
-          fontSize: 9,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "0 4px",
-          fontWeight: 500,
-        }}
-      >
-        0
-      </span>
-    </button>
+    </a>
   );
 }
 
@@ -103,12 +83,12 @@ export function Nav() {
   }, []);
 
   const links = [
-    { href: "#shop", label: "Shop" },
-    { href: "#about", label: "About" },
-    { href: "#process", label: "Process" },
-    { href: "#journal", label: "Journal" },
-    { href: "#subscription", label: "Subscription" },
-    { href: "#contact", label: "Contact" },
+    { href: "/#shop", label: "Shop" },
+    { href: "/#about", label: "About" },
+    { href: "/#process", label: "Process" },
+    { href: "/#journal", label: "Journal" },
+    { href: "/#subscription", label: "Subscription" },
+    { href: "/#contact", label: "Contact" },
   ];
 
   return (

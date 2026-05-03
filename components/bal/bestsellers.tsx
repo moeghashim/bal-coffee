@@ -1,9 +1,9 @@
-type Product = {
-  name: string;
-  type: string;
-  blurb: string;
-  price: string;
-  image: React.ReactNode;
+import type { ReactNode } from "react";
+import { AddToCartButton } from "components/bal/add-to-cart-button";
+import { products, type Product } from "lib/products";
+
+type ProductCardProduct = Product & {
+  image: ReactNode;
 };
 
 function EasternBrewArt() {
@@ -281,33 +281,23 @@ function DateSpressoArt() {
   );
 }
 
-const products: Product[] = [
-  {
-    name: "Eastern Brew",
-    type: "Turkish coffee style",
-    blurb: "Finely ground for a traditional, rich and bold cup.",
-    price: "$24.00",
-    image: <EasternBrewArt />,
-  },
-  {
-    name: "GrounDate",
-    type: "Classic brewing",
-    blurb: "Perfectly ground for drip or French press.",
-    price: "$22.00",
-    image: <GrounDateArt />,
-  },
-  {
-    name: "DateSpresso",
-    type: "Pod compatible",
-    blurb: "Designed for Nespresso® machines.",
-    price: "$24.00",
-    image: <DateSpressoArt />,
-  },
-];
+const productImages: Record<Product["slug"], ReactNode> = {
+  "eastern-brew": <EasternBrewArt />,
+  groundate: <GrounDateArt />,
+  datespresso: <DateSpressoArt />,
+};
 
-function ProductCard({ p }: { p: Product }) {
+const featuredProducts: ProductCardProduct[] = products.map((product) => ({
+  ...product,
+  image: productImages[product.slug],
+}));
+
+const productPath = (slug: string) => `/products/${slug}`;
+
+function ProductCard({ p }: { p: ProductCardProduct }) {
   return (
     <article
+      id={`product-${p.slug}`}
       style={{
         background: "var(--cream-3)",
         border: "1px solid var(--line-soft)",
@@ -315,9 +305,16 @@ function ProductCard({ p }: { p: Product }) {
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
+        scrollMarginTop: 96,
       }}
     >
-      <div style={{ aspectRatio: "5 / 4" }}>{p.image}</div>
+      <a
+        href={productPath(p.slug)}
+        aria-label={`View ${p.name}`}
+        style={{ display: "block", aspectRatio: "5 / 4" }}
+      >
+        {p.image}
+      </a>
       <div style={{ padding: "20px 22px 22px" }}>
         <h3
           className="serif"
@@ -328,7 +325,7 @@ function ProductCard({ p }: { p: Product }) {
             letterSpacing: "-0.01em",
           }}
         >
-          {p.name}
+          <a href={productPath(p.slug)}>{p.name}</a>
         </h3>
         <p
           className="mono"
@@ -362,23 +359,7 @@ function ProductCard({ p }: { p: Product }) {
         >
           {p.price}
         </p>
-        <button
-          className="mono"
-          style={{
-            marginTop: 16,
-            width: "100%",
-            padding: "12px 16px",
-            border: "1px solid var(--ink)",
-            borderRadius: 2,
-            fontSize: 11,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            background: "transparent",
-            color: "var(--ink)",
-          }}
-        >
-          Quick Shop
-        </button>
+        <AddToCartButton productSlug={p.slug} />
       </div>
     </article>
   );
@@ -394,6 +375,7 @@ export function Bestsellers() {
       }}
     >
       <div
+        id="all-products"
         style={{
           maxWidth: 1280,
           margin: "0 auto",
@@ -401,6 +383,7 @@ export function Bestsellers() {
           gridTemplateColumns: "0.85fr 1fr 1fr 1fr",
           gap: 28,
           alignItems: "stretch",
+          scrollMarginTop: 96,
         }}
       >
         <div
@@ -468,7 +451,7 @@ export function Bestsellers() {
             Shop all products
           </a>
         </div>
-        {products.map((p) => (
+        {featuredProducts.map((p) => (
           <ProductCard key={p.name} p={p} />
         ))}
       </div>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 960" role="img" aria-labelledby="title desc">
+  <title id="title">Evening coffee ritual</title>
+  <desc id="desc">A warm evening scene with a glass mug beside an open book under soft lamplight.</desc>
+  <defs>
+    <radialGradient id="lamp" cx="72%" cy="8%" r="82%">
+      <stop offset="0" stop-color="#d49759"/>
+      <stop offset="0.35" stop-color="#7e4826"/>
+      <stop offset="1" stop-color="#170b04"/>
+    </radialGradient>
+    <linearGradient id="table" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#4c2d18"/>
+      <stop offset="1" stop-color="#1a0d05"/>
+    </linearGradient>
+    <linearGradient id="page" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff1d4"/>
+      <stop offset="1" stop-color="#c9a877"/>
+    </linearGradient>
+    <linearGradient id="coffee" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#6c3b1d"/>
+      <stop offset="1" stop-color="#1c0b04"/>
+    </linearGradient>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="30" stdDeviation="30" flood-color="#000" flood-opacity="0.34"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="960" fill="url(#lamp)"/>
+  <rect y="644" width="1200" height="316" fill="url(#table)"/>
+  <ellipse cx="760" cy="728" rx="345" ry="86" fill="#000" opacity="0.2"/>
+
+  <g filter="url(#soft-shadow)">
+    <path d="M130 558 C 265 518 420 526 585 566 L 555 748 C 392 700 245 698 102 744 Z" fill="#2b1810"/>
+    <path d="M588 566 C 750 520 910 518 1070 560 L 1098 744 C 946 698 792 700 620 748 Z" fill="#2b1810"/>
+    <path d="M154 554 C 288 520 424 530 586 574 L 558 724 C 405 676 260 676 128 722 Z" fill="url(#page)"/>
+    <path d="M590 574 C 748 528 898 524 1048 558 L 1072 722 C 928 676 780 676 624 724 Z" fill="url(#page)"/>
+    <path d="M586 574 L620 724" stroke="#835d36" stroke-width="3"/>
+    <g stroke="#6d4a2c" stroke-width="2" opacity="0.42">
+      <path d="M206 596 C 304 576 405 580 520 610"/>
+      <path d="M198 632 C 310 610 410 616 514 642"/>
+      <path d="M190 668 C 300 646 398 650 506 678"/>
+      <path d="M692 612 C 790 584 888 582 994 604"/>
+      <path d="M686 646 C 794 618 890 620 1002 646"/>
+      <path d="M680 680 C 786 654 894 656 1010 684"/>
+    </g>
+  </g>
+
+  <g filter="url(#soft-shadow)">
+    <ellipse cx="816" cy="746" rx="152" ry="24" fill="#000" opacity="0.42"/>
+    <path d="M706 468 Q 706 446 732 446 L 884 446 Q 910 446 910 468 L 910 696 Q 910 742 862 742 L 754 742 Q 706 742 706 696 Z" fill="#fff0dc" opacity="0.13" stroke="#d2a06e" stroke-width="4"/>
+    <path d="M736 502 Q 736 488 752 488 L 864 488 Q 880 488 880 502 L 880 690 Q 880 720 850 720 L 766 720 Q 736 720 736 690 Z" fill="url(#coffee)"/>
+    <ellipse cx="808" cy="502" rx="73" ry="12" fill="#b97e4b" opacity="0.75"/>
+    <path d="M910 520 Q 990 526 990 600 Q 990 674 910 684" fill="none" stroke="#d2a06e" stroke-width="8" stroke-linecap="round"/>
+    <path d="M738 460 C 722 426 734 396 758 372" fill="none" stroke="#f5d9ad" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+    <path d="M808 454 C 790 412 810 382 836 350" fill="none" stroke="#f5d9ad" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+  </g>
+
+  <ellipse cx="904" cy="170" rx="260" ry="115" fill="#e8af6c" opacity="0.13"/>
+  <circle cx="934" cy="104" r="42" fill="#f4c174" opacity="0.35"/>
+</svg>
