@@ -32,7 +32,7 @@ export default async function CartPage() {
         >
           <div style={{ maxWidth: 960, margin: "0 auto" }}>
             <a
-              href="/#all-products"
+              href="/products"
               className="mono"
               style={{
                 fontSize: 10,

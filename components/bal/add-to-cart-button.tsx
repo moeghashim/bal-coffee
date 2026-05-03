@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import {
   addProductToCart,
@@ -12,7 +12,7 @@ const initialState: AddToCartState = {
   message: "",
 };
 
-function SubmitButton({ label }: { label: string }) {
+function SubmitButton({ label, compact }: { label: string; compact: boolean }) {
   const { pending } = useFormStatus();
 
   return (
@@ -22,14 +22,14 @@ function SubmitButton({ label }: { label: string }) {
       className="mono"
       style={{
         width: "100%",
-        padding: "12px 16px",
-        border: "1px solid var(--ink)",
-        borderRadius: 2,
+        minHeight: compact ? 36 : 40,
+        padding: compact ? "9px 14px" : "12px 16px",
+        border: "1px solid #32180d",
+        borderRadius: 5,
         fontSize: 11,
-        letterSpacing: "0.18em",
-        textTransform: "uppercase",
-        background: pending ? "var(--ink-soft)" : "transparent",
-        color: "var(--ink)",
+        letterSpacing: 0,
+        background: pending ? "#6e594a" : "#32180d",
+        color: "#fff4e8",
         opacity: pending ? 0.75 : 1,
       }}
     >
@@ -41,22 +41,74 @@ function SubmitButton({ label }: { label: string }) {
 export function AddToCartButton({
   productSlug,
   label = "Add to cart",
+  compact = false,
+  showQuantity = false,
 }: {
   productSlug: string;
   label?: string;
+  compact?: boolean;
+  showQuantity?: boolean;
 }) {
   const [state, formAction] = useActionState(addProductToCart, initialState);
+  const [quantity, setQuantity] = useState(1);
 
   return (
-    <form action={formAction} style={{ marginTop: 16 }}>
+    <form action={formAction} style={{ marginTop: compact ? 10 : 16 }}>
       <input type="hidden" name="productSlug" value={productSlug} />
-      <SubmitButton label={state.status === "success" ? "Added" : label} />
+      <input type="hidden" name="quantity" value={quantity} />
+      <div
+        style={{
+          display: showQuantity ? "grid" : "block",
+          gridTemplateColumns: showQuantity ? "108px 1fr" : undefined,
+          gap: 16,
+          alignItems: "center",
+        }}
+      >
+        {showQuantity ? (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "32px 1fr 32px",
+              alignItems: "center",
+              minHeight: 40,
+              border: "1px solid rgba(77,56,36,0.22)",
+              borderRadius: 6,
+              overflow: "hidden",
+              background: "rgba(255,252,246,0.72)",
+            }}
+          >
+            <button
+              type="button"
+              aria-label="Decrease quantity"
+              onClick={() => setQuantity((value) => Math.max(1, value - 1))}
+              style={{ height: "100%", fontSize: 18, color: "var(--ink-2)" }}
+            >
+              -
+            </button>
+            <span style={{ textAlign: "center", fontSize: 14 }}>
+              {quantity}
+            </span>
+            <button
+              type="button"
+              aria-label="Increase quantity"
+              onClick={() => setQuantity((value) => value + 1)}
+              style={{ height: "100%", fontSize: 18, color: "var(--ink-2)" }}
+            >
+              +
+            </button>
+          </div>
+        ) : null}
+        <SubmitButton
+          compact={compact}
+          label={state.status === "success" ? "Added" : label}
+        />
+      </div>
       <p
         aria-live="polite"
         style={{
-          marginTop: 10,
-          minHeight: 20,
-          fontSize: 12,
+          marginTop: compact ? 7 : 10,
+          minHeight: compact ? 16 : 20,
+          fontSize: compact ? 11 : 12,
           lineHeight: 1.5,
           color:
             state.status === "error" ? "var(--terra-deep)" : "var(--ink-2)",

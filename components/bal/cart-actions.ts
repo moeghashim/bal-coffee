@@ -141,7 +141,7 @@ function getUserError(errors: ShopifyUserError[] = []) {
   return errors[0]?.message;
 }
 
-async function createCart(variantId: string) {
+async function createCart(variantId: string, quantity: number) {
   const data = await shopifyFetch<{
     cartCreate: {
       cart?: ShopifyCart;
@@ -164,7 +164,7 @@ async function createCart(variantId: string) {
     `,
     {
       input: {
-        lines: [{ merchandiseId: variantId, quantity: 1 }],
+        lines: [{ merchandiseId: variantId, quantity }],
       },
     },
   );
@@ -178,7 +178,11 @@ async function createCart(variantId: string) {
   return data.cartCreate.cart;
 }
 
-async function addLineToCart(cartId: string, variantId: string) {
+async function addLineToCart(
+  cartId: string,
+  variantId: string,
+  quantity: number,
+) {
   const data = await shopifyFetch<{
     cartLinesAdd: {
       cart?: ShopifyCart;
@@ -201,7 +205,7 @@ async function addLineToCart(cartId: string, variantId: string) {
     `,
     {
       cartId,
-      lines: [{ merchandiseId: variantId, quantity: 1 }],
+      lines: [{ merchandiseId: variantId, quantity }],
     },
   );
 
@@ -286,6 +290,7 @@ export async function addProductToCart(
   formData: FormData,
 ): Promise<AddToCartState> {
   const slug = String(formData.get("productSlug") || "");
+  const quantity = Math.max(1, Number(formData.get("quantity") || 1));
   const product = getProduct(slug);
 
   if (!product) {
@@ -309,10 +314,10 @@ export async function addProductToCart(
 
     try {
       cart = currentCartId
-        ? await addLineToCart(currentCartId, variantId)
-        : await createCart(variantId);
+        ? await addLineToCart(currentCartId, variantId, quantity)
+        : await createCart(variantId, quantity);
     } catch {
-      cart = await createCart(variantId);
+      cart = await createCart(variantId, quantity);
     }
 
     await saveCart(cart);
