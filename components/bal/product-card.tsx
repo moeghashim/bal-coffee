@@ -1,5 +1,5 @@
 import { AddToCartButton } from "components/bal/add-to-cart-button";
-import { ProductVisual } from "components/bal/product-visual";
+import { ProductMedia } from "components/bal/product-media";
 import type { Product } from "lib/products";
 
 type ProductCardProps = {
@@ -8,6 +8,8 @@ type ProductCardProps = {
 };
 
 export function ProductCard({ product, horizontal = false }: ProductCardProps) {
+  const hasLongName = product.name.length > 34;
+
   return (
     <article
       id={`product-${product.slug}`}
@@ -31,7 +33,7 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
           aspectRatio: horizontal ? "1.35 / 1" : "1.36 / 1",
         }}
       >
-        <ProductVisual product={product} compact={horizontal} />
+        <ProductMedia product={product} compact={horizontal} />
       </a>
       <div
         style={{
@@ -54,7 +56,19 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
                 letterSpacing: 0,
               }}
             >
-              <a href={`/products/${product.slug}`}>{product.name}</a>
+              <a
+                href={`/products/${product.slug}`}
+                style={{
+                  display: "-webkit-box",
+                  overflow: "hidden",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: horizontal ? 3 : 2,
+                  fontSize: hasLongName ? (horizontal ? 15 : 20) : undefined,
+                  lineHeight: hasLongName ? 1.12 : undefined,
+                }}
+              >
+                {product.name}
+              </a>
             </h3>
             <p
               style={{

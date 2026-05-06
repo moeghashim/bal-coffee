@@ -3,8 +3,8 @@ import { Footer } from "components/bal/footer";
 import { Grain } from "components/bal/grain";
 import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
-import { ProductVisual } from "components/bal/product-visual";
-import { products } from "lib/products";
+import { ProductMedia } from "components/bal/product-media";
+import { getProducts } from "lib/products";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -93,7 +93,8 @@ function Seal() {
   );
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const products = await getProducts();
   const heroProduct = products[0];
 
   return (
@@ -171,7 +172,7 @@ export default function ProductsPage() {
               className="bal-products-hero-visual"
               style={{ height: 280, position: "relative", overflow: "hidden" }}
             >
-              {heroProduct ? <ProductVisual product={heroProduct} /> : null}
+              {heroProduct ? <ProductMedia product={heroProduct} /> : null}
             </div>
             <div
               className="bal-products-seal"

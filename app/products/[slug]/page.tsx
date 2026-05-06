@@ -4,8 +4,12 @@ import { Footer } from "components/bal/footer";
 import { Grain } from "components/bal/grain";
 import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
-import { ProductVisual } from "components/bal/product-visual";
-import { getProduct, getRelatedProducts, products } from "lib/products";
+import { ProductMedia } from "components/bal/product-media";
+import {
+  getProductWithShopify,
+  getRelatedProductsWithShopify,
+  products,
+} from "lib/products";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -23,7 +27,7 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getProductWithShopify(slug);
 
   if (!product) {
     return {};
@@ -31,7 +35,7 @@ export async function generateMetadata({
 
   return {
     title: product.name,
-    description: product.blurb,
+    description: product.description || product.blurb,
   };
 }
 
@@ -193,13 +197,18 @@ const reviews = [
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getProductWithShopify(slug);
 
   if (!product) {
     notFound();
   }
 
-  const related = getRelatedProducts(product.slug);
+  const related = await getRelatedProductsWithShopify(product.slug);
+  const productImages =
+    product.images && product.images.length > 0
+      ? product.images.slice(0, 4)
+      : [undefined, undefined, undefined, undefined];
+  const hasLongName = product.name.length > 42;
 
   return (
     <>
@@ -242,7 +251,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     aspectRatio: "1.16 / 1",
                   }}
                 >
-                  <ProductVisual product={product} />
+                  <ProductMedia product={product} />
                   <span
                     className="mono"
                     style={{
@@ -275,9 +284,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     gap: 12,
                   }}
                 >
-                  {[0, 1, 2, 3].map((item) => (
+                  {productImages.map((image, item) => (
                     <div
-                      key={item}
+                      key={image?.url || item}
                       style={{
                         overflow: "hidden",
                         borderRadius: 8,
@@ -288,7 +297,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         aspectRatio: "1.35 / 1",
                       }}
                     >
-                      <ProductVisual product={product} compact />
+                      <ProductMedia product={product} image={image} compact />
                     </div>
                   ))}
                 </div>
@@ -298,8 +307,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <h1
                   className="serif"
                   style={{
-                    fontSize: "clamp(46px, 5vw, 64px)",
-                    lineHeight: 0.98,
+                    fontSize: hasLongName
+                      ? "clamp(30px, 3.8vw, 44px)"
+                      : "clamp(46px, 5vw, 64px)",
+                    lineHeight: hasLongName ? 1.06 : 0.98,
                     fontWeight: 400,
                     color: "var(--ink)",
                     letterSpacing: 0,

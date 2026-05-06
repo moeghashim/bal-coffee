@@ -1,3 +1,11 @@
+import {
+  formatShopifyPrice,
+  getShopifyProductByHandle,
+  getShopifyProductsByHandles,
+  type ShopifyImage,
+  type ShopifyProduct,
+} from "lib/shopify";
+
 export type ProductKind =
   | "bag-dark"
   | "bag-light"
@@ -24,6 +32,8 @@ export type Product = {
   brewSteps: { title: string; body: string }[];
   kind: ProductKind;
   accent: string;
+  availableForSale?: boolean;
+  images?: ShopifyImage[];
 };
 
 export const products: Product[] = [
@@ -259,4 +269,98 @@ export function getProduct(slug: string) {
 
 export function getRelatedProducts(slug: string) {
   return products.filter((product) => product.slug !== slug).slice(0, 3);
+}
+
+function normalizeDescription(description: string) {
+  return description.replace(/\s+/g, " ").trim();
+}
+
+function toProductBlurb(description: string, fallback: string) {
+  const cleaned = normalizeDescription(description);
+
+  if (!cleaned) {
+    return fallback;
+  }
+
+  return cleaned.length > 118 ? `${cleaned.slice(0, 115).trim()}...` : cleaned;
+}
+
+function getShopifyImages(shopifyProduct: ShopifyProduct) {
+  const images = [
+    ...shopifyProduct.images.nodes,
+    ...(shopifyProduct.featuredImage ? [shopifyProduct.featuredImage] : []),
+  ];
+  const seen = new Set<string>();
+
+  return images.filter((image) => {
+    if (!image.url || seen.has(image.url)) {
+      return false;
+    }
+
+    seen.add(image.url);
+    return true;
+  });
+}
+
+function mergeShopifyProduct(
+  product: Product,
+  shopifyProduct?: ShopifyProduct,
+) {
+  if (!shopifyProduct) {
+    return product;
+  }
+
+  const description = normalizeDescription(shopifyProduct.description);
+
+  return {
+    ...product,
+    name: shopifyProduct.title || product.name,
+    description: description || product.description,
+    blurb: toProductBlurb(description, product.blurb),
+    price: formatShopifyPrice(shopifyProduct.priceRange.minVariantPrice),
+    availableForSale: shopifyProduct.availableForSale,
+    images: getShopifyImages(shopifyProduct),
+  };
+}
+
+export async function getProducts() {
+  const shopifyProducts = await getShopifyProductsByHandles(
+    products.map((product) => product.shopifyHandle),
+  );
+
+  return products.map((product) =>
+    mergeShopifyProduct(product, shopifyProducts.get(product.shopifyHandle)),
+  );
+}
+
+export async function getFeaturedProducts() {
+  return (await getProducts()).slice(0, 3);
+}
+
+export async function getProductWithShopify(slug: string) {
+  const product = getProduct(slug);
+
+  if (!product) {
+    return undefined;
+  }
+
+  try {
+    return mergeShopifyProduct(
+      product,
+      await getShopifyProductByHandle(product.shopifyHandle),
+    );
+  } catch {
+    return product;
+  }
+}
+
+export async function getRelatedProductsWithShopify(slug: string) {
+  const relatedProducts = getRelatedProducts(slug);
+  const shopifyProducts = await getShopifyProductsByHandles(
+    relatedProducts.map((product) => product.shopifyHandle),
+  );
+
+  return relatedProducts.map((product) =>
+    mergeShopifyProduct(product, shopifyProducts.get(product.shopifyHandle)),
+  );
 }

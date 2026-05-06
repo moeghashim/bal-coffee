@@ -2,6 +2,14 @@
 
 import { cookies } from "next/headers";
 import { getProduct } from "lib/products";
+import {
+  getUserError,
+  shopifyFetch,
+  type ShopifyCart,
+  type ShopifyCartDetails,
+  type ShopifyCartLine,
+  type ShopifyUserError,
+} from "lib/shopify";
 
 const CART_ID_COOKIE = "bal_cart_id";
 
@@ -12,99 +20,14 @@ export type AddToCartState = {
   totalQuantity?: number;
 };
 
-type ShopifyCart = {
-  id: string;
-  checkoutUrl: string;
-  totalQuantity: number;
-};
+export type CartLine = ShopifyCartLine;
 
-export type CartLine = {
-  id: string;
-  quantity: number;
-  merchandise: {
-    title: string;
-    product: {
-      title: string;
-      handle: string;
-    };
-  };
-  cost: {
-    totalAmount: {
-      amount: string;
-      currencyCode: string;
-    };
-  };
-};
-
-export type CartDetails = ShopifyCart & {
-  lines: CartLine[];
-  cost: {
-    totalAmount: {
-      amount: string;
-      currencyCode: string;
-    };
-  };
-};
-
-type ShopifyUserError = {
-  message: string;
-};
-
-type ShopifyResponse<T> = {
-  data?: T;
-  errors?: { message: string }[];
-};
+export type CartDetails = ShopifyCartDetails;
 
 const initialError: AddToCartState = {
   status: "error",
   message: "Unable to add this product right now.",
 };
-
-function getShopifyEndpoint() {
-  const domain = process.env.SHOPIFY_STORE_DOMAIN;
-  const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
-  const apiVersion = process.env.SHOPIFY_STOREFRONT_API_VERSION || "2025-10";
-
-  if (!domain || !token) {
-    return undefined;
-  }
-
-  const origin = domain.startsWith("http") ? domain : `https://${domain}`;
-
-  return {
-    url: `${origin}/api/${apiVersion}/graphql.json`,
-    token,
-  };
-}
-
-async function shopifyFetch<T>(
-  query: string,
-  variables: Record<string, unknown>,
-) {
-  const endpoint = getShopifyEndpoint();
-
-  if (!endpoint) {
-    throw new Error("Shopify Storefront API is not configured.");
-  }
-
-  const response = await fetch(endpoint.url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": endpoint.token,
-    },
-    body: JSON.stringify({ query, variables }),
-    cache: "no-store",
-  });
-
-  const body = (await response.json()) as ShopifyResponse<T>;
-
-  if (!response.ok || body.errors?.length) {
-    throw new Error(body.errors?.[0]?.message || "Shopify request failed.");
-  }
-
-  return body.data as T;
-}
 
 async function getFirstAvailableVariantId(handle: string) {
   const data = await shopifyFetch<{
@@ -135,10 +58,6 @@ async function getFirstAvailableVariantId(handle: string) {
   return data.product?.variants.nodes.find(
     (variant) => variant.availableForSale,
   )?.id;
-}
-
-function getUserError(errors: ShopifyUserError[] = []) {
-  return errors[0]?.message;
 }
 
 async function createCart(variantId: string, quantity: number) {
