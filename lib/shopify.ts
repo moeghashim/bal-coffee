@@ -30,9 +30,11 @@ export type ShopifyCartLine = {
   quantity: number;
   merchandise: {
     title: string;
+    image?: ShopifyImage | null;
     product: {
       title: string;
       handle: string;
+      featuredImage?: ShopifyImage | null;
     };
   };
   cost: {
@@ -43,6 +45,8 @@ export type ShopifyCartLine = {
 export type ShopifyCartDetails = ShopifyCart & {
   lines: ShopifyCartLine[];
   cost: {
+    subtotalAmount?: ShopifyMoney | null;
+    totalTaxAmount?: ShopifyMoney | null;
     totalAmount: ShopifyMoney;
   };
 };

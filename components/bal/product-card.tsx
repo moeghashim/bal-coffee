@@ -9,6 +9,8 @@ type ProductCardProps = {
 
 export function ProductCard({ product, horizontal = false }: ProductCardProps) {
   const hasLongName = product.name.length > 34;
+  const titleHeight = horizontal ? 60 : 58;
+  const blurbHeight = horizontal ? 48 : 42;
 
   return (
     <article
@@ -30,6 +32,7 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
         aria-label={`View ${product.name}`}
         style={{
           display: "block",
+          flex: "0 0 auto",
           aspectRatio: horizontal ? "1.35 / 1" : "1.36 / 1",
         }}
       >
@@ -39,13 +42,21 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
         style={{
           display: "flex",
           flexDirection: "column",
+          height: horizontal ? "100%" : 196,
+          minHeight: horizontal ? 0 : 196,
+          overflow: "hidden",
           padding: horizontal ? "22px 22px 18px" : "14px 18px 16px",
         }}
       >
         <div
-          style={{ display: "flex", justifyContent: "space-between", gap: 16 }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 16,
+            minWidth: 0,
+          }}
         >
-          <div>
+          <div style={{ minWidth: 0 }}>
             <h3
               className="serif"
               style={{
@@ -54,12 +65,14 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
                 fontWeight: 400,
                 color: "var(--ink)",
                 letterSpacing: 0,
+                minHeight: titleHeight,
               }}
             >
               <a
                 href={`/products/${product.slug}`}
                 style={{
                   display: "-webkit-box",
+                  minHeight: titleHeight,
                   overflow: "hidden",
                   WebkitBoxOrient: "vertical",
                   WebkitLineClamp: horizontal ? 3 : 2,
@@ -74,7 +87,12 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
               style={{
                 marginTop: 8,
                 maxWidth: horizontal ? 160 : 230,
-                minHeight: horizontal ? 44 : 42,
+                minHeight: blurbHeight,
+                maxHeight: blurbHeight,
+                display: "-webkit-box",
+                overflow: "hidden",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: horizontal ? 3 : 2,
                 fontSize: horizontal ? 12 : 15,
                 lineHeight: 1.2,
                 color: "var(--ink-2)",

@@ -41,7 +41,7 @@ function Logo() {
   );
 }
 
-function CartIcon() {
+function CartIcon({ count = 0 }: { count?: number }) {
   return (
     <a
       href="/cart"
@@ -69,6 +69,30 @@ function CartIcon() {
         <path d="M6 7h12l-1.2 11a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7z" />
         <path d="M9 7V5.5A3 3 0 0 1 12 2.5 3 3 0 0 1 15 5.5V7" />
       </svg>
+      {count > 0 ? (
+        <span
+          aria-label={`${count} items in cart`}
+          style={{
+            position: "absolute",
+            top: 1,
+            right: 0,
+            display: "inline-flex",
+            minWidth: 17,
+            height: 17,
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0 4px",
+            borderRadius: 999,
+            background: "#32180d",
+            color: "#fff4e8",
+            fontSize: 10,
+            lineHeight: 1,
+            fontWeight: 700,
+          }}
+        >
+          {count > 99 ? "99+" : count}
+        </span>
+      ) : null}
     </a>
   );
 }
@@ -104,7 +128,7 @@ function SearchIcon() {
   );
 }
 
-export function Nav() {
+export function Nav({ cartCount = 0 }: { cartCount?: number }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -210,7 +234,7 @@ export function Nav() {
           </svg>
         </button>
         <SearchIcon />
-        <CartIcon />
+        <CartIcon count={cartCount} />
       </div>
     </nav>
   );

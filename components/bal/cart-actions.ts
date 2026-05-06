@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { getProduct } from "lib/products";
 import {
   getUserError,
@@ -152,6 +153,14 @@ async function getCart(cartId: string) {
           checkoutUrl
           totalQuantity
           cost {
+            subtotalAmount {
+              amount
+              currencyCode
+            }
+            totalTaxAmount {
+              amount
+              currencyCode
+            }
             totalAmount {
               amount
               currencyCode
@@ -164,9 +173,21 @@ async function getCart(cartId: string) {
               merchandise {
                 ... on ProductVariant {
                   title
+                  image {
+                    url
+                    altText
+                    width
+                    height
+                  }
                   product {
                     title
                     handle
+                    featuredImage {
+                      url
+                      altText
+                      width
+                      height
+                    }
                   }
                 }
               }
@@ -190,6 +211,88 @@ async function getCart(cartId: string) {
         lines: data.cart.lines.nodes,
       }
     : undefined;
+}
+
+async function getSavedCartId() {
+  const cookieStore = await cookies();
+
+  return cookieStore.get(CART_ID_COOKIE)?.value;
+}
+
+async function updateLineQuantity(
+  cartId: string,
+  lineId: string,
+  quantity: number,
+) {
+  const data = await shopifyFetch<{
+    cartLinesUpdate: {
+      cart?: ShopifyCart;
+      userErrors: ShopifyUserError[];
+    };
+  }>(
+    /* GraphQL */ `
+      mutation UpdateCartLine($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+        cartLinesUpdate(cartId: $cartId, lines: $lines) {
+          cart {
+            id
+            checkoutUrl
+            totalQuantity
+          }
+          userErrors {
+            message
+          }
+        }
+      }
+    `,
+    {
+      cartId,
+      lines: [{ id: lineId, quantity }],
+    },
+  );
+
+  const error = getUserError(data.cartLinesUpdate.userErrors);
+
+  if (error || !data.cartLinesUpdate.cart) {
+    throw new Error(error || "Unable to update cart.");
+  }
+
+  return data.cartLinesUpdate.cart;
+}
+
+async function removeLine(cartId: string, lineId: string) {
+  const data = await shopifyFetch<{
+    cartLinesRemove: {
+      cart?: ShopifyCart;
+      userErrors: ShopifyUserError[];
+    };
+  }>(
+    /* GraphQL */ `
+      mutation RemoveCartLine($cartId: ID!, $lineIds: [ID!]!) {
+        cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+          cart {
+            id
+            checkoutUrl
+            totalQuantity
+          }
+          userErrors {
+            message
+          }
+        }
+      }
+    `,
+    {
+      cartId,
+      lineIds: [lineId],
+    },
+  );
+
+  const error = getUserError(data.cartLinesRemove.userErrors);
+
+  if (error || !data.cartLinesRemove.cart) {
+    throw new Error(error || "Unable to update cart.");
+  }
+
+  return data.cartLinesRemove.cart;
 }
 
 async function saveCart(cart: ShopifyCart) {
@@ -256,8 +359,7 @@ export async function addProductToCart(
 }
 
 export async function getCurrentCart(): Promise<CartDetails | undefined> {
-  const cookieStore = await cookies();
-  const cartId = cookieStore.get(CART_ID_COOKIE)?.value;
+  const cartId = await getSavedCartId();
 
   if (!cartId) {
     return undefined;
@@ -267,5 +369,40 @@ export async function getCurrentCart(): Promise<CartDetails | undefined> {
     return await getCart(cartId);
   } catch {
     return undefined;
+  }
+}
+
+export async function updateCartLineQuantity(formData: FormData) {
+  const cartId = await getSavedCartId();
+  const lineId = String(formData.get("lineId") || "");
+  const quantity = Number(formData.get("quantity"));
+
+  if (!cartId || !lineId || !Number.isFinite(quantity)) {
+    return;
+  }
+
+  try {
+    if (quantity < 1) {
+      await removeLine(cartId, lineId);
+    } else {
+      await updateLineQuantity(cartId, lineId, quantity);
+    }
+  } finally {
+    revalidatePath("/cart");
+  }
+}
+
+export async function removeCartLine(formData: FormData) {
+  const cartId = await getSavedCartId();
+  const lineId = String(formData.get("lineId") || "");
+
+  if (!cartId || !lineId) {
+    return;
+  }
+
+  try {
+    await removeLine(cartId, lineId);
+  } finally {
+    revalidatePath("/cart");
   }
 }
