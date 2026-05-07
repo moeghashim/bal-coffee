@@ -6,9 +6,9 @@ import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
 import { ProductMedia } from "components/bal/product-media";
 import {
+  getProducts,
   getProductWithShopify,
   getRelatedProductsWithShopify,
-  products,
 } from "lib/products";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -19,8 +19,8 @@ type ProductPageProps = {
   }>;
 };
 
-export function generateStaticParams() {
-  return products.map((product) => ({ slug: product.slug }));
+export async function generateStaticParams() {
+  return (await getProducts()).map((product) => ({ slug: product.slug }));
 }
 
 export async function generateMetadata({

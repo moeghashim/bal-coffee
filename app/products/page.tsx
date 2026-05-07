@@ -49,6 +49,50 @@ function FilterIcon() {
   );
 }
 
+function ChevronDownIcon() {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      style={{ flex: "0 0 auto" }}
+    >
+      <path d="M4 6 L8 10 L12 6" />
+    </svg>
+  );
+}
+
+function DropdownButton({ label }: { label: string }) {
+  return (
+    <button
+      type="button"
+      style={{
+        minHeight: 36,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 8,
+        padding: "0 16px",
+        border: "1px solid rgba(77,56,36,0.18)",
+        borderRadius: 7,
+        background: "rgba(255,252,246,0.76)",
+        color: "var(--ink-2)",
+        fontSize: 13,
+        lineHeight: 1,
+      }}
+    >
+      <span>{label}</span>
+      <ChevronDownIcon />
+    </button>
+  );
+}
+
 function Seal() {
   return (
     <svg width="124" height="124" viewBox="0 0 124 124" fill="none" aria-hidden>
@@ -96,6 +140,7 @@ function Seal() {
 export default async function ProductsPage() {
   const products = await getProducts();
   const heroProduct = products[0];
+  const chips = ["All Products", ...products.map((product) => product.name)];
 
   return (
     <>
@@ -201,13 +246,7 @@ export default async function ProductsPage() {
                 className="bal-products-chip-row"
                 style={{ display: "flex", flexWrap: "wrap", gap: 10 }}
               >
-                {[
-                  "All Products",
-                  "Eastern Brew",
-                  "GrounDate",
-                  "DateSpresso",
-                  "Gift Cards",
-                ].map((chip, index) => (
+                {chips.map((chip, index) => (
                   <button
                     key={chip}
                     type="button"
@@ -235,41 +274,14 @@ export default async function ProductsPage() {
                   }}
                 />
                 {["Roast Profile", "Brew Type"].map((label) => (
-                  <button
-                    key={label}
-                    type="button"
-                    style={{
-                      minHeight: 36,
-                      padding: "0 18px",
-                      border: "1px solid rgba(77,56,36,0.18)",
-                      borderRadius: 7,
-                      background: "rgba(255,252,246,0.76)",
-                      color: "var(--ink-2)",
-                      fontSize: 13,
-                    }}
-                  >
-                    {label}⌄
-                  </button>
+                  <DropdownButton key={label} label={label} />
                 ))}
               </div>
               <div
                 className="bal-products-sort-row"
                 style={{ display: "flex", alignItems: "center", gap: 12 }}
               >
-                <button
-                  type="button"
-                  style={{
-                    minHeight: 36,
-                    padding: "0 18px",
-                    border: "1px solid rgba(77,56,36,0.18)",
-                    borderRadius: 7,
-                    background: "rgba(255,252,246,0.76)",
-                    color: "var(--ink-2)",
-                    fontSize: 13,
-                  }}
-                >
-                  Best Selling⌄
-                </button>
+                <DropdownButton label="Best Selling" />
                 <FilterIcon />
               </div>
             </div>

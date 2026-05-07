@@ -19,7 +19,11 @@ import { Grain } from "components/bal/grain";
 import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
 import { ProductMedia } from "components/bal/product-media";
-import { products, type Product } from "lib/products";
+import {
+  getProductByShopifyHandle,
+  getProducts,
+  type Product,
+} from "lib/products";
 import type { ShopifyImage, ShopifyMoney } from "lib/shopify";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -49,9 +53,7 @@ function formatMoney(
 }
 
 function getProductForLine(line: CartLine) {
-  return products.find(
-    (product) => product.shopifyHandle === line.merchandise.product.handle,
-  );
+  return getProductByShopifyHandle(line.merchandise.product.handle);
 }
 
 function getLineImage(line: CartLine): ShopifyImage | undefined {
@@ -718,11 +720,12 @@ function OrderSummary({
 
 export default async function CartPage() {
   const cart = await getCurrentCart();
+  const connectedProducts = await getProducts();
   const hasItems = Boolean(cart?.lines.length);
   const cartHandles = new Set(
     cart?.lines.map((line) => line.merchandise.product.handle) || [],
   );
-  const recommended = products
+  const recommended = connectedProducts
     .filter((product) => !cartHandles.has(product.shopifyHandle))
     .slice(0, 3);
   const subtotalMoney = cart?.cost.subtotalAmount || cart?.cost.totalAmount;

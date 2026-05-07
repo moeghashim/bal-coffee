@@ -267,22 +267,12 @@ export function getProduct(slug: string) {
   return products.find((product) => product.slug === slug);
 }
 
-export function getRelatedProducts(slug: string) {
-  return products.filter((product) => product.slug !== slug).slice(0, 3);
+export function getProductByShopifyHandle(handle: string) {
+  return products.find((product) => product.shopifyHandle === handle);
 }
 
 function normalizeDescription(description: string) {
   return description.replace(/\s+/g, " ").trim();
-}
-
-function toProductBlurb(description: string, fallback: string) {
-  const cleaned = normalizeDescription(description);
-
-  if (!cleaned) {
-    return fallback;
-  }
-
-  return cleaned.length > 118 ? `${cleaned.slice(0, 115).trim()}...` : cleaned;
 }
 
 function getShopifyImages(shopifyProduct: ShopifyProduct) {
@@ -302,25 +292,23 @@ function getShopifyImages(shopifyProduct: ShopifyProduct) {
   });
 }
 
-function mergeShopifyProduct(
-  product: Product,
-  shopifyProduct?: ShopifyProduct,
-) {
-  if (!shopifyProduct) {
-    return product;
-  }
-
+function mergeShopifyProduct(product: Product, shopifyProduct: ShopifyProduct) {
   const description = normalizeDescription(shopifyProduct.description);
+  const images = getShopifyImages(shopifyProduct);
 
   return {
     ...product,
-    name: shopifyProduct.title || product.name,
     description: description || product.description,
-    blurb: toProductBlurb(description, product.blurb),
     price: formatShopifyPrice(shopifyProduct.priceRange.minVariantPrice),
     availableForSale: shopifyProduct.availableForSale,
-    images: getShopifyImages(shopifyProduct),
+    images,
   };
+}
+
+function isStorefrontProduct(
+  shopifyProduct?: ShopifyProduct,
+): shopifyProduct is ShopifyProduct {
+  return Boolean(shopifyProduct && getShopifyImages(shopifyProduct).length > 0);
 }
 
 export async function getProducts() {
@@ -328,9 +316,13 @@ export async function getProducts() {
     products.map((product) => product.shopifyHandle),
   );
 
-  return products.map((product) =>
-    mergeShopifyProduct(product, shopifyProducts.get(product.shopifyHandle)),
-  );
+  return products.flatMap((product) => {
+    const shopifyProduct = shopifyProducts.get(product.shopifyHandle);
+
+    return isStorefrontProduct(shopifyProduct)
+      ? [mergeShopifyProduct(product, shopifyProduct)]
+      : [];
+  });
 }
 
 export async function getFeaturedProducts() {
@@ -345,22 +337,20 @@ export async function getProductWithShopify(slug: string) {
   }
 
   try {
-    return mergeShopifyProduct(
-      product,
-      await getShopifyProductByHandle(product.shopifyHandle),
+    const shopifyProduct = await getShopifyProductByHandle(
+      product.shopifyHandle,
     );
+
+    return isStorefrontProduct(shopifyProduct)
+      ? mergeShopifyProduct(product, shopifyProduct)
+      : undefined;
   } catch {
-    return product;
+    return undefined;
   }
 }
 
 export async function getRelatedProductsWithShopify(slug: string) {
-  const relatedProducts = getRelatedProducts(slug);
-  const shopifyProducts = await getShopifyProductsByHandles(
-    relatedProducts.map((product) => product.shopifyHandle),
-  );
-
-  return relatedProducts.map((product) =>
-    mergeShopifyProduct(product, shopifyProducts.get(product.shopifyHandle)),
-  );
+  return (await getProducts())
+    .filter((product) => product.slug !== slug)
+    .slice(0, 3);
 }
