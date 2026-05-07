@@ -1,5 +1,6 @@
 import { AddToCartButton } from "components/bal/add-to-cart-button";
 import { ProductMedia } from "components/bal/product-media";
+import { getProduct } from "lib/products";
 import type { Product } from "lib/products";
 
 type ProductCardProps = {
@@ -8,7 +9,10 @@ type ProductCardProps = {
 };
 
 export function ProductCard({ product, horizontal = false }: ProductCardProps) {
-  const hasLongName = product.name.length > 34;
+  const localProduct = getProduct(product.slug);
+  const displayName = localProduct?.name || product.name;
+  const displayBlurb = localProduct?.blurb || product.blurb;
+  const hasLongName = displayName.length > 34;
   const titleHeight = horizontal ? 60 : 58;
   const blurbHeight = horizontal ? 48 : 42;
 
@@ -29,14 +33,17 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
     >
       <a
         href={`/products/${product.slug}`}
-        aria-label={`View ${product.name}`}
+        aria-label={`View ${displayName}`}
         style={{
           display: "block",
+          position: "relative",
           flex: "0 0 auto",
+          minHeight: 0,
+          overflow: "hidden",
           aspectRatio: horizontal ? "1.35 / 1" : "1.36 / 1",
         }}
       >
-        <ProductMedia product={product} compact={horizontal} />
+        <ProductMedia product={product} compact={horizontal} fill />
       </a>
       <div
         style={{
@@ -80,7 +87,7 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
                   lineHeight: hasLongName ? 1.12 : undefined,
                 }}
               >
-                {product.name}
+                {displayName}
               </a>
             </h3>
             <p
@@ -98,7 +105,7 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
                 color: "var(--ink-2)",
               }}
             >
-              {product.blurb}
+              {displayBlurb}
             </p>
           </div>
           <p
