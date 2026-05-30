@@ -129,7 +129,7 @@ function VariantPills({
             className="mono"
             style={{
               minHeight: 32,
-              padding: "0 12px",
+              padding: "0 14px",
               borderRadius: 999,
               border: active
                 ? "1px solid #32180d"
@@ -138,6 +138,7 @@ function VariantPills({
               color: active ? "#fff4e8" : "var(--ink-2)",
               fontSize: 11,
               letterSpacing: 0,
+              whiteSpace: "nowrap",
             }}
           >
             {variant.title} ·{" "}
@@ -166,6 +167,7 @@ function MenuRow({
 
   return (
     <div
+      className="bal-pos-row"
       style={{
         display: "grid",
         gridTemplateColumns: "92px 1fr auto",
@@ -176,6 +178,7 @@ function MenuRow({
       }}
     >
       <div
+        className="bal-pos-row-media"
         style={{
           width: 92,
           height: 92,
@@ -246,6 +249,7 @@ function MenuRow({
       </div>
 
       <div
+        className="bal-pos-row-actions"
         style={{
           display: "grid",
           justifyItems: "end",
