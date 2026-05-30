@@ -140,6 +140,7 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
 
   const links = [
     { href: "/products", label: "Shop" },
+    { href: "/pos", label: "Café" },
     { href: "/#about", label: "About" },
     { href: "/#process", label: "Process" },
     { href: "/#journal", label: "Journal" },

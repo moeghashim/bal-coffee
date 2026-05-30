@@ -267,6 +267,18 @@ input {
   .bal-cart-summary {
     border-radius: 14px !important;
   }
+  .bal-pos-page {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+  .bal-pos-layout {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+  .bal-pos-menu,
+  .bal-pos-summary {
+    border-radius: 14px !important;
+  }
   .bal-cart-line,
   .bal-cart-table-header {
     grid-template-columns: minmax(250px, 1fr) 108px 76px 86px 32px !important;
@@ -462,6 +474,14 @@ input {
   }
   .bal-cart-page {
     padding: 26px 16px 18px !important;
+  }
+  .bal-pos-page {
+    padding: 26px 16px 18px !important;
+  }
+  .bal-pos-menu,
+  .bal-pos-summary {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
   .bal-cart-page > div[aria-hidden] {
     display: none !important;
