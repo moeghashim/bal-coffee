@@ -66,6 +66,7 @@ export type ShopifyProduct = {
   variants: {
     nodes: {
       id: string;
+      title: string;
       availableForSale: boolean;
       price: ShopifyMoney;
     }[];
@@ -168,6 +169,7 @@ export async function getShopifyProductByHandle(handle: string) {
           variants(first: 10) {
             nodes {
               id
+              title
               availableForSale
               price {
                 amount

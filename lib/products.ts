@@ -14,6 +14,14 @@ export type ProductKind =
   | "dessert"
   | "iced";
 
+export type ProductVariant = {
+  id: string;
+  title: string;
+  availableForSale: boolean;
+  priceAmount: number;
+  currencyCode: string;
+};
+
 export type Product = {
   name: string;
   slug: string;
@@ -34,6 +42,9 @@ export type Product = {
   accent: string;
   availableForSale?: boolean;
   images?: ShopifyImage[];
+  priceAmount?: number;
+  currencyCode?: string;
+  variants?: ProductVariant[];
 };
 
 export const products: Product[] = [
@@ -271,6 +282,26 @@ export function getProductByShopifyHandle(handle: string) {
   return products.find((product) => product.shopifyHandle === handle);
 }
 
+// POS / cafe items are the prepared-fresh drinks customers order in-store,
+// as opposed to the take-home retail bags.
+export function isPosProduct(product: Product) {
+  return product.category === "drink";
+}
+
+// Cafe drinks are merch-only in Shopify (no storefront photography), so we ship
+// our own on-brand artwork from /public/pos and fall back to it when Shopify
+// has no image for the product.
+const POS_IMAGES: Record<string, string> = {
+  "hot-latte": "/pos/hot-latte.png",
+  "tiramisu-dream": "/pos/tiramisu-dream.png",
+  "caramel-glow": "/pos/caramel-glow.png",
+};
+
+export function getPosImage(slug: string): ShopifyImage | undefined {
+  const url = POS_IMAGES[slug];
+  return url ? { url, altText: `${slug} drink` } : undefined;
+}
+
 function normalizeDescription(description: string) {
   return description.replace(/\s+/g, " ").trim();
 }
@@ -300,6 +331,8 @@ function mergeShopifyProduct(product: Product, shopifyProduct: ShopifyProduct) {
     ...product,
     description: description || product.description,
     price: formatShopifyPrice(shopifyProduct.priceRange.minVariantPrice),
+    priceAmount: Number(shopifyProduct.priceRange.minVariantPrice.amount),
+    currencyCode: shopifyProduct.priceRange.minVariantPrice.currencyCode,
     availableForSale: shopifyProduct.availableForSale,
     images,
   };
@@ -327,6 +360,55 @@ export async function getProducts() {
 
 export async function getFeaturedProducts() {
   return (await getProducts()).slice(0, 3);
+}
+
+// Unlike the retail bags, POS drinks don't need storefront photography to be
+// orderable — only a real, available Shopify variant to check out with.
+function isSellableProduct(
+  shopifyProduct?: ShopifyProduct,
+): shopifyProduct is ShopifyProduct {
+  return Boolean(
+    shopifyProduct &&
+      shopifyProduct.availableForSale &&
+      shopifyProduct.variants.nodes.some((variant) => variant.availableForSale),
+  );
+}
+
+function toProductVariants(shopifyProduct: ShopifyProduct): ProductVariant[] {
+  return shopifyProduct.variants.nodes
+    .filter((variant) => variant.availableForSale)
+    .map((variant) => ({
+      id: variant.id,
+      title: variant.title,
+      availableForSale: variant.availableForSale,
+      priceAmount: Number(variant.price.amount),
+      currencyCode: variant.price.currencyCode,
+    }));
+}
+
+export async function getPosProducts() {
+  const posProducts = products.filter(isPosProduct);
+  const shopifyProducts = await getShopifyProductsByHandles(
+    posProducts.map((product) => product.shopifyHandle),
+  );
+
+  return posProducts.flatMap((product) => {
+    const shopifyProduct = shopifyProducts.get(product.shopifyHandle);
+
+    if (!isSellableProduct(shopifyProduct)) {
+      return [];
+    }
+
+    const merged = mergeShopifyProduct(product, shopifyProduct);
+    const fallbackImage = getPosImage(product.slug);
+    const images = merged.images?.length
+      ? merged.images
+      : fallbackImage
+        ? [fallbackImage]
+        : [];
+
+    return [{ ...merged, images, variants: toProductVariants(shopifyProduct) }];
+  });
 }
 
 export async function getProductWithShopify(slug: string) {
