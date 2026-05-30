@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useState } from "react";
+import { Fragment, useActionState, useEffect, useMemo, useState } from "react";
 import { createPosOrder } from "components/bal/pos-actions";
 import { BADGE_PATTERN, type PosOrderState } from "lib/pos";
 
@@ -27,6 +27,10 @@ const initialState: PosOrderState = {
   status: "idle",
   message: "",
 };
+
+// Persist the in-progress order so a refresh doesn't wipe the customer's
+// selection before they reach checkout.
+const STORAGE_KEY = "bal_pos_order_v1";
 
 function formatPrice(amount: number, currencyCode: string) {
   const hasCents = Number.isFinite(amount) && amount % 1 !== 0;
@@ -279,10 +283,42 @@ export function PosOrder({ items }: { items: PosMenuItem[] }) {
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [variantIds, setVariantIds] = useState<Record<string, string>>({});
   const [badge, setBadge] = useState("");
+  const [restored, setRestored] = useState(false);
   const [state, formAction, isPending] = useActionState(
     createPosOrder,
     initialState,
   );
+
+  // Restore a saved in-progress order on mount.
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        if (saved && typeof saved === "object") {
+          if (saved.quantities) setQuantities(saved.quantities);
+          if (saved.variantIds) setVariantIds(saved.variantIds);
+          if (typeof saved.badge === "string") setBadge(saved.badge);
+        }
+      }
+    } catch {
+      // ignore unreadable/corrupt storage
+    }
+    setRestored(true);
+  }, []);
+
+  // Persist on every change once we've restored.
+  useEffect(() => {
+    if (!restored) return;
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ quantities, variantIds, badge }),
+      );
+    } catch {
+      // ignore quota/availability errors
+    }
+  }, [restored, quantities, variantIds, badge]);
 
   const currencyCode = items[0]?.variants[0]?.currencyCode || "USD";
 
@@ -315,27 +351,24 @@ export function PosOrder({ items }: { items: PosMenuItem[] }) {
   const success = state.status === "success" && Boolean(state.checkoutUrl);
   const canSubmit = totalQuantity > 0 && badgeValid && !isPending && !success;
 
-  // On success the action returns the Shopify checkout URL; send the customer
-  // there to pay, with a visible fallback link below.
+  // On success the action returns the Shopify checkout URL; clear the saved
+  // order and send the customer there to pay (visible fallback link below).
   useEffect(() => {
     if (success && state.checkoutUrl) {
+      try {
+        window.localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // ignore
+      }
       window.location.href = state.checkoutUrl;
     }
   }, [success, state.checkoutUrl]);
 
   return (
-    <form
-      action={formAction}
-      className="bal-pos-layout"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) 388px",
-        gap: 0,
-        alignItems: "start",
-      }}
-    >
+    <form action={formAction}>
+      {/* Hidden order fields — kept out of the grid so they never occupy a cell. */}
       {selected.map((entry) => (
-        <span key={entry.item.slug}>
+        <Fragment key={entry.item.slug}>
           <input
             type="hidden"
             name={`quantity_${entry.item.slug}`}
@@ -346,265 +379,278 @@ export function PosOrder({ items }: { items: PosMenuItem[] }) {
             name={`variant_${entry.item.slug}`}
             value={entry.variant?.id || ""}
           />
-        </span>
+        </Fragment>
       ))}
 
-      <section
-        aria-label="Café menu"
-        className="bal-pos-menu"
+      <div
+        className="bal-pos-layout"
         style={{
-          padding: "10px 26px 26px",
-          border: "1px solid rgba(77,56,36,0.17)",
-          borderRadius: "14px 0 0 14px",
-          background: "rgba(255,252,246,0.72)",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr) 388px",
+          gap: 0,
+          alignItems: "start",
         }}
       >
-        <h2
-          className="serif"
+        <section
+          aria-label="Café menu"
+          className="bal-pos-menu"
           style={{
-            paddingTop: 18,
-            fontSize: 27,
-            lineHeight: 1.1,
-            fontWeight: 400,
-            color: "var(--ink)",
+            padding: "10px 26px 26px",
+            border: "1px solid rgba(77,56,36,0.17)",
+            borderRadius: "14px 0 0 14px",
+            background: "rgba(255,252,246,0.72)",
           }}
         >
-          Menu
-        </h2>
-        <p style={{ marginTop: 6, fontSize: 14, color: "var(--ink-2)" }}>
-          Prepared fresh. Naturally caffeine-free.
-        </p>
-        <div style={{ marginTop: 14 }}>
-          {items.map((item) => {
-            const variant = variantFor(item);
-            if (!variant) {
-              return null;
-            }
-            return (
-              <MenuRow
-                key={item.slug}
-                item={item}
-                quantity={quantities[item.slug] || 0}
-                variant={variant}
-                onQuantity={(next) =>
-                  setQuantities((current) => ({
-                    ...current,
-                    [item.slug]: next,
-                  }))
-                }
-                onVariant={(id) =>
-                  setVariantIds((current) => ({ ...current, [item.slug]: id }))
-                }
-              />
-            );
-          })}
-        </div>
-      </section>
-
-      <aside
-        className="bal-pos-summary"
-        style={{
-          alignSelf: "start",
-          padding: "30px",
-          border: "1px solid rgba(77,56,36,0.17)",
-          borderRadius: "0 14px 14px 0",
-          background: "rgba(255,252,246,0.82)",
-          boxShadow: "0 22px 60px rgba(50,24,13,0.06)",
-        }}
-      >
-        <h2
-          className="serif"
-          style={{ fontSize: 26, lineHeight: 1.1, fontWeight: 400 }}
-        >
-          Your order
-        </h2>
-
-        <div style={{ marginTop: 20, display: "grid", gap: 12 }}>
-          {selected.length ? (
-            selected.map((entry) => (
-              <div
-                key={entry.item.slug}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: 16,
-                  fontSize: 14,
-                  color: "var(--ink-2)",
-                }}
-              >
-                <span style={{ minWidth: 0 }}>
-                  {entry.item.name}
-                  <span style={{ color: "var(--ink-soft)" }}>
-                    {" "}
-                    × {entry.quantity}
-                  </span>
-                  {entry.item.variants.length > 1 && entry.variant ? (
-                    <span
-                      className="mono"
-                      style={{
-                        display: "block",
-                        fontSize: 11,
-                        letterSpacing: 0,
-                        color: "var(--ink-soft)",
-                      }}
-                    >
-                      {entry.variant.title}
-                    </span>
-                  ) : null}
-                </span>
-                <span className="serif" style={{ color: "var(--ink)" }}>
-                  {formatPrice(
-                    (entry.variant?.priceAmount || 0) * entry.quantity,
-                    currencyCode,
-                  )}
-                </span>
-              </div>
-            ))
-          ) : (
-            <p style={{ fontSize: 14, color: "var(--ink-soft)" }}>
-              No drinks added yet. Use the menu to build your order.
-            </p>
-          )}
-        </div>
-
-        <div
-          style={{
-            marginTop: 20,
-            paddingTop: 18,
-            borderTop: "1px solid rgba(77,56,36,0.18)",
-            display: "flex",
-            alignItems: "baseline",
-            justifyContent: "space-between",
-            gap: 16,
-          }}
-        >
-          <span className="serif" style={{ fontSize: 22, lineHeight: 1 }}>
-            Subtotal
-          </span>
-          <span className="serif" style={{ fontSize: 28, lineHeight: 1 }}>
-            {formatPrice(subtotal, currencyCode)}
-          </span>
-        </div>
-        <p style={{ marginTop: 8, fontSize: 12, color: "var(--ink-soft)" }}>
-          Taxes calculated at checkout.
-        </p>
-
-        <div style={{ marginTop: 22 }}>
-          <label
-            htmlFor="pos-badge"
-            className="mono"
+          <h2
+            className="serif"
             style={{
-              display: "block",
-              fontSize: 11,
-              letterSpacing: 0,
-              textTransform: "uppercase",
-              color: "var(--ink-2)",
-            }}
-          >
-            Badge number <span style={{ color: "var(--terra-deep)" }}>*</span>
-          </label>
-          <input
-            id="pos-badge"
-            name="badgeNumber"
-            value={badge}
-            onChange={(event) => setBadge(event.target.value)}
-            required
-            autoComplete="off"
-            inputMode="text"
-            maxLength={32}
-            placeholder="e.g. 10482"
-            aria-describedby="pos-badge-help"
-            style={{
-              marginTop: 8,
-              width: "100%",
-              minHeight: 48,
-              padding: "0 16px",
-              border: "1px solid rgba(77,56,36,0.24)",
-              borderRadius: 9,
-              background: "rgba(255,252,246,0.9)",
+              paddingTop: 18,
+              fontSize: 27,
+              lineHeight: 1.1,
+              fontWeight: 400,
               color: "var(--ink)",
-              fontSize: 16,
             }}
-          />
-          <p
-            id="pos-badge-help"
-            style={{ marginTop: 8, fontSize: 12, color: "var(--ink-soft)" }}
           >
-            Required — your badge number is attached to this order.
+            Menu
+          </h2>
+          <p style={{ marginTop: 6, fontSize: 14, color: "var(--ink-2)" }}>
+            Prepared fresh. Naturally caffeine-free.
           </p>
-        </div>
+          <div style={{ marginTop: 14 }}>
+            {items.map((item) => {
+              const variant = variantFor(item);
+              if (!variant) {
+                return null;
+              }
+              return (
+                <MenuRow
+                  key={item.slug}
+                  item={item}
+                  quantity={quantities[item.slug] || 0}
+                  variant={variant}
+                  onQuantity={(next) =>
+                    setQuantities((current) => ({
+                      ...current,
+                      [item.slug]: next,
+                    }))
+                  }
+                  onVariant={(id) =>
+                    setVariantIds((current) => ({
+                      ...current,
+                      [item.slug]: id,
+                    }))
+                  }
+                />
+              );
+            })}
+          </div>
+        </section>
 
-        <button
-          type="submit"
-          disabled={!canSubmit}
-          className="mono"
+        <aside
+          className="bal-pos-summary"
           style={{
-            marginTop: 22,
-            display: "flex",
-            width: "100%",
-            minHeight: 56,
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: 9,
-            background:
-              canSubmit || isPending || success ? "#32180d" : "#6e594a",
-            color: "#fff4e8",
-            fontSize: 13,
-            letterSpacing: 0,
-            opacity: canSubmit || isPending || success ? 1 : 0.55,
-            cursor: canSubmit ? "pointer" : "default",
+            alignSelf: "start",
+            padding: "30px",
+            border: "1px solid rgba(77,56,36,0.17)",
+            borderRadius: "0 14px 14px 0",
+            background: "rgba(255,252,246,0.82)",
+            boxShadow: "0 22px 60px rgba(50,24,13,0.06)",
           }}
         >
-          {isPending
-            ? "Placing order…"
-            : success
-              ? "Redirecting to payment…"
-              : "Place order"}
-        </button>
+          <h2
+            className="serif"
+            style={{ fontSize: 26, lineHeight: 1.1, fontWeight: 400 }}
+          >
+            Your order
+          </h2>
 
-        <p
-          aria-live="polite"
-          style={{
-            marginTop: 12,
-            minHeight: 18,
-            fontSize: 13,
-            lineHeight: 1.5,
-            color:
-              state.status === "error"
-                ? "var(--terra-deep)"
-                : "var(--olive-deep)",
-          }}
-        >
-          {state.status === "error" && state.message
-            ? state.message
-            : !badgeValid && badge.length > 0
-              ? "Enter a valid badge number (2–32 letters or numbers)."
-              : state.status === "success"
-                ? state.message
-                : ""}
-        </p>
+          <div style={{ marginTop: 20, display: "grid", gap: 12 }}>
+            {selected.length ? (
+              selected.map((entry) => (
+                <div
+                  key={entry.item.slug}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: 16,
+                    fontSize: 14,
+                    color: "var(--ink-2)",
+                  }}
+                >
+                  <span style={{ minWidth: 0 }}>
+                    {entry.item.name}
+                    <span style={{ color: "var(--ink-soft)" }}>
+                      {" "}
+                      × {entry.quantity}
+                    </span>
+                    {entry.item.variants.length > 1 && entry.variant ? (
+                      <span
+                        className="mono"
+                        style={{
+                          display: "block",
+                          fontSize: 11,
+                          letterSpacing: 0,
+                          color: "var(--ink-soft)",
+                        }}
+                      >
+                        {entry.variant.title}
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="serif" style={{ color: "var(--ink)" }}>
+                    {formatPrice(
+                      (entry.variant?.priceAmount || 0) * entry.quantity,
+                      currencyCode,
+                    )}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <p style={{ fontSize: 14, color: "var(--ink-soft)" }}>
+                No drinks added yet. Use the menu to build your order.
+              </p>
+            )}
+          </div>
 
-        {success && state.checkoutUrl ? (
-          <a
-            href={state.checkoutUrl}
+          <div
+            style={{
+              marginTop: 20,
+              paddingTop: 18,
+              borderTop: "1px solid rgba(77,56,36,0.18)",
+              display: "flex",
+              alignItems: "baseline",
+              justifyContent: "space-between",
+              gap: 16,
+            }}
+          >
+            <span className="serif" style={{ fontSize: 22, lineHeight: 1 }}>
+              Subtotal
+            </span>
+            <span className="serif" style={{ fontSize: 28, lineHeight: 1 }}>
+              {formatPrice(subtotal, currencyCode)}
+            </span>
+          </div>
+          <p style={{ marginTop: 8, fontSize: 12, color: "var(--ink-soft)" }}>
+            Taxes calculated at checkout.
+          </p>
+
+          <div style={{ marginTop: 22 }}>
+            <label
+              htmlFor="pos-badge"
+              className="mono"
+              style={{
+                display: "block",
+                fontSize: 11,
+                letterSpacing: 0,
+                textTransform: "uppercase",
+                color: "var(--ink-2)",
+              }}
+            >
+              Badge number <span style={{ color: "var(--terra-deep)" }}>*</span>
+            </label>
+            <input
+              id="pos-badge"
+              name="badgeNumber"
+              value={badge}
+              onChange={(event) => setBadge(event.target.value)}
+              required
+              autoComplete="off"
+              inputMode="text"
+              maxLength={32}
+              placeholder="e.g. 10482"
+              aria-describedby="pos-badge-help"
+              style={{
+                marginTop: 8,
+                width: "100%",
+                minHeight: 48,
+                padding: "0 16px",
+                border: "1px solid rgba(77,56,36,0.24)",
+                borderRadius: 9,
+                background: "rgba(255,252,246,0.9)",
+                color: "var(--ink)",
+                fontSize: 16,
+              }}
+            />
+            <p
+              id="pos-badge-help"
+              style={{ marginTop: 8, fontSize: 12, color: "var(--ink-soft)" }}
+            >
+              Required — your badge number is attached to this order.
+            </p>
+          </div>
+
+          <button
+            type="submit"
+            disabled={!canSubmit}
             className="mono"
             style={{
+              marginTop: 22,
               display: "flex",
-              minHeight: 48,
+              width: "100%",
+              minHeight: 56,
               alignItems: "center",
               justifyContent: "center",
-              border: "1px solid rgba(77,56,36,0.2)",
               borderRadius: 9,
-              background: "rgba(255,252,246,0.7)",
-              color: "var(--ink-2)",
-              fontSize: 12,
+              background:
+                canSubmit || isPending || success ? "#32180d" : "#6e594a",
+              color: "#fff4e8",
+              fontSize: 13,
               letterSpacing: 0,
+              opacity: canSubmit || isPending || success ? 1 : 0.55,
+              cursor: canSubmit ? "pointer" : "default",
             }}
           >
-            Continue to payment
-          </a>
-        ) : null}
-      </aside>
+            {isPending
+              ? "Placing order…"
+              : success
+                ? "Redirecting to payment…"
+                : "Place order"}
+          </button>
+
+          <p
+            aria-live="polite"
+            style={{
+              marginTop: 12,
+              minHeight: 18,
+              fontSize: 13,
+              lineHeight: 1.5,
+              color:
+                state.status === "error"
+                  ? "var(--terra-deep)"
+                  : "var(--olive-deep)",
+            }}
+          >
+            {state.status === "error" && state.message
+              ? state.message
+              : !badgeValid && badge.length > 0
+                ? "Enter a valid badge number (2–32 letters or numbers)."
+                : state.status === "success"
+                  ? state.message
+                  : ""}
+          </p>
+
+          {success && state.checkoutUrl ? (
+            <a
+              href={state.checkoutUrl}
+              className="mono"
+              style={{
+                display: "flex",
+                minHeight: 48,
+                alignItems: "center",
+                justifyContent: "center",
+                border: "1px solid rgba(77,56,36,0.2)",
+                borderRadius: 9,
+                background: "rgba(255,252,246,0.7)",
+                color: "var(--ink-2)",
+                fontSize: 12,
+                letterSpacing: 0,
+              }}
+            >
+              Continue to payment
+            </a>
+          ) : null}
+        </aside>
+      </div>
     </form>
   );
 }
