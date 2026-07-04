@@ -6,28 +6,14 @@ import {
   type ShopifyProduct,
 } from "lib/shopify";
 
-export type ProductKind =
-  | "bag-dark"
-  | "bag-light"
-  | "bag-green"
-  | "latte"
-  | "dessert"
-  | "iced";
-
-export type ProductVariant = {
-  id: string;
-  title: string;
-  availableForSale: boolean;
-  priceAmount: number;
-  currencyCode: string;
-};
+export type ProductKind = "bag-dark" | "bag-light" | "bag-green";
 
 export type Product = {
   name: string;
   slug: string;
   shopifyHandle: string;
   type: string;
-  category: "coffee" | "drink" | "gift";
+  category: "coffee" | "gift";
   badge: string;
   blurb: string;
   price: string;
@@ -44,7 +30,6 @@ export type Product = {
   images?: ShopifyImage[];
   priceAmount?: number;
   currencyCode?: string;
-  variants?: ProductVariant[];
 };
 
 export const products: Product[] = [
@@ -165,146 +150,6 @@ export const products: Product[] = [
     kind: "bag-green",
     accent: "#34411f",
   },
-  {
-    name: "Honey Iced Latte",
-    slug: "honey-iced-latte",
-    shopifyHandle: "honey-iced-lattee",
-    type: "Iced honey latte",
-    category: "drink",
-    badge: "Caffeine-Free",
-    blurb: "Golden honey over ice — smooth & refreshing.",
-    price: "$9",
-    description:
-      "A chilled date-seed latte sweetened with honey and poured over ice for a smooth, golden, caffeine-free refresher.",
-    notes: ["Honey", "Iced", "Smooth"],
-    details: ["Naturally caffeine-free", "Prepared fresh", "Served iced"],
-    benefits: [
-      "Refreshing without caffeine",
-      "Naturally honey-sweetened",
-      "Roasted date seed base",
-      "Smooth golden finish",
-      "Made fresh to order",
-    ],
-    ingredients: "Roasted date seed brew, milk, honey, ice.",
-    nutrition: [
-      { label: "Calories", value: "130" },
-      { label: "Carbohydrates", value: "22g" },
-      { label: "Dietary Fiber", value: "1g" },
-      { label: "Prebiotics", value: "1g" },
-    ],
-    brewSteps: [
-      { title: "Ice", body: "Fill the glass with ice." },
-      { title: "Pour", body: "Add brew, milk, and honey." },
-      { title: "Stir", body: "Stir well and enjoy." },
-    ],
-    kind: "iced",
-    accent: "#d29a3c",
-  },
-  {
-    name: "Brown Sugar",
-    slug: "brown-sugar",
-    shopifyHandle: "brown-sugar",
-    type: "Warm brown sugar latte",
-    category: "drink",
-    badge: "Caffeine-Free",
-    blurb: "Caramelized brown sugar, warm & cozy.",
-    price: "$8",
-    description:
-      "A warm date-seed latte sweetened with caramelized brown sugar for a cozy, mellow, caffeine-free cup.",
-    notes: ["Brown Sugar", "Cozy", "Sweet"],
-    details: ["Naturally caffeine-free", "Prepared fresh", "Served hot"],
-    benefits: [
-      "A cozy ritual without caffeine",
-      "Caramelized brown sugar sweetness",
-      "Roasted date seed base",
-      "Smooth and comforting",
-      "Made for any time of day",
-    ],
-    ingredients: "Roasted date seed brew, milk, brown sugar.",
-    nutrition: [
-      { label: "Calories", value: "110" },
-      { label: "Carbohydrates", value: "17g" },
-      { label: "Dietary Fiber", value: "1g" },
-      { label: "Prebiotics", value: "1g" },
-    ],
-    brewSteps: [
-      { title: "Brew", body: "Prepare date-seed coffee." },
-      { title: "Sweeten", body: "Stir in brown sugar." },
-      { title: "Steam", body: "Top with warm milk." },
-    ],
-    kind: "latte",
-    accent: "#9a6a39",
-  },
-  {
-    name: "Caramel Glow",
-    slug: "caramel-glow",
-    shopifyHandle: "caramel-glow",
-    type: "Iced caramel ritual",
-    category: "drink",
-    badge: "Prebiotic-Rich",
-    blurb: "Buttery caramel with a smooth, nutty finish.",
-    price: "$8",
-    description:
-      "A chilled date-seed drink with buttery caramel, a nutty finish, and a smooth caffeine-free base.",
-    notes: ["Caramel", "Nutty", "Smooth"],
-    details: ["Naturally caffeine-free", "Prepared fresh", "Served iced"],
-    benefits: [
-      "Refreshing without caffeine",
-      "Smooth date-seed base",
-      "Buttery caramel finish",
-      "Naturally prebiotic-rich",
-      "Made for slow afternoon rituals",
-    ],
-    ingredients: "Roasted date seed brew, milk, caramel.",
-    nutrition: [
-      { label: "Calories", value: "130" },
-      { label: "Carbohydrates", value: "20g" },
-      { label: "Dietary Fiber", value: "1g" },
-      { label: "Prebiotics", value: "1g" },
-    ],
-    brewSteps: [
-      { title: "Ice", body: "Fill the glass with ice." },
-      { title: "Pour", body: "Add brew and milk." },
-      { title: "Glow", body: "Finish with caramel." },
-    ],
-    kind: "iced",
-    accent: "#c98542",
-  },
-  {
-    name: "Pistachio Caramel",
-    slug: "pistachio-caramel",
-    shopifyHandle: "pistachio",
-    type: "Layered pistachio & caramel",
-    category: "drink",
-    badge: "Best Seller",
-    blurb: "Nutty pistachio meets buttery caramel.",
-    price: "$9",
-    description:
-      "A layered date-seed drink with nutty pistachio, buttery caramel, and a creamy, caffeine-free finish.",
-    notes: ["Pistachio", "Caramel", "Nutty"],
-    details: ["Naturally caffeine-free", "Prepared fresh", "Single serving"],
-    benefits: [
-      "Dessert-like without the caffeine",
-      "Nutty pistachio and caramel",
-      "Roasted date seed base",
-      "Layered creamy finish",
-      "Made fresh to order",
-    ],
-    ingredients: "Roasted date seed brew, milk, pistachio, caramel.",
-    nutrition: [
-      { label: "Calories", value: "150" },
-      { label: "Carbohydrates", value: "21g" },
-      { label: "Dietary Fiber", value: "1g" },
-      { label: "Prebiotics", value: "1g" },
-    ],
-    brewSteps: [
-      { title: "Layer", body: "Start with the pistachio base." },
-      { title: "Pour", body: "Add brew and milk." },
-      { title: "Finish", body: "Swirl in caramel." },
-    ],
-    kind: "dessert",
-    accent: "#7e8b46",
-  },
 ];
 
 export const featuredProducts = products.slice(0, 3);
@@ -315,27 +160,6 @@ export function getProduct(slug: string) {
 
 export function getProductByShopifyHandle(handle: string) {
   return products.find((product) => product.shopifyHandle === handle);
-}
-
-// POS / cafe items are the prepared-fresh drinks customers order in-store,
-// as opposed to the take-home retail bags.
-export function isPosProduct(product: Product) {
-  return product.category === "drink";
-}
-
-// Cafe drinks are merch-only in Shopify (no storefront photography), so we ship
-// our own on-brand artwork from /public/pos and fall back to it when Shopify
-// has no image for the product.
-const POS_IMAGES: Record<string, string> = {
-  "honey-iced-latte": "/pos/honey-iced-latte.png",
-  "brown-sugar": "/pos/brown-sugar.png",
-  "caramel-glow": "/pos/caramel-glow.png",
-  "pistachio-caramel": "/pos/pistachio-caramel.png",
-};
-
-export function getPosImage(slug: string): ShopifyImage | undefined {
-  const url = POS_IMAGES[slug];
-  return url ? { url, altText: `${slug} drink` } : undefined;
 }
 
 function normalizeDescription(description: string) {
@@ -396,55 +220,6 @@ export async function getProducts() {
 
 export async function getFeaturedProducts() {
   return (await getProducts()).slice(0, 3);
-}
-
-// Unlike the retail bags, POS drinks don't need storefront photography to be
-// orderable — only a real, available Shopify variant to check out with.
-function isSellableProduct(
-  shopifyProduct?: ShopifyProduct,
-): shopifyProduct is ShopifyProduct {
-  return Boolean(
-    shopifyProduct &&
-      shopifyProduct.availableForSale &&
-      shopifyProduct.variants.nodes.some((variant) => variant.availableForSale),
-  );
-}
-
-function toProductVariants(shopifyProduct: ShopifyProduct): ProductVariant[] {
-  return shopifyProduct.variants.nodes
-    .filter((variant) => variant.availableForSale)
-    .map((variant) => ({
-      id: variant.id,
-      title: variant.title,
-      availableForSale: variant.availableForSale,
-      priceAmount: Number(variant.price.amount),
-      currencyCode: variant.price.currencyCode,
-    }));
-}
-
-export async function getPosProducts() {
-  const posProducts = products.filter(isPosProduct);
-  const shopifyProducts = await getShopifyProductsByHandles(
-    posProducts.map((product) => product.shopifyHandle),
-  );
-
-  return posProducts.flatMap((product) => {
-    const shopifyProduct = shopifyProducts.get(product.shopifyHandle);
-
-    if (!isSellableProduct(shopifyProduct)) {
-      return [];
-    }
-
-    const merged = mergeShopifyProduct(product, shopifyProduct);
-    const fallbackImage = getPosImage(product.slug);
-    const images = merged.images?.length
-      ? merged.images
-      : fallbackImage
-        ? [fallbackImage]
-        : [];
-
-    return [{ ...merged, images, variants: toProductVariants(shopifyProduct) }];
-  });
 }
 
 export async function getProductWithShopify(slug: string) {
