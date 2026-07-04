@@ -1,10 +1,9 @@
 import {
-  formatShopifyPrice,
-  getShopifyProductByHandle,
-  getShopifyProductsByHandles,
-  type ShopifyImage,
-  type ShopifyProduct,
-} from "lib/shopify";
+  formatPrice,
+  getStorefrontProductByHandle,
+  getStorefrontProductsByHandles,
+} from "lib/commerce";
+import type { ShopifyImage, ShopifyProduct } from "lib/shopify";
 
 export type ProductKind = "bag-dark" | "bag-light" | "bag-green";
 
@@ -190,7 +189,7 @@ function mergeShopifyProduct(product: Product, shopifyProduct: ShopifyProduct) {
   return {
     ...product,
     description: description || product.description,
-    price: formatShopifyPrice(shopifyProduct.priceRange.minVariantPrice),
+    price: formatPrice(shopifyProduct.priceRange.minVariantPrice),
     priceAmount: Number(shopifyProduct.priceRange.minVariantPrice.amount),
     currencyCode: shopifyProduct.priceRange.minVariantPrice.currencyCode,
     availableForSale: shopifyProduct.availableForSale,
@@ -205,7 +204,7 @@ function isStorefrontProduct(
 }
 
 export async function getProducts() {
-  const shopifyProducts = await getShopifyProductsByHandles(
+  const shopifyProducts = await getStorefrontProductsByHandles(
     products.map((product) => product.shopifyHandle),
   );
 
@@ -230,7 +229,7 @@ export async function getProductWithShopify(slug: string) {
   }
 
   try {
-    const shopifyProduct = await getShopifyProductByHandle(
+    const shopifyProduct = await getStorefrontProductByHandle(
       product.shopifyHandle,
     );
 

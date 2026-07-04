@@ -7,7 +7,8 @@
     "start": "next start",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
-    "test": "pnpm prettier:check",
+    "check:boundary": "node scripts/check-import-boundary.mjs",
+    "test": "pnpm prettier:check && pnpm check:boundary",
     "e2e": "playwright test",
     "e2e:report": "playwright show-report"
   },
