@@ -2,8 +2,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import crypto from "node:crypto";
 import { revalidatePath } from "next/cache";
 
-export const dynamic = "force-dynamic";
-
 const HANDLED_TOPICS = new Set([
   "products/create",
   "products/update",
