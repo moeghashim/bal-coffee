@@ -10,7 +10,7 @@ keeping the project **compatible with upstream so preview updates can be pulled
 without breaking the app** — verified by a **full end-to-end test suite** that
 gates every change.
 
-We stay on **Next.js (App Router) on Vercel**. Hydrogen is adopted as a *toolkit*
+We stay on **Next.js (App Router) on Vercel**. Hydrogen is adopted as a _toolkit_
 (data/state primitives), not as a framework or a rehost. Checkout stays
 **Shopify-hosted**. The bespoke design is unchanged.
 
@@ -21,7 +21,9 @@ We stay on **Next.js (App Router) on Vercel**. Hydrogen is adopted as a *toolkit
 ## Two hard constraints (everything below serves these)
 
 ### 1. Pull upstream updates without breaking — via isolation + pinning
+
 The announcement is explicit: **"the API will change."** So:
+
 - `@shopify/hydrogen` is consumed **only as a pinned npm dependency** (exact
   version, no `^`). Never forked or vendored.
 - **All Hydrogen APIs live behind `lib/commerce/`** — our own stable interface.
@@ -33,6 +35,7 @@ The announcement is explicit: **"the API will change."** So:
   reviewed → merge only if green.
 
 ### 2. Full e2e — authored first, run as the CI gate
+
 - The Playwright suite is written **against the current app first**, so it encodes
   today's correct behavior as the migration contract.
 - It becomes a **required CI check** on every PR, especially Hydrogen version
@@ -41,21 +44,21 @@ The announcement is explicit: **"the API will change."** So:
 
 ## Sequence (see task list #1–#13)
 
-| # | Phase | Task |
-|---|-------|------|
-| 1 | Baseline | Branch + freeze current behavior as the contract |
-| 2 | Safety net | Playwright e2e against the **current** app: render → cart → Shopify checkout (must be green first) |
-| 3 | Foundation | Next.js 15 canary → 16, isolated from Hydrogen |
-| 4 | Foundation | `hydrogen@preview setup`, pin exact version, commit skills |
-| 5 | **Isolation** | Build `lib/commerce/` adapter + import-boundary rule |
-| 6 | Migrate | Storefront client → `createStorefrontClient` (behind adapter) |
-| 7 | Migrate | Cart → `createCartStore`/`useCartForm`, keep Shopify checkout |
-| 8 | Migrate | Money formatting → Hydrogen primitives (cent-accurate) |
-| 9 | Migrate | Consent-aware analytics (closes open Phase 4 checklist item) |
-| 10 | Verify | Design identical on new data layer |
-| 11 | **Upgrades** | Renovate + upgrade runbook + upstream diff reference |
-| 12 | Gate | Full e2e coverage + CI merge gate + schema-drift check |
-| 13 | Ship | Vercel preview smoke test + rollback plan + docs + sign-off |
+| #   | Phase         | Task                                                                                               |
+| --- | ------------- | -------------------------------------------------------------------------------------------------- |
+| 1   | Baseline      | Branch + freeze current behavior as the contract                                                   |
+| 2   | Safety net    | Playwright e2e against the **current** app: render → cart → Shopify checkout (must be green first) |
+| 3   | Foundation    | Next.js 15 canary → 16, isolated from Hydrogen                                                     |
+| 4   | Foundation    | `hydrogen@preview setup`, pin exact version, commit skills                                         |
+| 5   | **Isolation** | Build `lib/commerce/` adapter + import-boundary rule                                               |
+| 6   | Migrate       | Storefront client → `createStorefrontClient` (behind adapter)                                      |
+| 7   | Migrate       | Cart → `createCartStore`/`useCartForm`, keep Shopify checkout                                      |
+| 8   | Migrate       | Money formatting → Hydrogen primitives (cent-accurate)                                             |
+| 9   | Migrate       | Consent-aware analytics (closes open Phase 4 checklist item)                                       |
+| 10  | Verify        | Design identical on new data layer                                                                 |
+| 11  | **Upgrades**  | Renovate + upgrade runbook + upstream diff reference                                               |
+| 12  | Gate          | Full e2e coverage + CI merge gate + schema-drift check                                             |
+| 13  | Ship          | Vercel preview smoke test + rollback plan + docs + sign-off                                        |
 
 ## Risk posture
 
