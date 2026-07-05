@@ -8,6 +8,7 @@
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "check:boundary": "node scripts/check-import-boundary.mjs",
+    "hooks:install": "git config core.hooksPath .githooks",
     "test": "pnpm prettier:check && pnpm check:boundary",
     "e2e": "playwright test",
     "e2e:report": "playwright show-report"
