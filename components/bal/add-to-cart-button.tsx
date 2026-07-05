@@ -1,24 +1,36 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useState } from "react";
 import {
-  addProductToCart,
-  type AddToCartState,
-} from "components/bal/cart-actions";
+  ProductProvider,
+  toProductInput,
+  useProductForm,
+} from "lib/commerce/cart-client";
 
-const initialState: AddToCartState = {
-  status: "idle",
-  message: "",
+export type AddToCartProduct = {
+  merchandiseId?: string;
+  handle: string;
+  title: string;
+  amount: string;
+  currencyCode: string;
+  availableForSale?: boolean;
 };
 
-function SubmitButton({ label, compact }: { label: string; compact: boolean }) {
-  const { pending } = useFormStatus();
-
+function SubmitButton({
+  label,
+  compact,
+  disabled,
+  pending,
+}: {
+  label: string;
+  compact: boolean;
+  disabled: boolean;
+  pending: boolean;
+}) {
   return (
     <button
       type="submit"
-      disabled={pending}
+      disabled={disabled}
       className="mono"
       style={{
         width: "100%",
@@ -30,7 +42,7 @@ function SubmitButton({ label, compact }: { label: string; compact: boolean }) {
         letterSpacing: 0,
         background: pending ? "#6e594a" : "#32180d",
         color: "#fff4e8",
-        opacity: pending ? 0.75 : 1,
+        opacity: disabled ? 0.75 : 1,
       }}
     >
       {pending ? "Adding..." : label}
@@ -38,24 +50,35 @@ function SubmitButton({ label, compact }: { label: string; compact: boolean }) {
   );
 }
 
-export function AddToCartButton({
-  productSlug,
-  label = "Add to cart",
-  compact = false,
-  showQuantity = false,
+function AddToCartForm({
+  label,
+  compact,
+  showQuantity,
 }: {
-  productSlug: string;
-  label?: string;
-  compact?: boolean;
-  showQuantity?: boolean;
+  label: string;
+  compact: boolean;
+  showQuantity: boolean;
 }) {
-  const [state, formAction] = useActionState(addProductToCart, initialState);
+  const { register, formProps, pending, selectedVariant, errors } =
+    useProductForm();
   const [quantity, setQuantity] = useState(1);
+  const [added, setAdded] = useState(false);
+
+  const soldOut = selectedVariant?.availableForSale === false;
+  const errorMessage = errors.userErrors?.[0]?.message;
+  const message = errorMessage ? errorMessage : added ? "Added to cart." : "";
 
   return (
-    <form action={formAction} style={{ marginTop: compact ? 10 : 16 }}>
-      <input type="hidden" name="productSlug" value={productSlug} />
-      <input type="hidden" name="quantity" value={quantity} />
+    <form
+      {...formProps({ afterSubmit: () => setAdded(true) })}
+      style={{ marginTop: compact ? 10 : 16 }}
+    >
+      <input type="hidden" {...register("merchandiseId", {})} />
+      <input
+        type="hidden"
+        readOnly
+        {...register("quantity", { value: quantity })}
+      />
       <div
         className="bal-add-to-cart-row"
         style={{
@@ -101,7 +124,9 @@ export function AddToCartButton({
         ) : null}
         <SubmitButton
           compact={compact}
-          label={state.status === "success" ? "Added" : label}
+          disabled={pending || soldOut}
+          pending={pending}
+          label={soldOut ? "Sold out" : added ? "Added" : label}
         />
       </div>
       <p
@@ -111,44 +136,72 @@ export function AddToCartButton({
           minHeight: compact ? 16 : 20,
           fontSize: compact ? 11 : 12,
           lineHeight: 1.5,
-          color:
-            state.status === "error" ? "var(--terra-deep)" : "var(--ink-2)",
+          color: errorMessage ? "var(--terra-deep)" : "var(--ink-2)",
         }}
       >
-        {state.message}
+        {message}
       </p>
-      {state.checkoutUrl ? (
-        <span style={{ display: "flex", gap: 14, alignItems: "center" }}>
-          <a
-            href="/cart"
-            className="mono"
-            style={{
-              display: "inline-flex",
-              marginTop: 8,
-              fontSize: 10,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "var(--terra-deep)",
-            }}
-          >
-            View cart
-          </a>
-          <a
-            href={state.checkoutUrl}
-            className="mono"
-            style={{
-              display: "inline-flex",
-              marginTop: 8,
-              fontSize: 10,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "var(--terra-deep)",
-            }}
-          >
-            Checkout
-          </a>
-        </span>
+      {added && !errorMessage ? (
+        <a
+          href="/cart"
+          className="mono"
+          style={{
+            display: "inline-flex",
+            marginTop: 8,
+            fontSize: 10,
+            letterSpacing: "0.16em",
+            textTransform: "uppercase",
+            color: "var(--terra-deep)",
+          }}
+        >
+          View cart
+        </a>
       ) : null}
     </form>
+  );
+}
+
+export function AddToCartButton({
+  product,
+  label = "Add to cart",
+  compact = false,
+  showQuantity = false,
+}: {
+  product: AddToCartProduct;
+  label?: string;
+  compact?: boolean;
+  showQuantity?: boolean;
+}) {
+  // No sellable variant — render an inert control instead of a broken form.
+  if (!product.merchandiseId) {
+    return (
+      <div style={{ marginTop: compact ? 10 : 16 }}>
+        <SubmitButton
+          compact={compact}
+          disabled
+          pending={false}
+          label="Sold out"
+        />
+      </div>
+    );
+  }
+
+  const productInput = toProductInput({
+    merchandiseId: product.merchandiseId,
+    handle: product.handle,
+    title: product.title,
+    amount: product.amount,
+    currencyCode: product.currencyCode,
+    availableForSale: product.availableForSale ?? true,
+  });
+
+  return (
+    <ProductProvider product={productInput}>
+      <AddToCartForm
+        label={label}
+        compact={compact}
+        showQuantity={showQuantity}
+      />
+    </ProductProvider>
   );
 }

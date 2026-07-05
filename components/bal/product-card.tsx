@@ -121,7 +121,17 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
           </p>
         </div>
         <div style={{ marginTop: "auto" }}>
-          <AddToCartButton productSlug={product.slug} compact />
+          <AddToCartButton
+            product={{
+              merchandiseId: product.merchandiseId,
+              handle: product.shopifyHandle,
+              title: product.name,
+              amount: String(product.priceAmount ?? 0),
+              currencyCode: product.currencyCode ?? "USD",
+              availableForSale: product.availableForSale,
+            }}
+            compact
+          />
         </div>
       </div>
     </article>

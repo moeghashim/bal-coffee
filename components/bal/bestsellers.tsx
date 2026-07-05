@@ -1,5 +1,5 @@
 import { ProductCard } from "components/bal/product-card";
-import { getFeaturedProducts } from "lib/products";
+import { getFeaturedProducts } from "lib/catalog";
 
 export async function Bestsellers() {
   const featuredProducts = await getFeaturedProducts();

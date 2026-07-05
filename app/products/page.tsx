@@ -4,7 +4,7 @@ import { Grain } from "components/bal/grain";
 import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
 import { ProductMedia } from "components/bal/product-media";
-import { getProducts } from "lib/products";
+import { getProducts } from "lib/catalog";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

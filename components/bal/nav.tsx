@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useCart } from "lib/commerce/cart-client";
 
 function Logo() {
   return (
@@ -128,7 +129,8 @@ function SearchIcon() {
   );
 }
 
-export function Nav({ cartCount = 0 }: { cartCount?: number }) {
+export function Nav() {
+  const cartCount = useCart((state) => state.data.totalQuantity);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -140,7 +142,6 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
 
   const links = [
     { href: "/products", label: "Shop" },
-    { href: "/pos", label: "Café" },
     { href: "/#about", label: "About" },
     { href: "/#process", label: "Process" },
     { href: "/#journal", label: "Journal" },

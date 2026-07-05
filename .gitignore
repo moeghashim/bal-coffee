@@ -34,10 +34,21 @@ yarn-error.log*
 # vercel
 .vercel
 
-# claude code
-.claude
+# claude code — keep local agent config ignored, but VERSION-CONTROL the
+# version-matched Hydrogen toolkit skills so they travel with the pinned package
+# (see HYDROGEN_MIGRATION.md). New hydrogen-* skills auto-track on upgrade.
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/hydrogen-*
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/.playwright/

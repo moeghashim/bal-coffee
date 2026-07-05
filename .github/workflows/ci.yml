@@ -1,0 +1,91 @@
+name: CI
+
+# The migration gate (see HYDROGEN_MIGRATION.md). Every PR into main — and
+# especially @shopify/hydrogen version bumps — must pass:
+#   static  : format + import-boundary + production build
+#   e2e     : render -> cart -> Shopify-hosted checkout (Playwright)
+# Nothing merges unless both are green. Mark these as required status checks
+# in the repo's branch-protection rules for `main`.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, feat/hydrogen-migration]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The store domain is a public *.myshopify.com host; the Storefront token is a
+  # repo secret. The Hydrogen adapter reads PUBLIC_* first and falls back to
+  # these legacy SHOPIFY_* names, so one secret covers both the read path and
+  # the (not-yet-migrated) cart layer.
+  SHOPIFY_STORE_DOMAIN: balcoffee-store.myshopify.com
+  SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+
+jobs:
+  static:
+    name: Static checks + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard against a missing Storefront token
+        run: |
+          if [ -z "$SHOPIFY_STOREFRONT_ACCESS_TOKEN" ]; then
+            echo "::error::SHOPIFY_STOREFRONT_ACCESS_TOKEN repo secret is not set. Add it under Settings → Secrets and variables → Actions so the storefront build/e2e can reach Shopify." >&2
+            exit 1
+          fi
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Formatting + the "@shopify/hydrogen confined to lib/commerce" boundary.
+      - run: pnpm test
+
+      - run: pnpm build
+
+  e2e:
+    name: E2E (render → cart → checkout)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard against a missing Storefront token
+        run: |
+          if [ -z "$SHOPIFY_STOREFRONT_ACCESS_TOKEN" ]; then
+            echo "::error::SHOPIFY_STOREFRONT_ACCESS_TOKEN repo secret is not set. The live-catalog e2e specs cannot pass without it." >&2
+            exit 1
+          fi
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      # playwright.config.ts starts `pnpm dev` itself (reuseExistingServer is
+      # off when CI=true) and inherits the Shopify env above.
+      - run: pnpm e2e
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

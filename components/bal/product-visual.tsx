@@ -138,122 +138,10 @@ function ProductBag({ product }: { product: Product }) {
   );
 }
 
-function DrinkVisual({ product }: { product: Product }) {
-  if (product.kind === "dessert") {
-    return (
-      <g>
-        <ellipse
-          cx="210"
-          cy="270"
-          rx="84"
-          ry="12"
-          fill="#351c10"
-          opacity="0.18"
-        />
-        <path
-          d="M128 124 H292 L276 270 Q274 286 258 286 H162 Q146 286 144 270 Z"
-          fill="#f0dec6"
-          stroke="#75482b"
-          strokeWidth="2"
-        />
-        <rect x="142" y="174" width="136" height="28" fill="#6b351b" />
-        <rect x="144" y="210" width="132" height="36" fill="#fff3dc" />
-        <ellipse cx="210" cy="124" rx="82" ry="18" fill="#6b351b" />
-        <ellipse cx="210" cy="119" rx="76" ry="13" fill="#c99462" />
-        <circle cx="108" cy="256" r="18" fill="#5b2c16" />
-        <circle cx="82" cy="266" r="14" fill="#3b1d10" />
-      </g>
-    );
-  }
-
-  if (product.kind === "iced") {
-    return (
-      <g>
-        <ellipse
-          cx="212"
-          cy="278"
-          rx="78"
-          ry="11"
-          fill="#351c10"
-          opacity="0.15"
-        />
-        <path
-          d="M138 112 H286 L268 278 Q266 292 250 292 H174 Q158 292 156 278 Z"
-          fill="#ead7bd"
-          stroke="#90582e"
-          strokeWidth="2"
-        />
-        <path d="M154 160 H270 L260 258 H164 Z" fill="#c98c52" opacity="0.75" />
-        <path
-          d="M166 118 Q202 152 180 190 M226 118 Q258 150 236 190"
-          stroke="#8d4f27"
-          strokeWidth="8"
-          strokeLinecap="round"
-          opacity="0.65"
-        />
-        <rect
-          x="166"
-          y="134"
-          width="34"
-          height="28"
-          rx="5"
-          fill="#f5ead9"
-          opacity="0.75"
-        />
-        <rect
-          x="222"
-          y="138"
-          width="34"
-          height="28"
-          rx="5"
-          fill="#f5ead9"
-          opacity="0.75"
-        />
-        <DatesBowl x={86} y={236} />
-      </g>
-    );
-  }
-
-  return (
-    <g>
-      <ellipse
-        cx="212"
-        cy="278"
-        rx="94"
-        ry="12"
-        fill="#351c10"
-        opacity="0.14"
-      />
-      <ellipse
-        cx="212"
-        cy="168"
-        rx="108"
-        ry="104"
-        fill="#e5c19b"
-        stroke="#7c5436"
-        strokeWidth="2"
-      />
-      <ellipse cx="212" cy="160" rx="84" ry="76" fill="#b77e4d" />
-      <path
-        d="M150 156 C 180 116 244 120 272 154 C 244 188 182 190 150 156 Z"
-        fill="#f6ead4"
-      />
-      <path
-        d="M170 154 C 196 144 226 148 250 160"
-        stroke="#d09a67"
-        strokeWidth="8"
-        strokeLinecap="round"
-      />
-    </g>
-  );
-}
-
 export function ProductVisual({
   product,
   compact = false,
 }: ProductVisualProps) {
-  const isDrink = ["latte", "dessert", "iced"].includes(product.kind);
-
   return (
     <svg
       viewBox="0 0 420 320"
@@ -292,22 +180,14 @@ export function ProductVisual({
         opacity="0.62"
       />
       <g filter={`url(#${product.slug}-shadow)`}>
-        {isDrink ? (
-          <DrinkVisual product={product} />
+        {product.kind === "bag-green" ? <DatesBowl x={84} y={222} /> : null}
+        <ProductBag product={product} />
+        {product.kind === "bag-dark" ? <DatesBowl x={72} y={224} /> : null}
+        {product.kind === "bag-light" ? <DatesBowl x={312} y={230} /> : null}
+        {product.kind === "bag-green" ? (
+          <Cup x={318} y={226} />
         ) : (
-          <>
-            {product.kind === "bag-green" ? <DatesBowl x={84} y={222} /> : null}
-            <ProductBag product={product} />
-            {product.kind === "bag-dark" ? <DatesBowl x={72} y={224} /> : null}
-            {product.kind === "bag-light" ? (
-              <DatesBowl x={312} y={230} />
-            ) : null}
-            {product.kind === "bag-green" ? (
-              <Cup x={318} y={226} />
-            ) : (
-              <Cup x={318} y={230} />
-            )}
-          </>
+          <Cup x={318} y={230} />
         )}
       </g>
       {!compact ? (

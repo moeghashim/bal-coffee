@@ -135,6 +135,7 @@ Recommended order — **none of this is reversible quickly, so each step needs e
 8. **Run the Phase 5 smoke script** against `https://balcoffee.com` (now Next.js) end-to-end including checkout redirect.
 
 **Risks:**
+
 - Email continues to work because the DKIM/DMARC records are re-created at the new DNS host.
 - Any inbound link or marketing campaign hitting `balcoffee.com/whatever-liquid-path` will hit Next.js — make sure 404s have a sensible page.
 - The legacy Liquid theme's storefront and any installed apps depending on it (Inbox widget, etc.) stop working unless ported to the headless storefront.
