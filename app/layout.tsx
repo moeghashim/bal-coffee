@@ -1,7 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import "./globals.css";
 import { baseUrl } from "lib/utils";
 import { CartProvider } from "lib/commerce/cart-client";
+import { getShopAnalytics } from "lib/commerce/analytics-shop";
+import { AnalyticsTracker } from "components/bal/analytics-tracker";
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -15,7 +17,13 @@ export const metadata = {
   robots: { follow: true, index: true },
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const shopAnalytics = await getShopAnalytics();
+
   return (
     <html lang="en">
       <head>
@@ -39,6 +47,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body>
+        {shopAnalytics ? (
+          <Suspense fallback={null}>
+            <AnalyticsTracker shop={shopAnalytics} />
+          </Suspense>
+        ) : null}
         <CartProvider>{children}</CartProvider>
       </body>
     </html>
