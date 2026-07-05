@@ -9,7 +9,7 @@ import {
   getProducts,
   getProductWithShopify,
   getRelatedProductsWithShopify,
-} from "lib/products";
+} from "lib/catalog";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -394,7 +394,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   >
                     Quantity
                   </p>
-                  <AddToCartButton productSlug={product.slug} showQuantity />
+                  <AddToCartButton
+                    product={{
+                      merchandiseId: product.merchandiseId,
+                      handle: product.shopifyHandle,
+                      title: product.name,
+                      amount: String(product.priceAmount ?? 0),
+                      currencyCode: product.currencyCode ?? "USD",
+                      availableForSale: product.availableForSale,
+                    }}
+                    showQuantity
+                  />
                 </div>
 
                 <div

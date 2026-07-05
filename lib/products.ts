@@ -1,9 +1,8 @@
-import {
-  formatPrice,
-  getStorefrontProductByHandle,
-  getStorefrontProductsByHandles,
-} from "lib/commerce";
-import type { ShopifyImage, ShopifyProduct } from "lib/shopify";
+import type { ShopifyImage } from "lib/shopify";
+
+// Pure, client-safe catalog: static product data, types, and slug/handle
+// lookups. Shopify-backed reads live in lib/catalog.ts (server-only) so this
+// module can be imported from client components without pulling `server-only`.
 
 export type ProductKind = "bag-dark" | "bag-light" | "bag-green";
 
@@ -29,6 +28,9 @@ export type Product = {
   images?: ShopifyImage[];
   priceAmount?: number;
   currencyCode?: string;
+  // First sellable Shopify variant GID — the merchandiseId the Hydrogen cart
+  // adds to the cart. Present only after a product is merged with live data.
+  merchandiseId?: string;
 };
 
 export const products: Product[] = [
@@ -159,90 +161,4 @@ export function getProduct(slug: string) {
 
 export function getProductByShopifyHandle(handle: string) {
   return products.find((product) => product.shopifyHandle === handle);
-}
-
-function normalizeDescription(description: string) {
-  return description.replace(/\s+/g, " ").trim();
-}
-
-function getShopifyImages(shopifyProduct: ShopifyProduct) {
-  const images = [
-    ...shopifyProduct.images.nodes,
-    ...(shopifyProduct.featuredImage ? [shopifyProduct.featuredImage] : []),
-  ];
-  const seen = new Set<string>();
-
-  return images.filter((image) => {
-    if (!image.url || seen.has(image.url)) {
-      return false;
-    }
-
-    seen.add(image.url);
-    return true;
-  });
-}
-
-function mergeShopifyProduct(product: Product, shopifyProduct: ShopifyProduct) {
-  const description = normalizeDescription(shopifyProduct.description);
-  const images = getShopifyImages(shopifyProduct);
-
-  return {
-    ...product,
-    description: description || product.description,
-    price: formatPrice(shopifyProduct.priceRange.minVariantPrice),
-    priceAmount: Number(shopifyProduct.priceRange.minVariantPrice.amount),
-    currencyCode: shopifyProduct.priceRange.minVariantPrice.currencyCode,
-    availableForSale: shopifyProduct.availableForSale,
-    images,
-  };
-}
-
-function isStorefrontProduct(
-  shopifyProduct?: ShopifyProduct,
-): shopifyProduct is ShopifyProduct {
-  return Boolean(shopifyProduct && getShopifyImages(shopifyProduct).length > 0);
-}
-
-export async function getProducts() {
-  const shopifyProducts = await getStorefrontProductsByHandles(
-    products.map((product) => product.shopifyHandle),
-  );
-
-  return products.flatMap((product) => {
-    const shopifyProduct = shopifyProducts.get(product.shopifyHandle);
-
-    return isStorefrontProduct(shopifyProduct)
-      ? [mergeShopifyProduct(product, shopifyProduct)]
-      : [];
-  });
-}
-
-export async function getFeaturedProducts() {
-  return (await getProducts()).slice(0, 3);
-}
-
-export async function getProductWithShopify(slug: string) {
-  const product = getProduct(slug);
-
-  if (!product) {
-    return undefined;
-  }
-
-  try {
-    const shopifyProduct = await getStorefrontProductByHandle(
-      product.shopifyHandle,
-    );
-
-    return isStorefrontProduct(shopifyProduct)
-      ? mergeShopifyProduct(product, shopifyProduct)
-      : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-export async function getRelatedProductsWithShopify(slug: string) {
-  return (await getProducts())
-    .filter((product) => product.slug !== slug)
-    .slice(0, 3);
 }
