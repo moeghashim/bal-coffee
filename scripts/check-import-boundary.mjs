@@ -2,10 +2,13 @@
 // imported inside lib/commerce/. This is the mechanical guarantee behind
 // "pull upstream Hydrogen updates without breaking the app" (HYDROGEN_MIGRATION.md).
 // Run via `pnpm check:boundary` (part of `pnpm test`) and in CI.
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, sep } from "node:path";
 
 const ROOTS = ["app", "components", "lib"];
+// Root-level server entrypoints that could reach for Hydrogen directly and
+// bypass the boundary (they live outside the scanned ROOTS).
+const ROOT_FILES = ["proxy.ts", "middleware.ts"];
 const ALLOWED_PREFIX = ["lib", "commerce"].join(sep);
 const NEEDLE = "@shopify/hydrogen";
 const violations = [];
@@ -28,6 +31,12 @@ for (const root of ROOTS) {
     walk(root);
   } catch {
     // root may not exist; ignore
+  }
+}
+
+for (const file of ROOT_FILES) {
+  if (existsSync(file) && readFileSync(file, "utf8").includes(NEEDLE)) {
+    violations.push(file);
   }
 }
 
