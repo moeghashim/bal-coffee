@@ -10,8 +10,10 @@ import { getStorefront, gql } from "./storefront";
 const PRODUCT_QUERY = gql(`
   query CommerceProduct($handle: String!) {
     product(handle: $handle) {
+      id
       handle
       title
+      vendor
       description
       availableForSale
       featuredImage {
