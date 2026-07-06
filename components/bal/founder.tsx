@@ -39,6 +39,10 @@ export function Founder() {
         position: "relative",
         background: "var(--cream)",
         overflow: "hidden",
+        // Breathing room so the founder image doesn't butt against the
+        // full-bleed "end of your day" art directly above it.
+        marginTop: "clamp(48px, 6vw, 88px)",
+        scrollMarginTop: "88px",
       }}
     >
       <div
