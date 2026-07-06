@@ -35,15 +35,15 @@ function getShopifyImages(shopifyProduct: ShopifyProduct) {
   });
 }
 
-function getMerchandiseId(shopifyProduct: ShopifyProduct) {
+function getSellableVariant(shopifyProduct: ShopifyProduct) {
   const variants = shopifyProduct.variants.nodes;
-  const sellable = variants.find((variant) => variant.availableForSale);
-  return (sellable ?? variants[0])?.id;
+  return variants.find((variant) => variant.availableForSale) ?? variants[0];
 }
 
 function mergeShopifyProduct(product: Product, shopifyProduct: ShopifyProduct) {
   const description = normalizeDescription(shopifyProduct.description);
   const images = getShopifyImages(shopifyProduct);
+  const variant = getSellableVariant(shopifyProduct);
 
   return {
     ...product,
@@ -52,7 +52,10 @@ function mergeShopifyProduct(product: Product, shopifyProduct: ShopifyProduct) {
     priceAmount: Number(shopifyProduct.priceRange.minVariantPrice.amount),
     currencyCode: shopifyProduct.priceRange.minVariantPrice.currencyCode,
     availableForSale: shopifyProduct.availableForSale,
-    merchandiseId: getMerchandiseId(shopifyProduct),
+    merchandiseId: variant?.id,
+    variantTitle: variant?.title,
+    productId: shopifyProduct.id,
+    vendor: shopifyProduct.vendor ?? undefined,
     images,
   };
 }

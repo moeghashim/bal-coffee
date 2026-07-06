@@ -4,6 +4,7 @@ import { baseUrl } from "lib/utils";
 import { CartProvider } from "lib/commerce/cart-client";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
 import { AnalyticsTracker } from "components/bal/analytics-tracker";
+import { CartAnalyticsBridge } from "components/bal/cart-analytics-bridge";
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -52,7 +53,10 @@ export default async function RootLayout({
             <AnalyticsTracker shop={shopAnalytics} />
           </Suspense>
         ) : null}
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          <CartAnalyticsBridge />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

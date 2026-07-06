@@ -10,6 +10,8 @@ import {
   getProductWithShopify,
   getRelatedProductsWithShopify,
 } from "lib/catalog";
+import { getShopAnalytics } from "lib/commerce/analytics-shop";
+import { ProductViewedTracker } from "components/bal/product-viewed-tracker";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -204,6 +206,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   const related = await getRelatedProductsWithShopify(product.slug);
+  const shopAnalytics = await getShopAnalytics();
   const productImages =
     product.images && product.images.length > 0
       ? product.images.slice(0, 4)
@@ -212,6 +215,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <>
+      {shopAnalytics && product.productId && product.merchandiseId ? (
+        <ProductViewedTracker
+          shop={shopAnalytics}
+          product={{
+            id: product.productId,
+            title: product.name,
+            price: String(product.priceAmount ?? 0),
+            vendor: product.vendor ?? "BAL Coffee",
+            variantId: product.merchandiseId,
+            variantTitle: product.variantTitle ?? "",
+          }}
+        />
+      ) : null}
       <Nav />
       <main style={{ background: "var(--cream)" }}>
         <section

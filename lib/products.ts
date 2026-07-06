@@ -31,6 +31,11 @@ export type Product = {
   // First sellable Shopify variant GID — the merchandiseId the Hydrogen cart
   // adds to the cart. Present only after a product is merged with live data.
   merchandiseId?: string;
+  // Shopify Product GID + vendor + variant title, for PRODUCT_VIEWED analytics.
+  // Merge-only.
+  productId?: string;
+  vendor?: string;
+  variantTitle?: string;
 };
 
 export const products: Product[] = [
