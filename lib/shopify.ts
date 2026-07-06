@@ -52,8 +52,10 @@ export type ShopifyCartDetails = ShopifyCart & {
 };
 
 export type ShopifyProduct = {
+  id: string;
   handle: string;
   title: string;
+  vendor?: string | null;
   description: string;
   availableForSale: boolean;
   featuredImage?: ShopifyImage | null;
