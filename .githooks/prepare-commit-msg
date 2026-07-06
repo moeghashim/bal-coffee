@@ -1,0 +1,18 @@
+#!/bin/sh
+# Auto-append a DCO Signed-off-by trailer so commits satisfy the DCO check that
+# is a required status check on `main`. Idempotent: skips if the exact trailer
+# is already present (e.g. `git commit -s`).
+#
+# Activate once per clone:  git config core.hooksPath .githooks
+# (or run: pnpm run hooks:install)
+
+msg_file="$1"
+
+name=$(git config user.name)
+email=$(git config user.email)
+[ -n "$name" ] && [ -n "$email" ] || exit 0
+
+sob="Signed-off-by: $name <$email>"
+grep -qsF -- "$sob" "$msg_file" && exit 0
+
+git interpret-trailers --if-exists doNothing --trailer "$sob" --in-place "$msg_file"
