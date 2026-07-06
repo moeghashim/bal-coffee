@@ -8,7 +8,8 @@
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "check:boundary": "node scripts/check-import-boundary.mjs",
-    "test": "pnpm prettier:check && pnpm check:boundary",
+    "check:graphql": "gql.tada check",
+    "test": "pnpm prettier:check && pnpm check:boundary && pnpm check:graphql",
     "e2e": "playwright test",
     "e2e:report": "playwright show-report"
   },
@@ -31,6 +32,7 @@
     "@types/node": "22.13.10",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
+    "gql.tada": "^1.11.2",
     "postcss": "^8.5.3",
     "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
