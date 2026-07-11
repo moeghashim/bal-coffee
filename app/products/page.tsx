@@ -13,23 +13,6 @@ export const metadata: Metadata = {
     "Shop naturally caffeine-free coffee made from roasted date seeds.",
 };
 
-function SearchIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      aria-hidden
-    >
-      <circle cx="11" cy="11" r="7" />
-      <path d="M16.5 16.5 L21 21" />
-    </svg>
-  );
-}
-
 function FilterIcon() {
   return (
     <svg
@@ -194,24 +177,6 @@ export default async function ProductsPage() {
                 Naturally caffeine-free coffee made from roasted date seeds.
                 Rooted in tradition. Roasted with care.
               </p>
-              <div
-                style={{
-                  marginTop: 28,
-                  width: 310,
-                  display: "grid",
-                  gridTemplateColumns: "24px 1fr",
-                  gap: 12,
-                  alignItems: "center",
-                  padding: "12px 18px",
-                  border: "1px solid rgba(77,56,36,0.22)",
-                  borderRadius: 999,
-                  background: "rgba(255,252,246,0.78)",
-                  color: "var(--ink-soft)",
-                }}
-              >
-                <SearchIcon />
-                <span style={{ fontSize: 14 }}>Search products...</span>
-              </div>
             </div>
             <div
               className="bal-products-hero-visual"
