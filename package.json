@@ -13,7 +13,8 @@
     "test": "pnpm prettier:check && pnpm check:boundary && pnpm check:graphql",
     "e2e": "playwright test",
     "e2e:report": "playwright show-report",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "register-webhooks": "node scripts/register-webhooks.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
