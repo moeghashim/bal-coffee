@@ -8,6 +8,7 @@
   ],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
+  "commitBody": "Signed-off-by: {{{gitAuthor}}}",
   "packageRules": [
     {
       "description": "Hydrogen preview toolkit is the migration's upstream-compat contract (HYDROGEN_MIGRATION.md). Keep it pinned to an exact version and give it its own PR so the required e2e gate runs on every bump and the lib/commerce adapter is reviewed. See HYDROGEN_UPGRADE.md.",
