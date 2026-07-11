@@ -3,3 +3,5 @@ pnpm-lock.yaml
 .next/
 graphql-env.d.ts
 *-graphql-env.d.ts
+# vendored, version-matched Hydrogen skills — keep identical to the package
+.claude/skills/

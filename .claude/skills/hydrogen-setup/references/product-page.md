@@ -26,9 +26,7 @@ The product form bindings depend on a cart store. Finish the setup skill's cart 
 The server data loader should follow this control flow, adapted to the framework's error helpers:
 
 ```ts
-const { data, errors } = await storefrontClient.graphql(PRODUCT_QUERY, {
-  variables,
-});
+const { data, errors } = await storefrontClient.graphql(PRODUCT_QUERY, { variables });
 
 if (errors) {
   console.error("[hydrogen] Product query failed", errors);

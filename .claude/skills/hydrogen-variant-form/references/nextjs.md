@@ -84,9 +84,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
   return <ProductDetails product={data.product} />;
 }
 
-function toURLSearchParams(
-  input: Record<string, string | string[] | undefined>,
-) {
+function toURLSearchParams(input: Record<string, string | string[] | undefined>) {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(input)) {
     if (Array.isArray(value)) {
@@ -106,11 +104,7 @@ Use the route's existing search-param normalization helper if present.
 ```tsx
 "use client";
 
-import {
-  canAddToCart,
-  type SelectedOption,
-  type StorefrontApi,
-} from "@shopify/hydrogen";
+import { canAddToCart, type SelectedOption, type StorefrontApi } from "@shopify/hydrogen";
 import { createProductComponents } from "@shopify/hydrogen/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { PRODUCT_QUERY } from "../products/[handle]/page";
@@ -118,8 +112,7 @@ import type { PRODUCT_QUERY } from "../products/[handle]/page";
 type ProductQuery = StorefrontApi.ResultOf<typeof PRODUCT_QUERY>;
 type ProductData = NonNullable<ProductQuery["product"]>;
 
-const { ProductProvider, useProductForm } =
-  createProductComponents<ProductData>();
+const { ProductProvider, useProductForm } = createProductComponents<ProductData>();
 
 export function ProductDetails({ product }: { product: ProductData }) {
   const router = useRouter();
@@ -130,12 +123,7 @@ export function ProductDetails({ product }: { product: ProductData }) {
       product={product}
       onSelect={(result) => {
         router.replace(
-          variantUrl(
-            product,
-            result.selectedOptions,
-            result.selectedVariant?.product?.handle,
-            searchParams,
-          ),
+          variantUrl(product, result.selectedOptions, result.selectedVariant?.product?.handle, searchParams),
           { scroll: false },
         );
       }}
@@ -158,9 +146,7 @@ function variantUrl(
   product: { handle: string; options: Array<{ name: string }> },
   selectedOptions: SelectedOption[],
   handle = product.handle,
-  base:
-    | URLSearchParams
-    | ReturnType<typeof useSearchParams> = new URLSearchParams(),
+  base: URLSearchParams | ReturnType<typeof useSearchParams> = new URLSearchParams(),
 ) {
   const params = new URLSearchParams(base);
   for (const option of product.options) params.delete(option.name);
@@ -174,7 +160,7 @@ function variantUrl(
 
 Use the local `hydrogen-shop-pay` skill when adding Shop Pay. Use the local `hydrogen-money` skill for prices.
 
-Do not put option controls inside the add-to-cart form. The form contains `merchandiseId` and `quantity`; option controls are buttons/links outside it. The add-to-cart form uses `formProps` and `register` from `useProductForm()`.
+Do not put option controls inside the add-to-cart form. The form submits `merchandiseId` and `quantity`; option controls are buttons/links outside it. Register the submit button with `addToCart`.
 
 ```tsx
 function AddToCart({ product }: { product: ProductData }) {
@@ -185,7 +171,7 @@ function AddToCart({ product }: { product: ProductData }) {
     <form {...formProps({ afterSubmit: openCartDrawer })}>
       <input type="hidden" {...register("merchandiseId", {})} />
       <input {...register("quantity", { value: 1 })} />
-      <button type="submit" disabled={!addable || pending}>
+      <button {...register("addToCart", {})} disabled={!addable || pending}>
         Add to cart
       </button>
     </form>

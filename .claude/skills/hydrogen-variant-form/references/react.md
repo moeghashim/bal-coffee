@@ -18,11 +18,7 @@ Use the provider's `onSelect` callback for same-product URL sync:
   onSelect={(result) => {
     void navigate(
       toRouterLocation(
-        variantUrl(
-          product,
-          result.selectedOptions,
-          result.selectedVariant?.product?.handle,
-        ),
+        variantUrl(product, result.selectedOptions, result.selectedVariant?.product?.handle),
       ),
       {
         replace: true,
@@ -54,9 +50,7 @@ Cross-product option values are framework links that reuse the same URL helper:
 
 ```tsx
 <Link
-  to={toRouterLocation(
-    variantUrl(product, value.selectedOptions, value.handle),
-  )}
+  to={toRouterLocation(variantUrl(product, value.selectedOptions, value.handle))}
   preventScrollReset
 >
   {value.name}

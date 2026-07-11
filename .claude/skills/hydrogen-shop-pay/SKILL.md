@@ -25,22 +25,20 @@ Before writing UI, check whether this skill has a reference file for the app's f
 - Use `channel="hydrogen"` for Hydrogen headless storefronts unless the app has a reason to use a different channel.
 - Do not hardcode checkout domains in framework bindings; they derive checkout URL from `window.location.origin`.
 - Keep Shop Pay near the primary purchase action, and keep its disabled state aligned with `canAddToCart(...)`.
+- Do not pass `height`; the Shop Pay custom element does not honor it. Hydrogen reserves space by default while the element hydrates. Use wrapper styles only when the wrapper needs a different reservation.
 
 ## Product Page Pattern
 
 ```tsx
-{
-  selectedVariant ? (
-    <ShopPayButton
-      variants={[{ id: selectedVariant.id, quantity }]}
-      channel="hydrogen"
-      disabled={!addable || pending}
-      width="100%"
-      height="48px"
-      borderRadius="9999px"
-    />
-  ) : null;
-}
+{selectedVariant ? (
+  <ShopPayButton
+    variants={[{ id: selectedVariant.id, quantity }]}
+    channel="hydrogen"
+    disabled={!addable || pending}
+    width="100%"
+    borderRadius="9999px"
+  />
+) : null}
 ```
 
 `addable` should come from `canAddToCart(product, options)`, not from checking `selectedVariant` alone.
@@ -50,17 +48,14 @@ Before writing UI, check whether this skill has a reference file for the app's f
 For a full-cart checkout shortcut, render Shop Pay without `variants` and hide or disable it when the cart is empty or a cart mutation is pending.
 
 ```tsx
-{
-  cart.lines.nodes.length > 0 ? (
-    <ShopPayButton
-      channel="hydrogen"
-      disabled={cartPending}
-      width="100%"
-      height="48px"
-      borderRadius="4px"
-    />
-  ) : null;
-}
+{cart.lines.nodes.length > 0 ? (
+  <ShopPayButton
+    channel="hydrogen"
+    disabled={cartPending}
+    width="100%"
+    borderRadius="4px"
+  />
+) : null}
 ```
 
 ## Gotchas

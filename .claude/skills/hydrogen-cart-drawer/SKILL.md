@@ -17,7 +17,7 @@ Build an accessible cart drawer that opens from the edge of the viewport and int
 
 Before building the cart drawer, these must be in place:
 
-- **Standard Actions** — load `https://cdn.shopify.com/storefront/standard-actions.js` once in the root document as `<script type="module" src="https://cdn.shopify.com/storefront/standard-actions.js" crossorigin="anonymous"></script>`. In JSX/TSX, use `crossOrigin="anonymous"`.
+- **Shopify runtime scripts** — render `ShopifyScripts` once in the root document, or use `getShopifyScriptTags()` / `renderShopifyScriptTags()` from core in framework-agnostic heads plus `initializeShopifyScripts({ routes: routeTemplates })` during browser hydration. Use the local `hydrogen-routing` skill for the required routing options. The drawer uses `window.Shopify.actions.openCart()` from that runtime.
 - **`/cart` route** — the full cart page, used as the no-JS fallback for progressive enhancement
 
 ---
@@ -135,10 +135,7 @@ export function closeCartDrawer() {
 }
 
 function configureOpenCartActionNow() {
-  const openCart =
-    typeof window !== "undefined"
-      ? window.Shopify?.actions?.openCart
-      : undefined;
+  const openCart = typeof window !== "undefined" ? window.Shopify?.actions?.openCart : undefined;
   if (!openCart) return false;
 
   openCart.configure({
@@ -176,13 +173,13 @@ import { CART_DRAWER_ID, closeCartDrawer } from "~/lib/cart-drawer";
 
 function CartDrawer() {
   return (
-    <dialog
-      id={CART_DRAWER_ID}
-      aria-labelledby="cart-drawer-title"
-      closedby="any"
-    >
+    <dialog id={CART_DRAWER_ID} aria-labelledby="cart-drawer-title" closedby="any">
       <h2 id="cart-drawer-title">Cart</h2>
-      <button type="button" aria-label="Close cart" onClick={closeCartDrawer}>
+      <button
+        type="button"
+        aria-label="Close cart"
+        onClick={closeCartDrawer}
+      >
         Close
       </button>
       {/* cart content */}
@@ -276,7 +273,6 @@ dialog#cart-drawer {
 ```
 
 **Entry and exit animation**: slide in from the edge and let the dialog remain transitionable while closing.
-
 ```css
 dialog#cart-drawer {
   transform: translateX(100%);
@@ -298,7 +294,6 @@ dialog#cart-drawer[open] {
 ```
 
 **Backdrop**: fade in.
-
 ```css
 dialog#cart-drawer::backdrop {
   background: rgb(0 0 0 / 0);
@@ -319,11 +314,8 @@ dialog#cart-drawer[open]::backdrop {
 ```
 
 **Scroll lock**:
-
 ```css
-body:has(dialog#cart-drawer[open]) {
-  overflow: hidden;
-}
+body:has(dialog#cart-drawer[open]) { overflow: hidden; }
 ```
 
 Exact measurements and colors are not prescribed — the above matches the base example for reference. Adapt to the project's design system.

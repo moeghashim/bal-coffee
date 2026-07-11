@@ -26,7 +26,6 @@ When creating a full cart page, use the app's existing route convention when pre
 The store holds a `CartState` and notifies subscribers on change. Mutations flow through Shopify Standard Actions — the store listens for `shopify:cart:lines-update`, `shopify:cart:discount-update`, and `shopify:cart:note-update` DOM events. Each event carries a `promise` that resolves with the server response.
 
 On mutation:
-
 1. The store applies an **optimistic update** — the UI-visible state changes immediately.
 2. The affected entity is added to `pending` — a set of in-flight line IDs, discount codes, or a note boolean.
 3. When the promise resolves, the store **reconciles** optimistic state with server truth and clears the pending entry.
@@ -122,7 +121,7 @@ Each `CartErrorGroup` contains `{ userErrors: CartUserError[], warnings: CartWar
 
 - **While `loading` is `true`**, show skeleton placeholders — not empty state. The cart hasn't been fetched yet.
 - **When `loading` is `false` and `lines` is empty**, show empty state ("Your cart is empty" or equivalent).
-- **If `initialData` is provided** when creating the store, `loading` starts as `false` and the initial fetch is skipped. This eliminates the skeleton state entirely — the cart renders with server data on first paint.
+- **If `initialData` is provided** when creating the store, `loading` starts as `false` and the initial fetch is skipped. `initialData` is the cart handler data envelope (`{cart, errors?}`), not only the cart object. `{cart: null}` means the server already completed the bootstrap with no usable cart, so the UI should render empty state without a browser retry. `undefined` means no server bootstrap was provided, so the store fetches `/api/cart` after hydration. Cart server handlers log bootstrap errors before returning them, so app loaders should forward handler data instead of logging or throwing those errors again.
 
 ---
 

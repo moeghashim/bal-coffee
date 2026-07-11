@@ -23,8 +23,7 @@ import { createCartComponents } from "@shopify/hydrogen/react";
 
 import type { cartHandlers } from "./cart-handlers";
 
-export const { CartProvider, useCart, useCartForm } =
-  createCartComponents<typeof cartHandlers>();
+export const { CartProvider, useCart, useCartForm } = createCartComponents<typeof cartHandlers>();
 ```
 
 ```tsx
@@ -35,20 +34,23 @@ import { cartHandlers } from "~/lib/cart-handlers";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const storefrontClient = context.get(storefrontClientContext);
-  const { data } = await cartHandlers.get({ storefrontClient });
-  return { cart: data.cart };
+  const cartData = cartHandlers.get({ storefrontClient }).then(({ data }) => data);
+
+  return { cartData };
 }
 
 export default function App({ loaderData }: Route.ComponentProps) {
   return (
-    <CartProvider initialData={loaderData.cart}>
+    <CartProvider initialData={loaderData.cartData}>
       <Outlet />
     </CartProvider>
   );
 }
 ```
 
-If there is no server cart fetch yet, still wrap with `<CartProvider>`; it will fetch `/api/cart` after hydration. Register the `cartHandlers` from the server-only module with `handleShopifyRoutes({ handlers: [cartHandlers] })` so that route exists.
+Pass the full handler data envelope (`{cart, errors?}`) to `initialData`. Do not unwrap to `data.cart`: `{cart: null}` tells the client the server already checked and found no usable cart, while omitted `initialData` tells the client to fetch `/api/cart` after hydration. The cart server handlers log returned cart errors on the server, so do not throw just to force a route error.
+
+If there is no server cart fetch yet, still wrap with `<CartProvider>`; it will fetch `/api/cart` after hydration. Register the `cartHandlers` from the server-only module in the app's central `handleShopifyRoutes` wiring; use the `hydrogen-request-handlers` skill for the full framework-specific setup.
 
 ## Custom Cart Fields
 
@@ -98,28 +100,21 @@ function CartLines() {
         return (
           <li key={line.id}>
             {merchandise?.image ? (
-              <img
-                src={merchandise.image.url}
-                alt={merchandise.image.altText ?? ""}
-              />
+              <img src={merchandise.image.url} alt={merchandise.image.altText ?? ""} />
             ) : null}
             {merchandise?.product.handle ? (
               <a href={`/products/${merchandise.product.handle}`}>
                 {merchandise.product.title}
               </a>
             ) : (
-              <span>
-                {merchandise?.product.title ?? merchandise?.title ?? "Product"}
-              </span>
+              <span>{merchandise?.product.title ?? merchandise?.title ?? "Product"}</span>
             )}
             {selectedOptions.map((option) => (
               <span key={option.name}>
                 {option.name}: {option.value}
               </span>
             ))}
-            {merchandise?.availableForSale === false ? (
-              <span>Unavailable</span>
-            ) : null}
+            {merchandise?.availableForSale === false ? <span>Unavailable</span> : null}
           </li>
         );
       })}
@@ -150,11 +145,7 @@ Use `useCartForm()` for existing cart forms: line quantity changes, line removal
 Line item quantity forms must keep this shape even when the surrounding markup, styling, or component boundaries differ:
 
 ```tsx
-function LineItemQuantity({
-  line,
-}: {
-  line: { id: string; quantity: number };
-}) {
+function LineItemQuantity({ line }: { line: { id: string; quantity: number } }) {
   const { formProps, register } = useCartForm();
   const pendingLines = useCart((state) => state.pending.lines);
 

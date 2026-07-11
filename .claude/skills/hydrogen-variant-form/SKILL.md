@@ -16,14 +16,12 @@ The product form primitive is a client-side store that computes per-option-value
 The store holds a `ProductFormStoreState` and notifies subscribers on change. It is initialized with a product object and a `CartStore` instance. The product includes `encodedVariantExistence`, `encodedVariantAvailability`, product options (each with `firstSelectableVariant` per option value), a sparse variant cache (`adjacentVariants`), and a nullable `selectedOrFirstAvailableVariant`.
 
 On initialization:
-
 1. The store uses the encoded fields, when present, to determine which option-value combinations **exist** and which are **available** (in stock).
 2. It stitches together the sparse variant cache (`adjacentVariants` + `firstSelectableVariant` per option value + `selectedOrFirstAvailableVariant`) to resolve a concrete `variant` object per option value where possible.
 3. It sets the initial selection from `selectedOrFirstAvailableVariant` (server-resolved), falling back to explicitly provided `selectedOptions`, falling back to empty selection.
 4. It subscribes to the `CartStore` to derive `matchedLineItem` and `errors` reactively.
 
 On `selectOption(name, value)`:
-
 1. The store validates that the option name and value exist on the product.
 2. It validates that the combination exists when Shopify provides an encoded existence field.
 3. It updates `selectedOptions` and recomputes the full options grid.
@@ -58,7 +56,6 @@ interface ProductFormStoreState<TVariant> {
 `selectedVariant` is the currently resolved variant, or `null` when the selection is incomplete or the variant is not in the local cache.
 
 `errors` surfaces cart errors relevant to this product form:
-
 - `userErrors` — merged cart-level and line-level user errors for the matched line item.
 - `warnings` — merged cart-level and line-level warnings.
 - `networkErrors` — cart network errors.
@@ -75,7 +72,7 @@ interface ProductFormStoreState<TVariant> {
 
 ## Register API
 
-The `register` function binds product form identity and activation handlers. It covers three product-relevant fields. It intentionally does not emit UI props like `type`, `checked`, `disabled`, or `aria-pressed`; derive those from `options`, `selectedVariant`, and caller-owned state.
+The `register` function binds product form identity and activation handlers. It covers product-relevant fields. It intentionally does not emit option control UI props like `checked`, `disabled`, or `aria-pressed`; derive those from `options`, `selectedVariant`, and caller-owned state.
 
 ### `register("merchandiseId", opts)`
 
@@ -88,6 +85,10 @@ Accepts `{ value: number }` for a controlled input or `{ defaultValue: number }`
 ### `register("optionValue", opts)`
 
 Requires `{ optionName, value }`. Returns `{ name, value, onChange, onClick }` — form identity plus activation handlers. Derive caller-owned UI props from the matching option value state, such as `value.exists`, `value.available`, and `value.selected`.
+
+### `register("addToCart", opts)`
+
+Returns `{ name: "add-to-cart", type: "submit" }` for the add-to-cart submit button.
 
 ## Form submission
 
@@ -152,7 +153,7 @@ Pass `{ optionNames: [...] }` to filter to only known option names, avoiding unr
 
 - **ALWAYS use `canAddToCart(product, options)` to determine if the add-to-cart button should be enabled.** This checks three conditions: a variant is selected, it is available for sale, and the product does not require a selling plan. Checking only `selectedVariant !== null` misses the selling-plan and availability constraints.
 - **The add-to-cart form is separate from the variant selector.** Variant selection uses buttons and links — not form submissions. The add-to-cart form contains `merchandiseId` (the selected variant ID) and `quantity`. Do not put variant selection controls inside the cart form.
-- **Use `register` to bind form fields.** `register("merchandiseId", {})` returns the hidden input props with the current variant ID. `register("quantity", { value: 1 })` returns the quantity input props. These stay synchronized with store state automatically.
+- **Use `register` to bind form fields.** `register("merchandiseId", {})` returns the hidden input props with the current variant ID. `register("quantity", { value: 1 })` returns the quantity input props. `register("addToCart", {})` returns stable add-to-cart submit button props. These stay synchronized with store state automatically.
 - **Use the local `hydrogen-shop-pay` skill** when adding accelerated checkout near the add-to-cart form.
 - **Show contextual CTA text.** When `canAddToCart` is `true`: "Add to cart". When no variant is selected (`selectedVariant === null`): "Select options" unless a navigation or submission is actually pending. When a variant is selected but unavailable: "Unavailable" or "Sold out".
 - **Surface cart errors from `errors` state.** After form submission, user errors, warnings, and network errors relevant to the current product form are available on `state.errors`. Display these to the buyer.
@@ -221,14 +222,15 @@ Pass `{ optionNames: [...] }` to filter to only known option names, avoiding unr
 26. **Option value registration** — `register("optionValue", { optionName: "Color", value: "Red" })` returns `{ name, value, onChange, onClick }`. Calling `onChange` or `onClick` triggers `selectOption`.
 27. **Caller-owned option attributes** — `register("optionValue", { optionName: "Color", value: "Red" })` returns only `{ name, value, onChange, onClick }`. Derive `disabled`, `aria-pressed`, and visual state from the matching `options` value.
 28. **Quantity registration** — `register("quantity", { value: 1 })` returns `{ name: "quantity", value: "1" }`. `register("quantity", { defaultValue: 1 })` returns `{ name: "quantity", defaultValue: "1" }`.
+29. **Add-to-cart registration** — `register("addToCart", {})` returns `{ name: "add-to-cart", type: "submit" }`.
 
 ### Unresolved selection
 
-29. **Transient unresolved** — In URL-routing apps, when a complete selection returns `unresolved` because the exact variant is absent from the local cache, the app navigates to the new URL and re-fetches product data. The subsequent hydration resolves the variant. Incomplete selections should remain in selection UI until the buyer chooses the remaining options.
+30. **Transient unresolved** — In URL-routing apps, when a complete selection returns `unresolved` because the exact variant is absent from the local cache, the app navigates to the new URL and re-fetches product data. The subsequent hydration resolves the variant. Incomplete selections should remain in selection UI until the buyer chooses the remaining options.
 
 ### Reset
 
-30. **Reset to initial state** — Calling `reset()` restores the store to the product and selected options it was created with. All user selections are discarded.
+31. **Reset to initial state** — Calling `reset()` restores the store to the product and selected options it was created with. All user selections are discarded.
 
 ---
 
