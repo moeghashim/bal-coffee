@@ -1,21 +1,18 @@
 import "server-only";
-import {
-  createStorefrontRequestContext,
-  handleShopifyRoutes,
-  type StorefrontRequestContext,
-} from "@shopify/hydrogen";
+import { handleShopifyRoutes } from "@shopify/hydrogen";
 import { cartHandlers } from "./cart-handlers";
-import { getStorefront } from "./storefront";
+import { createSessionManager } from "./session";
+import { createPublicStorefront, createRequestContext } from "./storefront";
 
 /**
  * The Hydrogen routing gate, kept behind the commerce boundary so `proxy.ts`
- * never imports `@shopify/hydrogen` directly (see HYDROGEN_MIGRATION.md +
+ * never imports `@shopify/hydrogen` directly (HYDROGEN_MIGRATION.md +
  * scripts/check-import-boundary.mjs).
  *
- * `handleShopifyRoutes` owns routes the Next router should never see — the
- * `/api/cart` cart handlers, SFAPI proxy URLs, cart permalinks, `/checkout`.
- * Everything else falls through to Next, and we return the request/response
- * header helpers so the proxy can propagate SFAPI cookies + Server-Timing.
+ * As of 8a708a8, `handleShopifyRoutes` is fully request-scoped: it takes a
+ * per-request `requestContext`, a request-scoped storefront client, and an
+ * app-owned `sessionManager` (see session.ts). It owns `/api/cart`, SFAPI proxy
+ * URLs, cart permalinks, and `/checkout`; everything else falls through to Next.
  */
 export type CommerceRouteResult = {
   shopifyResponse?: Response;
@@ -23,23 +20,18 @@ export type CommerceRouteResult = {
   applyResponseHeaders: (headers: Headers) => void;
 };
 
-// The route handlers are typed for a request-scoped private client. We run on
-// the public client (fully cart-capable; private token + buyer IP is a later
-// upgrade), so the boundary layer absorbs the type gap here — the one place
-// allowed to know Hydrogen's concrete types.
-type RouteStorefront = Parameters<
-  typeof handleShopifyRoutes
->[0]["storefrontClient"];
-
 export async function handleCommerceRoutes(
   request: Request,
 ): Promise<CommerceRouteResult> {
-  const requestContext: StorefrontRequestContext =
-    createStorefrontRequestContext(request);
+  const requestContext = createRequestContext(request);
+  const storefrontClient = createPublicStorefront(requestContext);
+  const sessionManager = createSessionManager(request);
 
   const shopifyResponse = await handleShopifyRoutes({
     request,
-    storefrontClient: getStorefront() as unknown as RouteStorefront,
+    requestContext,
+    sessionManager,
+    storefrontClient,
     handlers: [cartHandlers],
   });
 

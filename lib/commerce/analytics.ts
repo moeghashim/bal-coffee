@@ -39,7 +39,7 @@ export function getAnalytics(): StorefrontAnalytics | null {
     // Shopify's hosted Customer Privacy API decides per-visitor geography whether
     // consent is required and renders its banner when it is. canTrack defaults to
     // the SDK's analyticsProcessingAllowed() — never override in production.
-    consent: { mode: "default-banner", country: "US", language: "EN" },
+    consent: { mode: "default-banner" },
   });
 
   return bus;

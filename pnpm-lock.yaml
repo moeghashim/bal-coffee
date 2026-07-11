@@ -15,8 +15,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0(react@19.2.7)
       '@shopify/hydrogen':
-        specifier: 0.0.0-preview-0c3bff8-20260618001533
-        version: 0.0.0-preview-0c3bff8-20260618001533(graphql@16.14.2)(react@19.2.7)(typescript@5.8.2)
+        specifier: 0.0.0-preview-8a708a8-20260708155454
+        version: 0.0.0-preview-8a708a8-20260708155454(graphql@16.14.2)(react@19.2.7)(typescript@5.8.2)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -407,8 +407,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
-  '@shopify/hydrogen@0.0.0-preview-0c3bff8-20260618001533':
-    resolution: {integrity: sha512-Qwf6KM5EeTykdehBTe9cTZuUOA6gm2B3aFG3O0OREAX9wkwfWYQa856YjmG7dlo/jOplQl4d0DLWQEmThabqNg==}
+  '@shopify/hydrogen@0.0.0-preview-8a708a8-20260708155454':
+    resolution: {integrity: sha512-JNd3ZRaMvSZLKDBsPqMa1a0zsCBuLtaoedkzyUOyvXq6eTqSAVhClxpig+I6O9EFrY1cRKh9S43AeTqDBJ9fqQ==}
     hasBin: true
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
@@ -1132,7 +1132,7 @@ snapshots:
     dependencies:
       react: 19.2.7
 
-  '@shopify/hydrogen@0.0.0-preview-0c3bff8-20260618001533(graphql@16.14.2)(react@19.2.7)(typescript@5.8.2)':
+  '@shopify/hydrogen@0.0.0-preview-8a708a8-20260708155454(graphql@16.14.2)(react@19.2.7)(typescript@5.8.2)':
     dependencies:
       gql.tada: 1.11.2(graphql@16.14.2)(typescript@5.8.2)
     optionalDependencies:

@@ -1,3 +1,5 @@
 # Generated / managed files Prettier should not reformat.
 pnpm-lock.yaml
 .next/
+graphql-env.d.ts
+*-graphql-env.d.ts

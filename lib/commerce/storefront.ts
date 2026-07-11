@@ -1,19 +1,22 @@
 import "server-only";
-import { createStorefrontClient, gql } from "@shopify/hydrogen";
+import {
+  createShopifyRequestContext,
+  createStorefrontClient,
+  gql,
+} from "@shopify/hydrogen";
 
 /**
- * Internal Hydrogen Storefront client.
+ * Internal Hydrogen Storefront client, behind the commerce boundary (the ONLY
+ * place allowed to import `@shopify/hydrogen` — HYDROGEN_MIGRATION.md).
  *
- * This module — and everything else under lib/commerce/ — is the ONLY place
- * allowed to import from `@shopify/hydrogen` (enforced by
- * scripts/check-import-boundary.mjs). App and UI code import the stable surface
- * from `lib/commerce` instead, so when the preview API changes, breakage is
- * contained here. See HYDROGEN_MIGRATION.md.
+ * As of the 8a708a8 toolkit, clients are request-scoped: `createStorefrontClient`
+ * takes a `requestContext` (which now carries `i18n`), so the public config no
+ * longer holds `i18n`. For request-independent reads (product list, PDPs, shop
+ * analytics) we build a synthetic request context; the request proxy builds a
+ * real one per request (see routes.ts).
  *
- * Uses the `public` client with Bal's existing public Storefront token (the
- * same token the hand-rolled layer sent as X-Shopify-Storefront-Access-Token).
- * Env is read with a fallback to the legacy SHOPIFY_* names so existing
- * .env.local / Vercel config keeps working during the migration.
+ * Env reads fall back to the legacy SHOPIFY_* names so existing Vercel config
+ * keeps working.
  */
 const storeDomain =
   process.env.PUBLIC_STORE_DOMAIN ?? process.env.SHOPIFY_STORE_DOMAIN;
@@ -21,9 +24,9 @@ const publicStorefrontToken =
   process.env.PUBLIC_STOREFRONT_API_TOKEN ??
   process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
-let client: ReturnType<typeof createStorefrontClient> | undefined;
+const i18n = { country: "US", language: "EN" } as const;
 
-export function getStorefront() {
+function assertConfigured() {
   if (!storeDomain || !publicStorefrontToken) {
     throw new Error(
       "Storefront API is not configured. Set PUBLIC_STORE_DOMAIN and " +
@@ -31,18 +34,32 @@ export function getStorefront() {
         "SHOPIFY_STOREFRONT_ACCESS_TOKEN).",
     );
   }
+}
 
-  // The public client's config is request-independent, so it can be module-scoped.
-  client ??= createStorefrontClient({
+export function createRequestContext(request: Request) {
+  return createShopifyRequestContext({ request, i18n });
+}
+
+export function createPublicStorefront(
+  requestContext: ReturnType<typeof createShopifyRequestContext>,
+) {
+  assertConfigured();
+  return createStorefrontClient({
     type: "public",
-    config: {
-      storeDomain,
-      publicStorefrontToken,
-      i18n: { country: "US", language: "EN" },
-    },
+    requestContext,
+    config: { storeDomain: storeDomain!, publicStorefrontToken },
   });
+}
 
-  return client;
+// Request-independent client for reads (SSG/build-time). Module-scoped over a
+// synthetic request context — reads don't depend on buyer/request state.
+let readClient: ReturnType<typeof createPublicStorefront> | undefined;
+
+export function getStorefront() {
+  readClient ??= createPublicStorefront(
+    createRequestContext(new Request("https://commerce.local/")),
+  );
+  return readClient;
 }
 
 export { gql };
