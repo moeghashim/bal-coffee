@@ -7,8 +7,7 @@ Middleware creates a per-request private client with buyer IP already resolved f
 import { createContext } from "react-router";
 import type { RequestScopedPrivateStorefrontClient } from "@shopify/hydrogen";
 
-export const storefrontContext =
-  createContext<RequestScopedPrivateStorefrontClient>();
+export const storefrontContext = createContext<RequestScopedPrivateStorefrontClient>();
 ```
 
 This `createContext` is React Router's request context for passing values from middleware to loaders; it is not React's component `createContext`.
@@ -17,7 +16,7 @@ This `createContext` is React Router's request context for passing values from m
 // app/storefront.middleware.ts
 import {
   createStorefrontClient,
-  createStorefrontRequestContext,
+  createShopifyRequestContext,
 } from "@shopify/hydrogen";
 import { storefrontContext } from "./storefront.context";
 import type { Route } from "./+types/root";
@@ -27,18 +26,19 @@ export const storefrontMiddleware: Route.MiddlewareFunction = async (
   next,
 ) => {
   const buyerIp = request.headers.get("cf-connecting-ip");
-  if (!buyerIp)
-    throw new Error("cf-connecting-ip is required for private SFAPI clients");
-  const requestContext = createStorefrontRequestContext(request);
+  if (!buyerIp) throw new Error("cf-connecting-ip is required for private SFAPI clients");
+  const requestContext = createShopifyRequestContext({
+    request,
+    i18n: { country: "US", language: "EN" },
+  });
 
   const client = createStorefrontClient({
     type: "private",
+    requestContext,
     config: {
       storeDomain: process.env.PUBLIC_STORE_DOMAIN!,
       privateStorefrontToken: process.env.PRIVATE_STOREFRONT_API_TOKEN!,
       buyerIp,
-      requestContext,
-      i18n: { country: "US", language: "EN" },
     },
   });
 

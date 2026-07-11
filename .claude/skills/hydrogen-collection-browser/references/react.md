@@ -13,11 +13,7 @@ import {
   type CollectionState,
   type ProductFilter,
 } from "@shopify/hydrogen";
-import {
-  CollectionProvider,
-  useCollection,
-  useCollectionForm,
-} from "@shopify/hydrogen/react";
+import { CollectionProvider, useCollection, useCollectionForm } from "@shopify/hydrogen/react";
 import type { ProductFilter as StorefrontApiProductFilter } from "@shopify/hydrogen/storefront-api-types";
 ```
 
@@ -57,16 +53,13 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
       handle: params.handle,
       first: 24,
       filters:
-        browse.filters.length > 0
-          ? (browse.filters as StorefrontApiProductFilter[])
-          : undefined,
+        browse.filters.length > 0 ? (browse.filters as StorefrontApiProductFilter[]) : undefined,
       sortKey: browse.sortKey,
       reverse: browse.reverse || undefined,
     },
   });
 
-  if (!data?.collection)
-    throw new Response("Collection not found", { status: 404 });
+  if (!data?.collection) throw new Response("Collection not found", { status: 404 });
 
   return {
     collection: data.collection,
@@ -90,10 +83,7 @@ export default function CollectionRoute({ loaderData }: Route.ComponentProps) {
 
   return (
     <CollectionProvider
-      data={{
-        handle: loaderData.collection.handle,
-        dataSearch: loaderData.dataSearch,
-      }}
+      data={{ handle: loaderData.collection.handle, dataSearch: loaderData.dataSearch }}
       urlSearch={searchParams.toString()}
       onChange={(search) =>
         navigate(
@@ -128,11 +118,7 @@ function CollectionPage({ availableFilters, products }: Props) {
         activeFilters={state.filters}
         disabled={isLoading}
       />
-      <select
-        name="sort_by"
-        defaultValue={currentSortValue(state)}
-        onChange={requestFormSubmit}
-      >
+      <select name="sort_by" defaultValue={currentSortValue(state)} onChange={requestFormSubmit}>
         {COLLECTION_SORT_OPTIONS.map((option) => (
           <option key={option.label} value={option.value}>
             {option.label}
@@ -144,9 +130,7 @@ function CollectionPage({ availableFilters, products }: Props) {
   );
 }
 
-function requestFormSubmit(
-  event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-) {
+function requestFormSubmit(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
   event.currentTarget.form?.requestSubmit();
 }
 ```
@@ -158,9 +142,7 @@ Use uncontrolled form controls. When a route needs to remount checkboxes after e
 For each Storefront `FilterValue`, treat `value.input` as the canonical JSON-encoded `ProductFilter`. Convert it to checkbox params by parsing the JSON, wrapping it in the minimal collection state shape, and calling `serializeCollectionParams(...)`. Use Hydrogen helpers for active checks:
 
 ```tsx
-function filterValueInputParamEntries(
-  input: string,
-): Array<{ name: string; value: string }> {
+function filterValueInputParamEntries(input: string): Array<{ name: string; value: string }> {
   let filter: ProductFilter;
   try {
     filter = JSON.parse(input) as ProductFilter;
@@ -169,11 +151,7 @@ function filterValueInputParamEntries(
   }
 
   return Array.from(
-    serializeCollectionParams({
-      filters: [filter],
-      sortKey: undefined,
-      reverse: false,
-    }),
+    serializeCollectionParams({ filters: [filter], sortKey: undefined, reverse: false }),
     ([name, value]) => ({ name, value }),
   );
 }
@@ -211,7 +189,11 @@ function ActiveFilterChip({ collectionPath, filter, state }: Props) {
   const removal = getFilterRemovalUrl(currentParams, filter);
   const href = removal === "?" ? collectionPath : `${collectionPath}${removal}`;
 
-  return <a href={href}>{describeFilter(filter)}</a>;
+  return (
+    <a href={href}>
+      {describeFilter(filter)}
+    </a>
+  );
 }
 ```
 
@@ -236,9 +218,7 @@ Use the same binding with a synthetic handle:
 <CollectionProvider
   data={{ handle: `search:${term}`, dataSearch }}
   urlSearch={searchParams.toString()}
-  onChange={(search) =>
-    navigate({ search }, { replace: searchParams.size > 0 })
-  }
+  onChange={(search) => navigate({ search }, { replace: searchParams.size > 0 })}
 >
   <input type="hidden" name="q" value={term} />
 </CollectionProvider>

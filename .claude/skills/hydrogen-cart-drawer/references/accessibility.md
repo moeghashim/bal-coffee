@@ -8,14 +8,14 @@ The native `<dialog>` element with `showModal()` is the recommended foundation. 
 
 ### What `showModal()` provides
 
-| Behavior                         | How it works                                                                                                                                                                          |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Top-layer rendering**          | The dialog is promoted above all other content, regardless of `z-index` stacking. No z-index wars.                                                                                    |
-| **`::backdrop` pseudo-element**  | A full-viewport overlay rendered behind the dialog in the top layer. Styleable with CSS.                                                                                              |
-| **Escape key dismissal**         | Pressing Escape fires a `cancel` event (cancelable), then closes the dialog and fires a `close` event.                                                                                |
-| **Focus containment**            | All content outside the dialog becomes `inert` — unreachable by Tab, click, or assistive technology. Tab and Shift+Tab cycle only through focusable elements inside the dialog.       |
-| **Focus restoration**            | The browser stores the previously-focused element when `showModal()` is called and restores focus to it when the dialog closes via `close()`. Per the WHATWG spec, this is automatic. |
-| **Implicit `aria-modal="true"`** | Screen readers recognize the dialog as modal without an explicit attribute.                                                                                                           |
+| Behavior | How it works |
+|----------|-------------|
+| **Top-layer rendering** | The dialog is promoted above all other content, regardless of `z-index` stacking. No z-index wars. |
+| **`::backdrop` pseudo-element** | A full-viewport overlay rendered behind the dialog in the top layer. Styleable with CSS. |
+| **Escape key dismissal** | Pressing Escape fires a `cancel` event (cancelable), then closes the dialog and fires a `close` event. |
+| **Focus containment** | All content outside the dialog becomes `inert` — unreachable by Tab, click, or assistive technology. Tab and Shift+Tab cycle only through focusable elements inside the dialog. |
+| **Focus restoration** | The browser stores the previously-focused element when `showModal()` is called and restores focus to it when the dialog closes via `close()`. Per the WHATWG spec, this is automatic. |
+| **Implicit `aria-modal="true"`** | Screen readers recognize the dialog as modal without an explicit attribute. |
 
 ### What must be implemented manually
 
@@ -38,7 +38,7 @@ Watch for the scrollbar-gutter shift: when the scrollbar disappears, body width 
 The default `<dialog>` behavior does not close on backdrop click. The standard pattern detects clicks on the dialog element itself (as opposed to its children):
 
 ```js
-dialog.addEventListener("click", (event) => {
+dialog.addEventListener('click', (event) => {
   if (event.target === dialog) dialog.close();
 });
 ```
@@ -54,19 +54,13 @@ The hard problem: `close()` removes the dialog from the top layer immediately, m
 Two strategies:
 
 **CSS `@starting-style` + `allow-discrete` (modern browsers)**
-
 ```css
 dialog[open] {
   transform: translateX(0);
-  transition:
-    transform 250ms,
-    overlay 250ms allow-discrete,
-    display 250ms allow-discrete;
+  transition: transform 250ms, overlay 250ms allow-discrete, display 250ms allow-discrete;
 }
 @starting-style {
-  dialog[open] {
-    transform: translateX(100%);
-  }
+  dialog[open] { transform: translateX(100%); }
 }
 dialog:not([open]) {
   transform: translateX(100%);
@@ -93,12 +87,12 @@ If additional context is useful for screen readers (e.g., item count), use `aria
 
 With `<dialog>` + `showModal()` and semantic HTML, all keyboard interactions are native:
 
-| Key           | Behavior                                                | Source                                  |
-| ------------- | ------------------------------------------------------- | --------------------------------------- |
-| Escape        | Closes the dialog                                       | Native (`cancel` → `close` events)      |
-| Tab           | Moves focus to next focusable element inside dialog     | Native (background is `inert`)          |
-| Shift+Tab     | Moves focus to previous focusable element inside dialog | Native                                  |
-| Enter / Space | Activates the focused button or link                    | Native for `<button>`, `<a>`, `<input>` |
+| Key | Behavior | Source |
+|-----|----------|--------|
+| Escape | Closes the dialog | Native (`cancel` → `close` events) |
+| Tab | Moves focus to next focusable element inside dialog | Native (background is `inert`) |
+| Shift+Tab | Moves focus to previous focusable element inside dialog | Native |
+| Enter / Space | Activates the focused button or link | Native for `<button>`, `<a>`, `<input>` |
 
 No additional keyboard handlers are needed if all interactive elements use semantic HTML (`<button>`, `<a>`, `<input>`). Custom elements that are not natively focusable require `tabindex="0"` and `role` attributes — prefer native elements instead.
 

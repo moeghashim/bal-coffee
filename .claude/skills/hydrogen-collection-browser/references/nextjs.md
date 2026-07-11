@@ -17,25 +17,13 @@ export default async function CollectionPage({
   const { handle } = await params;
   const urlSearch = toURLSearchParams(await searchParams);
   const storefront = await getStorefrontClient();
-  const result = await queryCollection({
-    storefrontClient: storefront,
-    handle,
-    searchParams: urlSearch,
-  });
+  const result = await queryCollection({ storefrontClient: storefront, handle, searchParams: urlSearch });
   if (!result) notFound();
 
-  return (
-    <CollectionBrowser
-      mode="collection"
-      {...result}
-      dataSearch={urlSearch.toString()}
-    />
-  );
+  return <CollectionBrowser mode="collection" {...result} dataSearch={urlSearch.toString()} />;
 }
 
-function toURLSearchParams(
-  input: Record<string, string | string[] | undefined>,
-) {
+function toURLSearchParams(input: Record<string, string | string[] | undefined>) {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(input)) {
     if (Array.isArray(value)) {
@@ -55,11 +43,7 @@ The page may be dynamic when it reads request-scoped Storefront client data or s
 In a `"use client"` component:
 
 ```tsx
-import {
-  CollectionProvider,
-  useCollection,
-  useCollectionForm,
-} from "@shopify/hydrogen/react";
+import { CollectionProvider, useCollection, useCollectionForm } from "@shopify/hydrogen/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export function CollectionBrowser(props: Props) {
@@ -92,9 +76,7 @@ export function CollectionBrowser(props: Props) {
 Build the actual `BrowserContent` controls from the React reference patterns: sort option values come from `getSortByValue(...)`, filter checkbox names/values come from parsing `FilterValue.input` and passing that exact parsed filter through `serializeCollectionParams(...)`, and uncontrolled checkbox reset keys belong on the filter subtree when external navigation can clear filters.
 
 ```tsx
-function filterValueInputParamEntries(
-  input: string,
-): Array<{ name: string; value: string }> {
+function filterValueInputParamEntries(input: string): Array<{ name: string; value: string }> {
   let filter: ProductFilter;
   try {
     filter = JSON.parse(input) as ProductFilter;
@@ -103,11 +85,7 @@ function filterValueInputParamEntries(
   }
 
   return Array.from(
-    serializeCollectionParams({
-      filters: [filter],
-      sortKey: undefined,
-      reverse: false,
-    }),
+    serializeCollectionParams({ filters: [filter], sortKey: undefined, reverse: false }),
     ([name, value]) => ({ name, value }),
   );
 }
@@ -120,8 +98,7 @@ This helper is only an adapter from Storefront API `FilterValue.input` to Hydrog
 Use the same component with a discriminated `mode`:
 
 ```tsx
-const handle =
-  props.mode === "collection" ? props.handle : `search:${props.term}`;
+const handle = props.mode === "collection" ? props.handle : `search:${props.term}`;
 ```
 
 For search forms:

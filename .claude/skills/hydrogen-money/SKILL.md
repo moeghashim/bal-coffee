@@ -49,12 +49,7 @@ inputs must share one currency.
 ## Examples
 
 ```tsx
-<p>
-  {formatPrice(
-    selectedVariant?.price ?? product.priceRange.minVariantPrice,
-    locale,
-  )}
-</p>
+<p>{formatPrice(selectedVariant?.price ?? product.priceRange.minVariantPrice, locale)}</p>
 ```
 
 ```ts
