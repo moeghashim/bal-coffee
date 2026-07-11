@@ -12,7 +12,8 @@
     "hooks:install": "git config core.hooksPath .githooks",
     "test": "pnpm prettier:check && pnpm check:boundary && pnpm check:graphql",
     "e2e": "playwright test",
-    "e2e:report": "playwright show-report"
+    "e2e:report": "playwright show-report",
+    "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
