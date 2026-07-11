@@ -98,37 +98,6 @@ function CartIcon({ count = 0 }: { count?: number }) {
   );
 }
 
-function SearchIcon() {
-  return (
-    <a
-      href="/products"
-      aria-label="Search products"
-      style={{
-        width: 36,
-        height: 36,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "var(--ink)",
-      }}
-    >
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="11" cy="11" r="7" />
-        <path d="M16.5 16.5 L21 21" />
-      </svg>
-    </a>
-  );
-}
-
 export function Nav() {
   const cartCount = useCart((state) => state.data.totalQuantity);
   const [scrolled, setScrolled] = useState(false);
@@ -235,7 +204,6 @@ export function Nav() {
             )}
           </svg>
         </button>
-        <SearchIcon />
         <CartIcon count={cartCount} />
       </div>
     </nav>

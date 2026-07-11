@@ -65,7 +65,7 @@ export function Founder() {
         >
           <Image
             src="/founder.png"
-            alt="Batool, founder of BAL Coffee"
+            alt="Judy Ghashim, founder of BAL Coffee"
             fill
             sizes="(max-width: 1024px) 100vw, 40vw"
             style={{ objectFit: "cover", objectPosition: "center" }}
@@ -131,7 +131,7 @@ export function Founder() {
                 color: "var(--ink)",
               }}
             >
-              — Batool
+              — Judy Ghashim
             </p>
             <p
               className="mono"
