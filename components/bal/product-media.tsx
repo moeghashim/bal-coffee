@@ -36,6 +36,33 @@ function srcSet(url: string) {
   return SRCSET_WIDTHS.map((w) => `${sized(url, w)} ${w}w`).join(", ");
 }
 
+// Display-size hints. Non-compact = PDP main image + products hero, which sit in
+// a padded column (~90vw on mobile, not full-bleed); compact = cards,
+// thumbnails, cart lines.
+const NON_COMPACT_SIZES = "(max-width: 768px) 90vw, 600px";
+const COMPACT_SIZES = "(max-width: 768px) 50vw, 360px";
+
+/**
+ * Preload link for an above-the-fold product image, matching the `<img>` the
+ * `priority` ProductMedia renders (same srcset + sizes) so the browser fetches
+ * the LCP image immediately — before it discovers the <img> in the DOM — with no
+ * double-download. React 19 hoists this <link> into <head>. Render it once per
+ * page for the LCP image only.
+ */
+export function ProductImagePreload({ image }: { image?: ShopifyImage }) {
+  if (!image?.url || !isShopifyCdn(image.url)) return null;
+  return (
+    <link
+      rel="preload"
+      as="image"
+      href={sized(image.url, 1200)}
+      imageSrcSet={srcSet(image.url)}
+      imageSizes={NON_COMPACT_SIZES}
+      fetchPriority="high"
+    />
+  );
+}
+
 export function ProductMedia({
   product,
   compact = false,
@@ -61,9 +88,7 @@ export function ProductMedia({
   // Rough display widths: compact contexts (cards, thumbnails, cart lines) show
   // ~half the viewport on mobile and a fixed column on desktop; the main/hero
   // image fills its column.
-  const sizes = compact
-    ? "(max-width: 768px) 50vw, 360px"
-    : "(max-width: 768px) 100vw, 600px";
+  const sizes = compact ? COMPACT_SIZES : NON_COMPACT_SIZES;
 
   return (
     <img
