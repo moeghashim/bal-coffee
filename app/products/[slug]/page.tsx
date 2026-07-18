@@ -4,7 +4,10 @@ import { Footer } from "components/bal/footer";
 import { Grain } from "components/bal/grain";
 import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
-import { ProductMedia } from "components/bal/product-media";
+import {
+  ProductImagePreload,
+  ProductMedia,
+} from "components/bal/product-media";
 import {
   getProducts,
   getProductWithShopify,
@@ -215,6 +218,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <>
+      <ProductImagePreload image={product.images?.[0]} />
       {shopAnalytics && product.productId && product.merchandiseId ? (
         <ProductViewedTracker
           shop={shopAnalytics}
