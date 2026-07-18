@@ -267,7 +267,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     aspectRatio: "1.16 / 1",
                   }}
                 >
-                  <ProductMedia product={product} />
+                  <ProductMedia product={product} priority />
                   <span
                     className="mono"
                     style={{

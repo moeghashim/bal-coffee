@@ -182,7 +182,9 @@ export default async function ProductsPage() {
               className="bal-products-hero-visual"
               style={{ height: 280, position: "relative", overflow: "hidden" }}
             >
-              {heroProduct ? <ProductMedia product={heroProduct} /> : null}
+              {heroProduct ? (
+                <ProductMedia product={heroProduct} priority />
+              ) : null}
             </div>
             <div
               className="bal-products-seal"
