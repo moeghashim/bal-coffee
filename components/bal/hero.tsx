@@ -62,8 +62,9 @@ export function Hero({ product }: { product?: Product }) {
           maxWidth: 1280,
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "minmax(0, 720px) minmax(0, 500px)",
-          justifyContent: "space-between",
+          // 720:500 as fluid tracks, so both columns shrink together between
+          // the 1024px collapse and the 1280px max width.
+          gridTemplateColumns: "minmax(0, 36fr) minmax(0, 25fr)",
           alignItems: "center",
           gap: 48,
         }}
@@ -185,7 +186,7 @@ export function Hero({ product }: { product?: Product }) {
           className="bal-kraft-hero-photo"
           style={{
             position: "relative",
-            width: 500,
+            width: "100%",
             aspectRatio: "500 / 720",
             borderRadius: 22,
             overflow: "hidden",
