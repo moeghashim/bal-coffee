@@ -19,18 +19,18 @@ export const metadata: Metadata = {
 function FilterIcon() {
   return (
     <svg
-      width="24"
-      height="24"
+      width="22"
+      height="22"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.5"
+      strokeWidth="1.8"
       aria-hidden
     >
       <path d="M4 7 H20" />
       <path d="M4 17 H20" />
-      <circle cx="9" cy="7" r="2" fill="var(--cream)" />
-      <circle cx="15" cy="17" r="2" fill="var(--cream)" />
+      <circle cx="9" cy="7" r="2" fill="var(--label)" />
+      <circle cx="15" cy="17" r="2" fill="var(--label)" />
     </svg>
   );
 }
@@ -43,7 +43,7 @@ function ChevronDownIcon() {
       viewBox="0 0 16 16"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.7"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
@@ -56,70 +56,45 @@ function ChevronDownIcon() {
 
 function DropdownButton({ label }: { label: string }) {
   return (
-    <button
-      type="button"
-      style={{
-        minHeight: 36,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 8,
-        padding: "0 16px",
-        border: "1px solid rgba(77,56,36,0.18)",
-        borderRadius: 7,
-        background: "rgba(255,252,246,0.76)",
-        color: "var(--ink-2)",
-        fontSize: 13,
-        lineHeight: 1,
-      }}
-    >
+    <button type="button" className="label-chip" style={{ gap: 8 }}>
       <span>{label}</span>
       <ChevronDownIcon />
     </button>
   );
 }
 
-function Seal() {
+function CaffeineStamp() {
   return (
-    <svg width="124" height="124" viewBox="0 0 124 124" fill="none" aria-hidden>
-      <circle cx="62" cy="62" r="54" stroke="#766f35" strokeWidth="1.2" />
-      <circle
-        cx="62"
-        cy="62"
-        r="35"
-        stroke="#766f35"
-        strokeWidth="0.8"
-        opacity="0.55"
-      />
-      <path
-        d="M62 38 C 54 48, 50 56, 50 66 C 50 76, 56 82, 62 86 C 68 82, 74 76, 74 66 C 74 56, 70 48, 62 38 Z"
-        stroke="#766f35"
-        strokeWidth="1.5"
-      />
-      <path d="M62 84 V 48" stroke="#766f35" strokeWidth="1.2" />
-      <text
-        x="62"
-        y="18"
-        textAnchor="middle"
-        fontFamily="IBM Plex Mono, monospace"
-        fontSize="8"
-        letterSpacing="2"
-        fill="#766f35"
+    <div
+      className="label-stamp bal-products-seal"
+      aria-hidden
+      style={{
+        position: "absolute",
+        right: -18,
+        top: -26,
+        width: 128,
+        height: 128,
+        zIndex: 1,
+      }}
+    >
+      <span
+        className="label-face"
+        style={{ fontSize: 34, fontWeight: 700, lineHeight: 1 }}
       >
-        ROASTED DATE SEEDS
-      </text>
-      <text
-        x="62"
-        y="109"
-        textAnchor="middle"
-        fontFamily="IBM Plex Mono, monospace"
-        fontSize="8"
-        letterSpacing="2"
-        fill="#766f35"
+        0 mg
+      </span>
+      <span
+        className="mono"
+        style={{
+          marginTop: 3,
+          fontSize: 8,
+          fontWeight: 600,
+          letterSpacing: "0.2em",
+        }}
       >
-        CAFFEINE FREE
-      </text>
-    </svg>
+        CAFFEINE
+      </span>
+    </div>
   );
 }
 
@@ -135,46 +110,40 @@ export default async function ProductsPage() {
       <main>
         <section
           className="bal-products-hero-section"
-          style={{
-            borderTop: "1px solid rgba(77,56,36,0.12)",
-            borderBottom: "1px solid rgba(77,56,36,0.14)",
-            background:
-              "radial-gradient(circle at 80% 20%, rgba(255,248,232,0.7), transparent 34%), linear-gradient(100deg, #f5ebdc 0%, #ead8bd 55%, #d2b78f 100%)",
-          }}
+          style={{ padding: "0 80px" }}
         >
           <div
             className="bal-products-hero"
             style={{
               maxWidth: 1180,
-              minHeight: 310,
               margin: "0 auto",
               display: "grid",
-              gridTemplateColumns: "0.82fr 1.18fr",
-              gap: 48,
+              gridTemplateColumns: "1fr 0.9fr",
+              gap: 56,
               alignItems: "center",
-              position: "relative",
-              padding: "56px 0",
+              padding: "48px 0 40px",
             }}
           >
             <div>
+              <p className="label-kicker">
+                The collection · {products.length} roasts
+              </p>
               <h1
-                className="serif"
+                className="label-title"
                 style={{
-                  fontSize: "clamp(48px, 6vw, 72px)",
-                  lineHeight: 0.98,
-                  fontWeight: 400,
-                  color: "var(--ink)",
-                  letterSpacing: 0,
+                  marginTop: 16,
+                  fontSize: "clamp(56px, 7vw, 96px)",
+                  lineHeight: 0.92,
                 }}
               >
                 All products
               </h1>
               <p
                 style={{
-                  marginTop: 18,
-                  maxWidth: 360,
+                  marginTop: 20,
+                  maxWidth: 420,
                   fontSize: 18,
-                  lineHeight: 1.35,
+                  lineHeight: 1.5,
                   color: "var(--ink-2)",
                 }}
               >
@@ -182,26 +151,36 @@ export default async function ProductsPage() {
                 Rooted in tradition. Roasted with care.
               </p>
             </div>
-            <div
-              className="bal-products-hero-visual"
-              style={{ height: 280, position: "relative", overflow: "hidden" }}
-            >
-              {heroProduct ? (
-                <ProductMedia product={heroProduct} priority />
-              ) : null}
-            </div>
-            <div
-              className="bal-products-seal"
-              style={{ position: "absolute", right: 18, top: 28 }}
-            >
-              <Seal />
+            <div style={{ position: "relative" }}>
+              <div
+                className="bal-products-hero-visual"
+                style={{
+                  position: "relative",
+                  height: 340,
+                  borderRadius: 22,
+                  overflow: "hidden",
+                  border: "2px solid var(--ink)",
+                  background: "var(--label)",
+                  transform: "rotate(1.5deg)",
+                }}
+              >
+                {heroProduct ? (
+                  <ProductMedia
+                    product={heroProduct}
+                    fill
+                    priority
+                    objectPosition="center 70%"
+                  />
+                ) : null}
+              </div>
+              <CaffeineStamp />
             </div>
           </div>
         </section>
 
         <section
           className="bal-products-shop"
-          style={{ padding: "18px 56px 20px", background: "var(--cream)" }}
+          style={{ padding: "8px 80px 96px" }}
         >
           <div style={{ maxWidth: 1180, margin: "0 auto" }}>
             <div
@@ -211,6 +190,8 @@ export default async function ProductsPage() {
                 gridTemplateColumns: "1fr auto",
                 alignItems: "center",
                 gap: 24,
+                paddingBottom: 22,
+                borderBottom: "2px solid var(--ink)",
               }}
             >
               <div
@@ -221,16 +202,7 @@ export default async function ProductsPage() {
                   <button
                     key={chip}
                     type="button"
-                    style={{
-                      minHeight: 36,
-                      padding: "0 18px",
-                      border: "1px solid rgba(77,56,36,0.18)",
-                      borderRadius: 999,
-                      background:
-                        index === 0 ? "#32180d" : "rgba(255,252,246,0.76)",
-                      color: index === 0 ? "#fff4e8" : "var(--ink-2)",
-                      fontSize: 13,
-                    }}
+                    className={`label-chip ${index === 0 ? "label-chip-active" : ""}`}
                   >
                     {chip}
                   </button>
@@ -238,10 +210,10 @@ export default async function ProductsPage() {
                 <span
                   className="bal-products-toolbar-divider"
                   style={{
-                    width: 1,
-                    height: 36,
-                    background: "rgba(77,56,36,0.18)",
-                    margin: "0 12px",
+                    width: 2,
+                    height: 34,
+                    background: "rgba(42,31,23,0.3)",
+                    margin: "0 8px",
                   }}
                 />
                 {["Roast Profile", "Brew Type"].map((label) => (
@@ -260,14 +232,18 @@ export default async function ProductsPage() {
             <div
               className="bal-products-grid"
               style={{
-                marginTop: 22,
+                marginTop: 32,
                 display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 18,
+                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                gap: 26,
               }}
             >
-              {products.map((product) => (
-                <ProductCard key={product.slug} product={product} />
+              {products.map((product, index) => (
+                <ProductCard
+                  key={product.slug}
+                  product={product}
+                  index={index}
+                />
               ))}
             </div>
             <BenefitsStrip />
