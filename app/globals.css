@@ -284,15 +284,15 @@ input {
   }
   .bal-cart-line,
   .bal-cart-table-header {
-    grid-template-columns: minmax(250px, 1fr) 108px 76px 86px 32px !important;
-    gap: 18px !important;
+    grid-template-columns: minmax(0, 1fr) 108px 76px 86px 32px !important;
+    gap: 16px !important;
   }
   .bal-cart-product-cell {
-    grid-template-columns: 150px 1fr !important;
+    grid-template-columns: 110px 1fr !important;
     gap: 16px !important;
   }
   .bal-cart-product-cell > a {
-    height: 118px !important;
+    height: 110px !important;
   }
   .bal-product-detail-grid,
   .bal-product-info-grid,
