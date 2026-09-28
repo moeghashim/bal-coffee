@@ -3,47 +3,6 @@
 import { useEffect, useState } from "react";
 import { useCart } from "lib/commerce/cart-client";
 
-type NavVariant = "default" | "kraft";
-
-function Logo() {
-  return (
-    <a
-      href="/"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 6,
-        color: "var(--ink)",
-      }}
-      aria-label="BAL Coffee — home"
-    >
-      <span
-        className="serif"
-        style={{
-          fontSize: 26,
-          fontWeight: 600,
-          letterSpacing: "-0.02em",
-          lineHeight: 1,
-        }}
-      >
-        BAL
-      </span>
-      <span
-        className="mono"
-        style={{
-          fontSize: 9,
-          letterSpacing: "0.32em",
-          textTransform: "uppercase",
-          color: "var(--ink-2)",
-          marginTop: 6,
-        }}
-      >
-        coffee
-      </span>
-    </a>
-  );
-}
-
 // The packaging wordmark: condensed navy BAL over the red smile.
 function LabelLogo() {
   return (
@@ -93,29 +52,21 @@ function LabelLogo() {
   );
 }
 
-function CartIcon({
-  count = 0,
-  variant,
-}: {
-  count?: number;
-  variant: NavVariant;
-}) {
-  const kraft = variant === "kraft";
-
+function CartIcon({ count = 0 }: { count?: number }) {
   return (
     <a
       href="/cart"
       aria-label="View cart"
       style={{
         position: "relative",
-        width: kraft ? 44 : 36,
-        height: kraft ? 44 : 36,
+        width: 44,
+        height: 44,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         color: "var(--ink)",
-        border: kraft ? "2px solid var(--ink)" : undefined,
-        borderRadius: kraft ? 10 : undefined,
+        border: "2px solid var(--ink)",
+        borderRadius: 10,
       }}
     >
       <svg
@@ -124,7 +75,7 @@ function CartIcon({
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth={kraft ? 1.8 : 1.6}
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -136,18 +87,18 @@ function CartIcon({
           aria-label={`${count} items in cart`}
           style={{
             position: "absolute",
-            top: kraft ? -8 : 1,
-            right: kraft ? -8 : 0,
+            top: -8,
+            right: -8,
             display: "inline-flex",
-            minWidth: kraft ? 20 : 17,
-            height: kraft ? 20 : 17,
+            minWidth: 20,
+            height: 20,
             alignItems: "center",
             justifyContent: "center",
             padding: "0 4px",
             borderRadius: 999,
-            background: kraft ? "var(--stamp)" : "#32180d",
-            color: kraft ? "var(--label)" : "#fff4e8",
-            fontSize: kraft ? 11 : 10,
+            background: "var(--stamp)",
+            color: "var(--label)",
+            fontSize: 11,
             lineHeight: 1,
             fontWeight: 700,
           }}
@@ -159,24 +110,14 @@ function CartIcon({
   );
 }
 
-const defaultLinks = [
+const links = [
   { href: "/products", label: "Shop" },
-  { href: "/#about", label: "About" },
-  { href: "/#process", label: "Process" },
-  { href: "/#journal", label: "Journal" },
-  { href: "/#subscription", label: "Subscription" },
-  { href: "/#contact", label: "Contact" },
-];
-
-const kraftLinks = [
-  { href: "/#shop", label: "Shop" },
   { href: "/#process", label: "What's in the bag" },
   { href: "/#about", label: "Our story" },
   { href: "/#subscription", label: "Subscribe" },
 ];
 
-export function Nav({ variant = "default" }: { variant?: NavVariant }) {
-  const kraft = variant === "kraft";
+export function Nav() {
   const cartCount = useCart((state) => state.data.totalQuantity);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -187,9 +128,8 @@ export function Nav({ variant = "default" }: { variant?: NavVariant }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const links = kraft ? kraftLinks : defaultLinks;
-  const linkColor = kraft ? "var(--ink)" : "var(--ink-2)";
-  const linkHover = kraft ? "var(--stamp)" : "var(--terra-deep)";
+  const linkColor = "var(--ink)";
+  const linkHover = "var(--stamp)";
 
   return (
     <nav
@@ -198,47 +138,31 @@ export function Nav({ variant = "default" }: { variant?: NavVariant }) {
         position: "sticky",
         top: 0,
         zIndex: 100,
-        padding: kraft
-          ? scrolled
-            ? "12px 80px"
-            : "20px 80px"
-          : scrolled
-            ? "14px 56px"
-            : "22px 56px",
+        padding: scrolled ? "12px 80px" : "20px 80px",
         display: "grid",
         gridTemplateColumns: "1fr auto 1fr",
         alignItems: "center",
         transition: "all .25s ease",
-        background: kraft
-          ? scrolled
-            ? "rgba(214,186,140,0.94)"
-            : "var(--kraft)"
-          : scrolled
-            ? "rgba(244,239,230,0.92)"
-            : "var(--cream)",
+        background: scrolled ? "rgba(242,214,174,0.94)" : "var(--kraft)",
         backdropFilter: scrolled ? "blur(10px)" : "none",
         borderBottom: scrolled
-          ? kraft
-            ? "2px solid var(--ink)"
-            : "1px solid var(--line-soft)"
-          : kraft
-            ? "2px solid transparent"
-            : "1px solid transparent",
+          ? "2px solid var(--ink)"
+          : "2px solid transparent",
       }}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
-        {kraft ? <LabelLogo /> : <Logo />}
+        <LabelLogo />
       </div>
       <div
-        className={`bal-nav-links ${mobileOpen ? "bal-nav-links-open" : ""} ${
-          kraft ? "label-face" : ""
+        className={`bal-nav-links label-face ${
+          mobileOpen ? "bal-nav-links-open" : ""
         }`}
         style={{
           display: "flex",
-          gap: kraft ? 38 : 36,
-          fontSize: kraft ? 16 : 14,
-          fontWeight: kraft ? 500 : undefined,
-          letterSpacing: kraft ? "0.08em" : undefined,
+          gap: 38,
+          fontSize: 16,
+          fontWeight: 500,
+          letterSpacing: "0.08em",
           color: linkColor,
         }}
       >
@@ -295,7 +219,7 @@ export function Nav({ variant = "default" }: { variant?: NavVariant }) {
             )}
           </svg>
         </button>
-        <CartIcon count={cartCount} variant={variant} />
+        <CartIcon count={cartCount} />
       </div>
     </nav>
   );
