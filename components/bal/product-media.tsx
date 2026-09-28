@@ -8,6 +8,8 @@ type ProductMediaProps = {
   image?: ShopifyImage;
   fill?: boolean;
   priority?: boolean;
+  // CSS object-position for the crop; defaults to centered.
+  objectPosition?: string;
 };
 
 // Shopify's CDN resizes on the fly via a `width` query param. Serving a
@@ -69,6 +71,7 @@ export function ProductMedia({
   image,
   fill = false,
   priority = false,
+  objectPosition = "center",
 }: ProductMediaProps) {
   const productImage = image || product.images?.[0];
 
@@ -108,7 +111,7 @@ export function ProductMedia({
         width: "100%",
         height: "100%",
         objectFit: "cover",
-        objectPosition: "center",
+        objectPosition,
       }}
     />
   );
