@@ -46,7 +46,7 @@ export async function generateMetadata({
 
 function Stars() {
   return (
-    <span style={{ color: "#6c6c2f", letterSpacing: 2, fontSize: 15 }}>
+    <span style={{ color: "var(--stamp)", letterSpacing: 2, fontSize: 16 }}>
       ★★★★★
     </span>
   );
@@ -55,10 +55,10 @@ function Stars() {
 function CheckIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="7" fill="#73743b" />
+      <circle cx="8" cy="8" r="7" fill="var(--navy)" />
       <path
         d="M4.8 8.1 L7 10.2 L11.2 5.8"
-        stroke="#fff8e9"
+        stroke="var(--label)"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -73,8 +73,8 @@ function BrewIcon({ index }: { index: number }) {
       height="70"
       viewBox="0 0 90 76"
       fill="none"
-      stroke="#8d6c4c"
-      strokeWidth="1.5"
+      stroke="var(--navy)"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
@@ -114,11 +114,7 @@ function StoryBand() {
   return (
     <section
       className="bal-product-story-band"
-      style={{
-        marginTop: 12,
-        background:
-          "linear-gradient(100deg, #d7bd95 0%, #efe2cc 52%, #f6efe3 100%)",
-      }}
+      style={{ marginTop: 56, background: "var(--navy)", padding: "0 80px" }}
     >
       <div
         className="bal-product-story-grid"
@@ -126,13 +122,21 @@ function StoryBand() {
           maxWidth: 1180,
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "1.05fr 0.95fr",
-          gap: 48,
+          gridTemplateColumns: "1fr 1fr",
+          gap: 56,
           alignItems: "center",
-          minHeight: 190,
+          minHeight: 280,
         }}
       >
-        <div style={{ height: 190, overflow: "hidden" }}>
+        <div
+          style={{
+            height: 220,
+            overflow: "hidden",
+            borderRadius: 18,
+            border: "2px solid var(--label)",
+            background: "var(--label)",
+          }}
+        >
           <img
             src="/product-ritual.svg"
             alt=""
@@ -144,25 +148,23 @@ function StoryBand() {
             }}
           />
         </div>
-        <div style={{ padding: "28px 0" }}>
+        <div style={{ padding: "36px 0" }}>
           <h2
-            className="serif"
-            style={{
-              fontSize: 26,
-              fontWeight: 400,
-              color: "var(--ink)",
-              letterSpacing: 0,
-            }}
+            className="label-title"
+            style={{ fontSize: 38, color: "var(--label)" }}
           >
-            Rooted in tradition. Made for modern rituals.
+            Rooted in tradition.{" "}
+            <span style={{ color: "var(--stamp-soft)" }}>
+              Made for modern rituals.
+            </span>
           </h2>
           <p
             style={{
-              marginTop: 12,
+              marginTop: 16,
               maxWidth: 470,
-              fontSize: 13.5,
-              lineHeight: 1.5,
-              color: "var(--ink-2)",
+              fontSize: 15,
+              lineHeight: 1.6,
+              color: "rgba(247,238,221,0.82)",
             }}
           >
             For generations, nothing went to waste. Date seeds were roasted over
@@ -170,14 +172,10 @@ function StoryBand() {
           </p>
           <a
             href="/#about"
-            style={{
-              display: "inline-flex",
-              marginTop: 14,
-              color: "var(--ink)",
-              fontSize: 14,
-            }}
+            className="label-btn label-btn-stamp"
+            style={{ marginTop: 22 }}
           >
-            Our Story →
+            Our story →
           </a>
         </div>
       </div>
@@ -233,16 +231,25 @@ export default async function ProductPage({ params }: ProductPageProps) {
         />
       ) : null}
       <Nav />
-      <main style={{ background: "var(--cream)" }}>
+      <main>
         <section
           className="bal-product-detail-section"
-          style={{ padding: "14px 56px 18px" }}
+          style={{ padding: "24px 80px 0" }}
         >
           <div
             className="bal-product-detail-container"
             style={{ maxWidth: 1180, margin: "0 auto" }}
           >
-            <nav style={{ fontSize: 12, color: "var(--ink-soft)" }}>
+            <nav
+              className="mono"
+              aria-label="Breadcrumb"
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--ink-soft)",
+              }}
+            >
               <a href="/">Home</a>
               <span style={{ margin: "0 12px" }}>/</span>
               <a href="/products">Shop</a>
@@ -253,52 +260,53 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div
               className="bal-product-detail-grid"
               style={{
-                marginTop: 14,
+                marginTop: 22,
                 display: "grid",
                 gridTemplateColumns: "1.05fr 1fr",
-                gap: 42,
+                gap: 48,
                 alignItems: "start",
               }}
             >
               <div>
                 <div
-                  className="bal-product-main-visual"
+                  className="bal-product-main-visual label-shadow"
                   style={{
                     position: "relative",
                     overflow: "hidden",
-                    borderRadius: 10,
-                    border: "1px solid rgba(77,56,36,0.16)",
+                    borderRadius: 22,
+                    border: "2px solid var(--ink)",
+                    background: "var(--label)",
                     aspectRatio: "1.16 / 1",
                   }}
                 >
-                  <ProductMedia product={product} priority />
-                  <span
-                    className="mono"
-                    style={{
-                      position: "absolute",
-                      left: 18,
-                      top: 18,
-                      width: 66,
-                      height: 66,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 999,
-                      border: "1px solid rgba(255,244,232,0.7)",
-                      background: "rgba(50,24,13,0.82)",
-                      color: "#fff4e8",
-                      fontSize: 10,
-                      textAlign: "center",
-                      lineHeight: 1.1,
-                    }}
-                  >
-                    {product.badge}
-                  </span>
+                  <ProductMedia
+                    product={product}
+                    priority
+                    objectPosition="center 65%"
+                  />
+                  {product.badge ? (
+                    <span
+                      className="label-stamp label-face"
+                      style={{
+                        position: "absolute",
+                        left: 18,
+                        top: 18,
+                        width: 92,
+                        height: 92,
+                        padding: 10,
+                        fontSize: 15,
+                        fontWeight: 700,
+                        lineHeight: 1,
+                      }}
+                    >
+                      {product.badge}
+                    </span>
+                  ) : null}
                 </div>
                 <div
                   className="bal-product-thumbs"
                   style={{
-                    marginTop: 12,
+                    marginTop: 18,
                     display: "grid",
                     gridTemplateColumns: "repeat(4, 1fr)",
                     gap: 12,
@@ -309,11 +317,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       key={image?.url || item}
                       style={{
                         overflow: "hidden",
-                        borderRadius: 8,
+                        borderRadius: 12,
                         border:
                           item === 0
-                            ? "2px solid #32180d"
-                            : "1px solid rgba(77,56,36,0.18)",
+                            ? "3px solid var(--navy)"
+                            : "2px solid var(--ink)",
+                        background: "var(--label)",
                         aspectRatio: "1.35 / 1",
                       }}
                     >
@@ -324,16 +333,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
 
               <div style={{ paddingTop: 2 }}>
+                <p className="label-kicker">{product.type}</p>
                 <h1
-                  className="serif"
+                  className="label-title"
                   style={{
+                    marginTop: 12,
                     fontSize: hasLongName
-                      ? "clamp(30px, 3.8vw, 44px)"
-                      : "clamp(46px, 5vw, 64px)",
-                    lineHeight: hasLongName ? 1.06 : 0.98,
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                    letterSpacing: 0,
+                      ? "clamp(32px, 4vw, 48px)"
+                      : "clamp(48px, 5.6vw, 76px)",
+                    lineHeight: hasLongName ? 1.02 : 0.94,
                   }}
                 >
                   {product.name}
@@ -353,8 +361,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </span>
                 </div>
                 <p
-                  className="serif"
-                  style={{ marginTop: 18, fontSize: 28, color: "var(--ink)" }}
+                  className="label-face"
+                  style={{
+                    marginTop: 18,
+                    fontSize: 40,
+                    fontWeight: 600,
+                    lineHeight: 1,
+                    color: "var(--ink)",
+                  }}
                 >
                   {product.price}
                 </p>
@@ -362,8 +376,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   style={{
                     marginTop: 18,
                     maxWidth: 500,
-                    fontSize: 15,
-                    lineHeight: 1.45,
+                    fontSize: 16,
+                    lineHeight: 1.6,
                     color: "var(--ink-2)",
                   }}
                 >
@@ -382,17 +396,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     "Prebiotic-Rich",
                     "Roasted Date Seeds",
                   ].map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        padding: "5px 12px",
-                        borderRadius: 999,
-                        border: "1px solid rgba(115,116,59,0.35)",
-                        background: "#e9dec3",
-                        color: "#5f6030",
-                        fontSize: 12,
-                      }}
-                    >
+                    <span key={tag} className="label-chip">
                       {tag}
                     </span>
                   ))}
@@ -400,18 +404,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
                 <div
                   style={{
-                    marginTop: 22,
-                    borderTop: "1px solid rgba(77,56,36,0.16)",
-                    paddingTop: 14,
+                    marginTop: 24,
+                    borderTop: "2px dashed rgba(42,31,23,0.35)",
+                    paddingTop: 18,
                   }}
                 >
-                  <p
-                    style={{
-                      marginBottom: 8,
-                      fontSize: 12,
-                      color: "var(--ink-2)",
-                    }}
-                  >
+                  <p className="label-kicker" style={{ marginBottom: 10 }}>
                     Quantity
                   </p>
                   <AddToCartButton
@@ -428,6 +426,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
 
                 <div
+                  className="bal-product-extras"
                   style={{
                     marginTop: 14,
                     display: "grid",
@@ -438,19 +437,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 >
                   <div>
                     <div
+                      className="label-panel"
                       style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
                         gap: 18,
-                        padding: "12px 14px",
-                        border: "1px solid rgba(77,56,36,0.18)",
-                        borderRadius: 8,
-                        background: "rgba(255,252,246,0.78)",
+                        padding: "14px 16px",
+                        borderRadius: 14,
                       }}
                     >
                       <div>
-                        <p style={{ fontSize: 14, color: "var(--ink)" }}>
+                        <p className="label-title" style={{ fontSize: 18 }}>
                           Subscribe & Save 10%
                         </p>
                         <p
@@ -464,13 +462,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         </p>
                       </div>
                       <span
-                        style={{
-                          padding: "6px 10px",
-                          borderRadius: 999,
-                          background: "#eadfc6",
-                          color: "var(--ink)",
-                          fontSize: 12,
-                        }}
+                        className="label-chip label-chip-active"
+                        style={{ minHeight: 30 }}
                       >
                         Save
                       </span>
@@ -487,24 +480,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </div>
 
                   <aside
-                    style={{
-                      padding: 18,
-                      border: "1px solid rgba(77,56,36,0.16)",
-                      borderRadius: 10,
-                      background: "rgba(255,252,246,0.72)",
-                    }}
+                    className="label-panel"
+                    style={{ padding: 18, borderRadius: 14 }}
                   >
-                    <p
-                      className="serif"
-                      style={{ fontSize: 18, color: "var(--ink)" }}
-                    >
+                    <p className="label-title" style={{ fontSize: 18 }}>
                       Flavor Notes
                     </p>
                     <p
+                      className="mono"
                       style={{
-                        marginTop: 18,
-                        fontSize: 14,
-                        color: "var(--ink)",
+                        marginTop: 14,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "var(--stamp)",
                       }}
                     >
                       {product.notes.join(" · ")}
@@ -529,29 +519,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div
               className="bal-product-info-grid"
               style={{
-                marginTop: 18,
+                marginTop: 24,
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr 1fr",
-                gap: 14,
+                gap: 20,
               }}
             >
-              <section
-                style={{
-                  padding: 22,
-                  border: "1px solid rgba(77,56,36,0.16)",
-                  borderRadius: 10,
-                  background: "rgba(255,252,246,0.74)",
-                }}
-              >
-                <h2
-                  className="serif"
-                  style={{
-                    fontSize: 26,
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                    letterSpacing: 0,
-                  }}
-                >
+              <section className="label-panel" style={{ padding: 26 }}>
+                <h2 className="label-title" style={{ fontSize: 28 }}>
                   Why you&apos;ll love it
                 </h2>
                 <div style={{ marginTop: 18, display: "grid", gap: 12 }}>
@@ -563,7 +538,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         gridTemplateColumns: "18px 1fr",
                         gap: 12,
                         alignItems: "center",
-                        fontSize: 13,
+                        fontSize: 14,
                         color: "var(--ink-2)",
                       }}
                     >
@@ -574,23 +549,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </section>
 
-              <section
-                style={{
-                  padding: 22,
-                  border: "1px solid rgba(77,56,36,0.16)",
-                  borderRadius: 10,
-                  background: "rgba(255,252,246,0.74)",
-                }}
-              >
-                <h2
-                  className="serif"
-                  style={{
-                    fontSize: 26,
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                    letterSpacing: 0,
-                  }}
-                >
+              <section className="label-panel" style={{ padding: 26 }}>
+                <h2 className="label-title" style={{ fontSize: 28 }}>
                   How to brew
                 </h2>
                 <div
@@ -605,10 +565,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     <div key={step.title} style={{ textAlign: "center" }}>
                       <BrewIcon index={index} />
                       <p
+                        className="label-face"
                         style={{
                           marginTop: 8,
-                          fontSize: 13,
-                          color: "var(--ink)",
+                          fontSize: 16,
+                          fontWeight: 600,
+                          color: "var(--navy)",
                         }}
                       >
                         {index + 1}. {step.title}
@@ -628,23 +590,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </section>
 
-              <section
-                style={{
-                  padding: 22,
-                  border: "1px solid rgba(77,56,36,0.16)",
-                  borderRadius: 10,
-                  background: "rgba(255,252,246,0.74)",
-                }}
-              >
-                <h2
-                  className="serif"
-                  style={{
-                    fontSize: 26,
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                    letterSpacing: 0,
-                  }}
-                >
+              <section className="label-panel" style={{ padding: 26 }}>
+                <h2 className="label-title" style={{ fontSize: 28 }}>
                   What&apos;s inside
                 </h2>
                 <p
@@ -675,8 +622,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                        borderBottom: "1px solid rgba(77,56,36,0.12)",
-                        fontSize: 12,
+                        padding: "6px 0",
+                        borderBottom: "1px solid rgba(42,31,23,0.3)",
+                        fontSize: 13,
                         color: "var(--ink-2)",
                       }}
                     >
@@ -694,7 +642,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         <section
           className="bal-product-related-section"
-          style={{ padding: "18px 56px 0" }}
+          style={{ padding: "64px 80px 0" }}
         >
           <div style={{ maxWidth: 1180, margin: "0 auto" }}>
             <div
@@ -705,28 +653,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 alignItems: "center",
               }}
             >
-              <h2
-                className="serif"
-                style={{
-                  fontSize: 24,
-                  fontWeight: 400,
-                  color: "var(--ink)",
-                  letterSpacing: 0,
-                }}
-              >
+              <h2 className="label-title" style={{ fontSize: 40 }}>
                 You may also like
               </h2>
-              <a href="/products" style={{ color: "var(--ink)", fontSize: 13 }}>
+              <a href="/products" className="label-btn label-btn-outline">
                 View all products →
               </a>
             </div>
             <div
               className="bal-product-related-grid"
               style={{
-                marginTop: 12,
+                marginTop: 24,
                 display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 18,
+                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                gap: 20,
               }}
             >
               {related.map((item) => (
@@ -738,7 +678,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         <section
           className="bal-product-reviews-section"
-          style={{ padding: "18px 56px 0" }}
+          style={{ padding: "56px 80px 96px" }}
         >
           <div
             className="bal-product-reviews-grid"
@@ -747,7 +687,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               margin: "0 auto",
               display: "grid",
               gridTemplateColumns: "1.35fr 1fr",
-              gap: 22,
+              gap: 32,
             }}
           >
             <div>
@@ -755,20 +695,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 className="bal-product-section-heading"
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
-                <h2
-                  className="serif"
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                    letterSpacing: 0,
-                  }}
-                >
+                <h2 className="label-title" style={{ fontSize: 30 }}>
                   What our customers say
                 </h2>
                 <a
                   href="#reviews"
-                  style={{ fontSize: 12, color: "var(--ink)" }}
+                  className="mono"
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: "var(--navy)",
+                  }}
                 >
                   View all reviews →
                 </a>
@@ -776,7 +715,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <div
                 className="bal-product-testimonials-grid"
                 style={{
-                  marginTop: 12,
+                  marginTop: 16,
                   display: "grid",
                   gridTemplateColumns: "repeat(3, 1fr)",
                   gap: 14,
@@ -785,29 +724,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {reviews.map((review) => (
                   <article
                     key={review.author}
-                    style={{
-                      padding: 18,
-                      border: "1px solid rgba(77,56,36,0.16)",
-                      borderRadius: 8,
-                      background: "rgba(255,252,246,0.76)",
-                    }}
+                    className="label-panel"
+                    style={{ padding: 18, borderRadius: 14 }}
                   >
                     <Stars />
                     <p
                       style={{
                         marginTop: 10,
-                        fontSize: 12.5,
-                        lineHeight: 1.4,
-                        color: "var(--ink-2)",
+                        fontSize: 14,
+                        lineHeight: 1.5,
+                        color: "var(--ink)",
                       }}
                     >
                       &quot;{review.quote}&quot;
                     </p>
                     <p
+                      className="label-face"
                       style={{
                         marginTop: 14,
-                        fontSize: 12,
-                        color: "var(--ink-soft)",
+                        fontSize: 15,
+                        fontWeight: 600,
+                        color: "var(--navy)",
                       }}
                     >
                       {review.author}
@@ -817,18 +754,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
             </div>
             <div>
-              <h2
-                className="serif"
-                style={{
-                  fontSize: 22,
-                  fontWeight: 400,
-                  color: "var(--ink)",
-                  letterSpacing: 0,
-                }}
-              >
+              <h2 className="label-title" style={{ fontSize: 30 }}>
                 Frequently Asked Questions
               </h2>
-              <div style={{ marginTop: 12, display: "grid", gap: 8 }}>
+              <div style={{ marginTop: 16, display: "grid", gap: 10 }}>
                 {[
                   `Is ${product.name} really caffeine-free?`,
                   "What does it taste like?",
@@ -837,19 +766,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 ].map((question) => (
                   <div
                     key={question}
+                    className="label-panel"
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      padding: "10px 14px",
-                      border: "1px solid rgba(77,56,36,0.14)",
-                      borderRadius: 7,
-                      background: "rgba(255,252,246,0.76)",
-                      fontSize: 13,
-                      color: "var(--ink-2)",
+                      gap: 12,
+                      padding: "14px 16px",
+                      borderRadius: 12,
+                      fontSize: 14,
+                      fontWeight: 500,
+                      color: "var(--ink)",
                     }}
                   >
                     <span>{question}</span>
-                    <span>+</span>
+                    <span
+                      className="label-face"
+                      aria-hidden
+                      style={{
+                        fontSize: 20,
+                        lineHeight: 1,
+                        color: "var(--stamp)",
+                      }}
+                    >
+                      +
+                    </span>
                   </div>
                 ))}
               </div>

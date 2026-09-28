@@ -144,11 +144,9 @@ export function Footer() {
       id="contact"
       className="bal-footer"
       style={{
-        background:
-          "radial-gradient(circle at 28% 0%, rgba(127,85,47,0.22), transparent 36%), linear-gradient(105deg, #211109 0%, #321b0f 52%, #1a0e08 100%)",
-        color: "#ead8bd",
-        padding: "34px 56px 20px",
-        borderTop: "1px solid rgba(238,216,185,0.14)",
+        background: "var(--ink)",
+        color: "var(--label)",
+        padding: "56px 80px 24px",
       }}
     >
       <div
@@ -162,38 +160,55 @@ export function Footer() {
         }}
       >
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <a
+            href="/"
+            aria-label="BAL Coffee — home"
+            style={{
+              display: "inline-flex",
+              flexDirection: "column",
+              alignItems: "center",
+              color: "var(--label)",
+            }}
+          >
             <span
-              className="serif"
+              className="label-face"
               style={{
-                fontSize: 30,
-                fontWeight: 600,
-                letterSpacing: "-0.02em",
-                color: "#f1d9b6",
+                fontSize: 36,
+                fontWeight: 700,
+                letterSpacing: "0.02em",
                 lineHeight: 1,
               }}
             >
               BAL
             </span>
+            <svg
+              width="56"
+              height="10"
+              viewBox="0 0 54 10"
+              fill="none"
+              aria-hidden
+              style={{ marginTop: -3 }}
+            >
+              <path
+                d="M2 2 Q27 14 52 2"
+                stroke="var(--stamp-soft)"
+                strokeWidth="3.2"
+                strokeLinecap="round"
+              />
+            </svg>
             <span
               className="mono"
-              style={{
-                fontSize: 9,
-                letterSpacing: "0.32em",
-                textTransform: "uppercase",
-                color: "#d0b890",
-                marginTop: 8,
-              }}
+              style={{ fontSize: 8, letterSpacing: "0.4em", marginTop: 1 }}
             >
-              coffee
+              COFFEE
             </span>
-          </div>
+          </a>
           <p
             style={{
               marginTop: 20,
               fontSize: 13.5,
               lineHeight: 1.6,
-              color: "#d0b890",
+              color: "rgba(247,238,221,0.78)",
               maxWidth: 240,
             }}
           >
@@ -205,7 +220,7 @@ export function Footer() {
               marginTop: 22,
               display: "flex",
               gap: 16,
-              color: "#d0b890",
+              color: "rgba(247,238,221,0.78)",
             }}
           >
             <a href="#instagram" aria-label="Instagram">
@@ -226,12 +241,12 @@ export function Footer() {
         {linkColumns.map((col) => (
           <div key={col.title}>
             <div
-              className="mono"
+              className="label-face"
               style={{
-                fontSize: 10,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "#e7c896",
+                fontSize: 17,
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                color: "var(--stamp-soft)",
                 marginBottom: 16,
               }}
             >
@@ -244,7 +259,7 @@ export function Footer() {
                 style={{
                   display: "block",
                   fontSize: 13.5,
-                  color: "#d0b890",
+                  color: "rgba(247,238,221,0.78)",
                   marginBottom: 10,
                 }}
               >
@@ -256,12 +271,12 @@ export function Footer() {
 
         <div>
           <div
-            className="mono"
+            className="label-face"
             style={{
-              fontSize: 10,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "#e7c896",
+              fontSize: 17,
+              fontWeight: 600,
+              letterSpacing: "0.08em",
+              color: "var(--stamp-soft)",
               marginBottom: 16,
             }}
           >
@@ -271,7 +286,7 @@ export function Footer() {
             style={{
               fontSize: 13.5,
               lineHeight: 1.55,
-              color: "#d0b890",
+              color: "rgba(247,238,221,0.78)",
               marginBottom: 16,
             }}
           >
@@ -282,10 +297,10 @@ export function Footer() {
             style={{
               display: "grid",
               gridTemplateColumns: "1fr auto",
-              border: "1px solid rgba(238,216,185,0.22)",
-              borderRadius: 8,
+              border: "2px solid var(--label)",
+              borderRadius: 10,
               overflow: "hidden",
-              background: "rgba(255,246,231,0.05)",
+              background: "var(--label)",
             }}
           >
             <input
@@ -299,18 +314,19 @@ export function Footer() {
                 padding: "12px 14px",
                 fontSize: 13.5,
                 background: "transparent",
-                color: "#f1d9b6",
+                color: "var(--ink)",
               }}
             />
             <button
               type="submit"
-              className="mono"
+              className="label-face"
               style={{
-                padding: "12px 20px",
-                background: "#77783a",
-                color: "#fff4e8",
-                fontSize: 11,
-                letterSpacing: 0,
+                padding: "0 20px",
+                background: "var(--stamp)",
+                color: "var(--label)",
+                fontSize: 15,
+                fontWeight: 600,
+                letterSpacing: "0.06em",
                 borderRadius: 0,
               }}
             >
@@ -326,7 +342,7 @@ export function Footer() {
           maxWidth: 1280,
           margin: "28px auto 0",
           paddingTop: 18,
-          borderTop: "1px solid rgba(238,216,185,0.14)",
+          borderTop: "1px solid rgba(247,238,221,0.18)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -338,7 +354,7 @@ export function Footer() {
             display: "flex",
             alignItems: "center",
             gap: 12,
-            color: "#bfa887",
+            color: "rgba(247,238,221,0.6)",
           }}
         >
           <LeafMark />
@@ -347,7 +363,7 @@ export function Footer() {
             style={{
               fontSize: 11,
               letterSpacing: "0.16em",
-              color: "#bfa887",
+              color: "rgba(247,238,221,0.6)",
             }}
           >
             © 2024 BAL Coffee. All rights reserved.
@@ -360,7 +376,7 @@ export function Footer() {
             gap: 28,
             fontSize: 11,
             letterSpacing: "0.16em",
-            color: "#bfa887",
+            color: "rgba(247,238,221,0.6)",
           }}
         >
           <a href="#privacy">Privacy Policy</a>
