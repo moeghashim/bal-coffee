@@ -96,8 +96,8 @@ function CartLineRow({ line }: { line: CartLine }) {
       className="bal-cart-line"
       style={{
         display: "grid",
-        gridTemplateColumns: "minmax(260px, 1fr) 112px 84px 94px 32px",
-        gap: 28,
+        gridTemplateColumns: "minmax(0, 1fr) 112px 84px 94px 32px",
+        gap: 20,
         alignItems: "center",
         padding: "16px 0",
         borderTop: "2px dashed rgba(42,31,23,0.3)",
@@ -111,8 +111,8 @@ function CartLineRow({ line }: { line: CartLine }) {
         className="bal-cart-product-cell"
         style={{
           display: "grid",
-          gridTemplateColumns: "204px 1fr",
-          gap: 24,
+          gridTemplateColumns: "120px 1fr",
+          gap: 18,
           alignItems: "center",
           minWidth: 0,
         }}
@@ -123,7 +123,7 @@ function CartLineRow({ line }: { line: CartLine }) {
           style={{
             display: "block",
             position: "relative",
-            height: 150,
+            height: 120,
             overflow: "hidden",
             borderRadius: 12,
             border: "2px solid var(--ink)",
@@ -522,7 +522,7 @@ export function CartContents({ products }: { products: Product[] }) {
           className="bal-cart-layout"
           style={{
             display: "grid",
-            gridTemplateColumns: "minmax(0, 1fr) 388px",
+            gridTemplateColumns: "minmax(0, 1fr) 360px",
             gap: 28,
             alignItems: "start",
           }}
@@ -536,8 +536,8 @@ export function CartContents({ products }: { products: Product[] }) {
               className="bal-cart-table-header"
               style={{
                 display: "grid",
-                gridTemplateColumns: "minmax(260px, 1fr) 112px 84px 94px 32px",
-                gap: 28,
+                gridTemplateColumns: "minmax(0, 1fr) 112px 84px 94px 32px",
+                gap: 20,
                 padding: "0 0 14px",
                 color: "var(--ink-soft)",
                 fontFamily: "var(--font-plex-mono)",
