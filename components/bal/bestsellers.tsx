@@ -1,98 +1,91 @@
-import { ProductCard } from "components/bal/product-card";
+import { LabelCard } from "components/bal/label-card";
 import { getFeaturedProducts } from "lib/catalog";
+import type { Product } from "lib/products";
 
-export async function Bestsellers() {
-  const featuredProducts = await getFeaturedProducts();
+export async function Bestsellers({ products }: { products?: Product[] }) {
+  const featuredProducts = products ?? (await getFeaturedProducts());
+  const price = featuredProducts[0]?.price;
 
   return (
     <section
       id="shop"
-      className="bal-bestsellers"
-      style={{
-        padding: "88px 56px 96px",
-        background: "var(--cream)",
-      }}
+      className="bal-kraft-section"
+      style={{ padding: "8px 80px 96px", scrollMarginTop: 96 }}
     >
-      <div
-        id="all-products"
-        className="bal-bestsellers-grid"
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "0.82fr repeat(3, 1fr)",
-          gap: 18,
-          alignItems: "stretch",
-          scrollMarginTop: 96,
-        }}
-      >
+      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
         <div
+          className="bal-kraft-collection-head"
           style={{
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            paddingRight: 18,
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            gap: 24,
           }}
         >
-          <p
-            className="mono"
-            style={{
-              fontSize: 10,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "var(--ink-soft)",
-            }}
-          >
-            Bestsellers
-          </p>
           <h2
-            className="serif"
+            className="label-face"
             style={{
-              marginTop: 14,
-              fontSize: "clamp(34px, 3vw, 48px)",
+              fontSize: "clamp(44px, 5vw, 72px)",
               lineHeight: 1,
-              fontWeight: 400,
+              fontWeight: 700,
               color: "var(--ink)",
-              letterSpacing: 0,
             }}
           >
-            Our most
-            <br />
-            loved brews
+            Pick your bag
           </h2>
           <p
-            style={{
-              marginTop: 20,
-              fontSize: 15,
-              lineHeight: 1.45,
-              color: "var(--ink-2)",
-              maxWidth: 270,
-            }}
-          >
-            Three ways to experience BAL. Each one crafted to bring warmth,
-            comfort, and connection to your daily ritual.
-          </p>
-          <a
-            href="/products"
             className="mono"
             style={{
-              marginTop: 28,
+              paddingBottom: 10,
+              fontSize: 12,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--ink-2)",
+            }}
+          >
+            {featuredProducts.length} roasts · 340 g each
+            {price ? ` · ${price}` : ""}
+          </p>
+        </div>
+
+        <div
+          id="all-products"
+          className="bal-kraft-grid-3"
+          style={{
+            marginTop: 44,
+            display: "grid",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+            gap: 28,
+            scrollMarginTop: 96,
+          }}
+        >
+          {featuredProducts.map((product, index) => (
+            <LabelCard key={product.slug} product={product} index={index} />
+          ))}
+        </div>
+
+        <div
+          style={{ marginTop: 36, display: "flex", justifyContent: "center" }}
+        >
+          <a
+            href="/products"
+            className="label-face bal-kraft-btn bal-kraft-btn-outline"
+            style={{
               display: "inline-flex",
-              alignSelf: "flex-start",
-              padding: "12px 20px",
-              background: "#32180d",
-              color: "#fff4e8",
-              fontSize: 11,
-              letterSpacing: 0,
-              borderRadius: 6,
+              alignItems: "center",
+              minHeight: 52,
+              padding: "0 28px",
+              borderRadius: 12,
+              border: "2px solid var(--ink)",
+              color: "var(--ink)",
+              fontSize: 17,
+              fontWeight: 600,
+              letterSpacing: "0.06em",
             }}
           >
             Shop all products
           </a>
         </div>
-        {featuredProducts.map((product) => (
-          <ProductCard key={product.slug} product={product} />
-        ))}
       </div>
     </section>
   );

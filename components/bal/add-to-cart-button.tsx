@@ -16,17 +16,46 @@ export type AddToCartProduct = {
   availableForSale?: boolean;
 };
 
+export type AddToCartVariant = "default" | "label";
+
 function SubmitButton({
   label,
   compact,
   disabled,
   pending,
+  variant = "default",
 }: {
   label: string;
   compact: boolean;
   disabled: boolean;
   pending: boolean;
+  variant?: AddToCartVariant;
 }) {
+  if (variant === "label") {
+    return (
+      <button
+        type="submit"
+        disabled={disabled}
+        className="label-face bal-kraft-btn bal-kraft-btn-navy"
+        style={{
+          width: "100%",
+          minHeight: 48,
+          padding: "0 20px",
+          borderRadius: 10,
+          fontSize: 16,
+          fontWeight: 600,
+          letterSpacing: "0.06em",
+          background: pending ? "#4a5670" : "var(--navy)",
+          color: "var(--label)",
+          opacity: disabled ? 0.75 : 1,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {pending ? "Adding..." : label}
+      </button>
+    );
+  }
+
   return (
     <button
       type="submit"
@@ -54,10 +83,12 @@ function AddToCartForm({
   label,
   compact,
   showQuantity,
+  variant,
 }: {
   label: string;
   compact: boolean;
   showQuantity: boolean;
+  variant: AddToCartVariant;
 }) {
   const { register, formProps, pending, selectedVariant, errors } =
     useProductForm();
@@ -71,7 +102,7 @@ function AddToCartForm({
   return (
     <form
       {...formProps({ afterSubmit: () => setAdded(true) })}
-      style={{ marginTop: compact ? 10 : 16 }}
+      style={{ marginTop: variant === "label" ? 0 : compact ? 10 : 16 }}
     >
       <input type="hidden" {...register("merchandiseId", {})} />
       <input
@@ -126,6 +157,7 @@ function AddToCartForm({
           compact={compact}
           disabled={pending || soldOut}
           pending={pending}
+          variant={variant}
           label={soldOut ? "Sold out" : added ? "Added" : label}
         />
       </div>
@@ -166,20 +198,23 @@ export function AddToCartButton({
   label = "Add to cart",
   compact = false,
   showQuantity = false,
+  variant = "default",
 }: {
   product: AddToCartProduct;
   label?: string;
   compact?: boolean;
   showQuantity?: boolean;
+  variant?: AddToCartVariant;
 }) {
   // No sellable variant — render an inert control instead of a broken form.
   if (!product.merchandiseId) {
     return (
-      <div style={{ marginTop: compact ? 10 : 16 }}>
+      <div style={{ marginTop: variant === "label" ? 0 : compact ? 10 : 16 }}>
         <SubmitButton
           compact={compact}
           disabled
           pending={false}
+          variant={variant}
           label="Sold out"
         />
       </div>
@@ -201,6 +236,7 @@ export function AddToCartButton({
         label={label}
         compact={compact}
         showQuantity={showQuantity}
+        variant={variant}
       />
     </ProductProvider>
   );

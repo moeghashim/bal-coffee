@@ -1,201 +1,208 @@
-function BotanicalAccent() {
-  return (
-    <svg
-      className="bal-hero-botanical"
-      width="160"
-      height="320"
-      viewBox="0 0 160 320"
-      fill="none"
-      stroke="var(--ink-2)"
-      strokeWidth="1"
-      strokeLinecap="round"
-      style={{
-        position: "absolute",
-        left: -10,
-        top: 60,
-        opacity: 0.35,
-        pointerEvents: "none",
-      }}
-      aria-hidden
-    >
-      <path d="M30 20 C 50 80, 70 160, 60 300" />
-      <path d="M52 60 C 80 60, 100 50, 110 40" />
-      <path d="M52 60 C 80 80, 100 90, 116 88" />
-      <path d="M58 110 C 90 110, 116 100, 130 92" />
-      <path d="M58 110 C 90 130, 110 142, 130 150" />
-      <path d="M62 170 C 90 168, 116 158, 132 150" />
-      <path d="M60 220 C 90 220, 110 208, 124 198" />
-      <path d="M60 220 C 88 240, 104 252, 120 258" />
-      <ellipse cx="98" cy="42" rx="10" ry="4" transform="rotate(-15 98 42)" />
-      <ellipse cx="104" cy="86" rx="11" ry="4" transform="rotate(10 104 86)" />
-      <ellipse cx="120" cy="92" rx="10" ry="4" transform="rotate(-12 120 92)" />
-      <ellipse
-        cx="120"
-        cy="148"
-        rx="11"
-        ry="4"
-        transform="rotate(15 120 148)"
-      />
-      <ellipse
-        cx="122"
-        cy="154"
-        rx="10"
-        ry="4"
-        transform="rotate(-8 122 154)"
-      />
-      <ellipse
-        cx="116"
-        cy="200"
-        rx="10"
-        ry="4"
-        transform="rotate(-18 116 200)"
-      />
-      <ellipse cx="112" cy="252" rx="9" ry="3" transform="rotate(20 112 252)" />
-    </svg>
-  );
-}
+import { ProductMedia } from "components/bal/product-media";
+import type { Product } from "lib/products";
 
-function HeroImage() {
+function CaffeineStamp() {
   return (
     <div
+      className="bal-kraft-stamp"
+      aria-hidden
       style={{
-        position: "relative",
-        width: "100%",
-        aspectRatio: "5 / 4",
-        borderRadius: 4,
-        overflow: "hidden",
-        boxShadow: "0 30px 60px -30px rgba(42,31,23,0.35)",
-        background: "var(--cream-2)",
+        position: "absolute",
+        right: -64,
+        top: -40,
+        width: 170,
+        height: 170,
+        borderRadius: 999,
+        background: "var(--stamp)",
+        border: "3px dashed rgba(247,238,221,0.7)",
+        transform: "rotate(-12deg)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
       }}
     >
-      <img
-        src="/product-ritual.svg"
-        alt="Bal Coffee bag beside a filled mug and date seeds"
+      <span
+        className="label-face bal-kraft-stamp-value"
         style={{
-          display: "block",
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
+          fontSize: 44,
+          fontWeight: 700,
+          lineHeight: 1,
+          color: "var(--label)",
         }}
-      />
+      >
+        0 mg
+      </span>
+      <span
+        className="mono bal-kraft-stamp-caption"
+        style={{
+          marginTop: 4,
+          fontSize: 10,
+          fontWeight: 600,
+          letterSpacing: "0.2em",
+          color: "var(--label)",
+        }}
+      >
+        CAFFEINE
+      </span>
     </div>
   );
 }
 
-export function Hero() {
+export function Hero({ product }: { product?: Product }) {
   return (
     <section
-      className="bal-hero"
-      style={{
-        position: "relative",
-        padding: "40px 56px 80px",
-        overflow: "hidden",
-      }}
+      className="bal-kraft-hero"
+      style={{ padding: "48px 80px 96px", overflow: "hidden" }}
     >
-      <BotanicalAccent />
       <div
-        className="bal-hero-grid"
+        className="bal-kraft-hero-grid"
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1.1fr",
-          gap: 56,
-          alignItems: "center",
           maxWidth: 1280,
           margin: "0 auto",
+          display: "grid",
+          // 720:500 as fluid tracks, so both columns shrink together between
+          // the 1024px collapse and the 1280px max width.
+          gridTemplateColumns: "minmax(0, 36fr) minmax(0, 25fr)",
+          alignItems: "center",
+          gap: 48,
         }}
       >
         <div
-          className="bal-hero-copy"
-          style={{ paddingLeft: 80, paddingRight: 20 }}
+          className="bal-kraft-label bal-kraft-shadow"
+          style={{
+            position: "relative",
+            containerType: "inline-size",
+            minHeight: 580,
+            padding: "60px 64px",
+            background: "var(--label)",
+            border: "2px solid var(--ink)",
+            borderRadius: 22,
+            boxShadow: "10px 10px 0 var(--ink)",
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
-          <h1
-            className="serif"
+          <p
+            className="mono bal-kraft-eyebrow"
             style={{
-              fontSize: "clamp(44px, 5.6vw, 80px)",
-              lineHeight: 1.02,
+              fontSize: 12,
               fontWeight: 500,
-              color: "var(--ink)",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "var(--ink-soft)",
             }}
           >
-            Coffee
-            <br />
+            Date seed coffee · 340 g
+          </p>
+          <h1
+            className="label-face"
+            style={{
+              marginTop: 22,
+              // "CAFFEINE-FREE." sets ~6.2em wide in Oswald 700, so 15% of the
+              // card's width keeps it on one line at every breakpoint.
+              fontSize: "clamp(34px, 15cqi, 112px)",
+              lineHeight: 0.93,
+              fontWeight: 700,
+              color: "var(--navy)",
+            }}
+          >
+            <span style={{ display: "block", whiteSpace: "nowrap" }}>
+              Caffeine-free.
+            </span>
             <span
               style={{
-                fontStyle: "italic",
-                fontWeight: 400,
-                color: "var(--terra-deep)",
+                display: "block",
+                whiteSpace: "nowrap",
+                color: "var(--stamp)",
               }}
             >
-              from the seed
+              Full flavor.
             </span>
           </h1>
           <p
             style={{
-              marginTop: 28,
-              fontSize: 16,
-              lineHeight: 1.7,
-              color: "var(--ink-2)",
-              maxWidth: 380,
+              marginTop: 30,
+              maxWidth: 500,
+              fontSize: 18,
+              lineHeight: 1.55,
+              color: "#3d2f23",
             }}
           >
-            A naturally caffeine-free ritual,
-            <br />
-            roasted from date seeds.
-            <br />
-            Warm. Grounding. Yours, any time of day.
+            Roasted from upcycled date seeds in small batches. Brews like
+            coffee, pours like tradition — with nothing but the seed in the bag.
           </p>
           <div
-            className="bal-hero-buttons"
-            style={{ marginTop: 36, display: "flex", gap: 14 }}
+            className="bal-kraft-hero-actions"
+            style={{
+              marginTop: "auto",
+              paddingTop: 36,
+              display: "flex",
+              gap: 14,
+            }}
           >
             <a
               href="#shop"
-              className="mono"
+              className="label-face bal-kraft-btn bal-kraft-btn-navy"
               style={{
-                padding: "14px 24px",
-                background: "var(--ink)",
-                color: "var(--cream)",
-                fontSize: 11,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                borderRadius: 2,
                 display: "inline-flex",
                 alignItems: "center",
+                minHeight: 58,
+                padding: "0 32px",
+                borderRadius: 12,
+                background: "var(--navy)",
+                color: "var(--label)",
+                fontSize: 18,
+                fontWeight: 600,
+                letterSpacing: "0.06em",
               }}
             >
-              Shop the collection
+              Shop the bags
             </a>
             <a
               href="#process"
-              className="mono"
+              className="label-face bal-kraft-btn bal-kraft-btn-outline"
               style={{
-                padding: "14px 22px",
-                border: "1px solid var(--ink)",
-                color: "var(--ink)",
-                fontSize: 11,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                borderRadius: 2,
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 10,
+                minHeight: 58,
+                padding: "0 28px",
+                borderRadius: 12,
+                border: "2px solid var(--navy)",
+                color: "var(--navy)",
+                fontSize: 18,
+                fontWeight: 600,
+                letterSpacing: "0.06em",
               }}
             >
-              How it brews
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 12 12"
-                fill="currentColor"
-                aria-hidden
-              >
-                <path d="M2 1 L 10 6 L 2 11 Z" />
-              </svg>
+              What&apos;s inside
             </a>
           </div>
+          <CaffeineStamp />
         </div>
-        <div>
-          <HeroImage />
+
+        <div
+          className="bal-kraft-hero-photo"
+          style={{
+            position: "relative",
+            width: "100%",
+            aspectRatio: "500 / 720",
+            borderRadius: 22,
+            overflow: "hidden",
+            border: "2px solid var(--ink)",
+            transform: "rotate(2deg)",
+            background: "var(--label)",
+          }}
+        >
+          {product ? (
+            <ProductMedia
+              product={product}
+              image={product.images?.[0]}
+              fill
+              priority
+            />
+          ) : null}
         </div>
       </div>
     </section>
