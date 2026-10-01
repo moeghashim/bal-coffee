@@ -12,7 +12,10 @@ export default function TermsPage() {
       title="Terms of Service"
       intro="This page is a draft. Final terms will be published before launch."
     >
-      <h2 className="label-title" style={{ fontSize: 22, marginTop: 32 }}>
+      <h2
+        className="serif"
+        style={{ fontSize: 22, marginTop: 32, color: "var(--ink)" }}
+      >
         Use of this site
       </h2>
       <p style={{ marginTop: 12 }}>
@@ -20,7 +23,10 @@ export default function TermsPage() {
         purposes and not to interfere with its operation or other shoppers'
         experience.
       </p>
-      <h2 className="label-title" style={{ fontSize: 22, marginTop: 32 }}>
+      <h2
+        className="serif"
+        style={{ fontSize: 22, marginTop: 32, color: "var(--ink)" }}
+      >
         Orders &amp; subscriptions
       </h2>
       <p style={{ marginTop: 12 }}>
@@ -28,7 +34,10 @@ export default function TermsPage() {
         once payment is captured. Subscriptions can be paused or cancelled at
         any time from your account.
       </p>
-      <h2 className="label-title" style={{ fontSize: 22, marginTop: 32 }}>
+      <h2
+        className="serif"
+        style={{ fontSize: 22, marginTop: 32, color: "var(--ink)" }}
+      >
         Contact
       </h2>
       <p style={{ marginTop: 12 }}>

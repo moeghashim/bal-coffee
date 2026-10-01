@@ -28,8 +28,8 @@ function BenefitIcon({ icon }: { icon: string }) {
       height="54"
       viewBox="0 0 54 54"
       fill="none"
-      stroke="var(--navy)"
-      strokeWidth="1.8"
+      stroke="#77783a"
+      strokeWidth="1.4"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
@@ -74,12 +74,15 @@ function BenefitIcon({ icon }: { icon: string }) {
 export function BenefitsStrip() {
   return (
     <div
-      className="bal-benefits-strip label-panel"
+      className="bal-benefits-strip"
       style={{
         maxWidth: 1180,
-        margin: "32px auto 0",
+        margin: "28px auto 0",
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
+        border: "1px solid rgba(77,56,36,0.18)",
+        borderRadius: 14,
+        background: "rgba(253,247,236,0.78)",
         overflow: "hidden",
       }}
     >
@@ -93,12 +96,15 @@ export function BenefitsStrip() {
             gap: 14,
             alignItems: "center",
             padding: "20px 26px",
-            borderLeft: index === 0 ? "none" : "2px dashed rgba(42,31,23,0.3)",
+            borderLeft: index === 0 ? "none" : "1px solid rgba(77,56,36,0.18)",
           }}
         >
           <BenefitIcon icon={benefit.icon} />
           <div>
-            <p className="label-title" style={{ fontSize: 18 }}>
+            <p
+              className="serif"
+              style={{ fontSize: 18, lineHeight: 1.1, color: "var(--ink)" }}
+            >
               {benefit.title}
             </p>
             <p

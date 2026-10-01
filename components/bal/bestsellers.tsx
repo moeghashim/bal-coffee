@@ -1,4 +1,4 @@
-import { ProductCard } from "components/bal/product-card";
+import { LabelCard } from "components/bal/label-card";
 import { getFeaturedProducts } from "lib/catalog";
 import type { Product } from "lib/products";
 
@@ -60,7 +60,7 @@ export async function Bestsellers({ products }: { products?: Product[] }) {
           }}
         >
           {featuredProducts.map((product, index) => (
-            <ProductCard key={product.slug} product={product} index={index} />
+            <LabelCard key={product.slug} product={product} index={index} />
           ))}
         </div>
 

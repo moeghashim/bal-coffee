@@ -32,9 +32,9 @@ export default async function HomePage() {
     getProduct("groundate");
 
   return (
-    <>
+    <div className="bal-kraft">
       <ProductImagePreload image={heroProduct?.images?.[0]} />
-      <Nav />
+      <Nav variant="kraft" />
       <main>
         <Hero product={heroProduct} />
         <Bestsellers products={products} />
@@ -44,6 +44,6 @@ export default async function HomePage() {
       </main>
       <Footer />
       <Grain />
-    </>
+    </div>
   );
 }

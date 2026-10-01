@@ -12,7 +12,10 @@ export default function PrivacyPage() {
       title="Privacy Policy"
       intro="This page is a draft. Final policy language will be published before launch."
     >
-      <h2 className="label-title" style={{ fontSize: 22, marginTop: 32 }}>
+      <h2
+        className="serif"
+        style={{ fontSize: 22, marginTop: 32, color: "var(--ink)" }}
+      >
         Information we collect
       </h2>
       <p style={{ marginTop: 12 }}>
@@ -20,14 +23,20 @@ export default function PrivacyPage() {
         information needed to fulfill your order and stay in touch — typically
         your name, email, shipping address, and payment details.
       </p>
-      <h2 className="label-title" style={{ fontSize: 22, marginTop: 32 }}>
+      <h2
+        className="serif"
+        style={{ fontSize: 22, marginTop: 32, color: "var(--ink)" }}
+      >
         How we use it
       </h2>
       <p style={{ marginTop: 12 }}>
         We use this information to process orders, send shipping updates, and —
         only if you opt in — share occasional news and offers.
       </p>
-      <h2 className="label-title" style={{ fontSize: 22, marginTop: 32 }}>
+      <h2
+        className="serif"
+        style={{ fontSize: 22, marginTop: 32, color: "var(--ink)" }}
+      >
         Contact
       </h2>
       <p style={{ marginTop: 12 }}>

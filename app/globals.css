@@ -15,7 +15,7 @@
 
   /* Kraft & Label (homepage) — taken from the real packaging: kraft bag,
      off-white label, navy wordmark, red smile. */
-  --kraft: #f2d6ae;
+  --kraft: #d6ba8c;
   --label: #f7eedd;
   --navy: #283349;
   --stamp: #b8452c;
@@ -37,7 +37,7 @@
 
 html,
 body {
-  background: var(--kraft);
+  background: var(--cream);
   color: var(--ink);
   font-family: var(--font-inter-tight);
   -webkit-font-smoothing: antialiased;
@@ -95,7 +95,7 @@ input {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--kraft);
+  background: var(--cream);
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(42, 31, 23, 0.2);
@@ -237,8 +237,8 @@ input {
   }
   .bal-products-seal {
     right: 0 !important;
-    top: -18px !important;
-    transform: rotate(-12deg) scale(0.78);
+    top: 18px !important;
+    transform: scale(0.78);
     transform-origin: top right;
   }
   .bal-products-shop,
@@ -364,8 +364,8 @@ input {
     flex-direction: column;
     gap: 0 !important;
     padding: 12px 20px 20px !important;
-    background: var(--kraft);
-    border-bottom: 2px solid var(--ink);
+    background: var(--cream);
+    border-bottom: 1px solid var(--line-soft);
   }
   .bal-nav-links.bal-nav-links-open a {
     padding: 12px 0;
@@ -552,7 +552,7 @@ input {
     grid-template-columns: 118px 1fr !important;
   }
   .bal-product-card {
-    border-radius: 16px !important;
+    border-radius: 10px !important;
   }
   .bal-benefits-strip {
     grid-template-columns: 1fr !important;
@@ -628,106 +628,18 @@ input {
 }
 
 /* ---------------------------------------------------------------------------
-   Kraft & Label
-   Shared label primitives used across every page, then homepage section
-   hover states and tablet/phone collapses. Components set desktop layout
-   inline.
+   Kraft & Label homepage
+   Components set desktop layout inline; these rules add hover states and
+   collapse the grids on tablet/phone.
    ------------------------------------------------------------------------ */
 
-/* A label card: off-white paper, heavy ink border. */
-.label-panel {
-  background: var(--label);
-  border: 2px solid var(--ink);
-  border-radius: 18px;
+.bal-kraft {
+  background: var(--kraft);
 }
-.label-shadow {
-  box-shadow: 8px 8px 0 var(--ink);
-}
-.label-title {
-  font-family: var(--font-oswald);
-  font-weight: 700;
-  line-height: 1;
-  text-transform: uppercase;
-  color: var(--navy);
-}
-.label-kicker {
-  font-family: var(--font-plex-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-.label-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 48px;
-  padding: 0 24px;
-  border: 2px solid var(--navy);
-  border-radius: 10px;
-  background: var(--navy);
-  color: var(--label);
-  font-family: var(--font-oswald);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease;
-}
-.label-btn:hover {
-  background: #1b2334;
-  transform: translateY(-1px);
-}
-.label-btn-outline {
-  background: transparent;
-  color: var(--navy);
-}
-.label-btn-outline:hover {
-  background: rgba(40, 51, 73, 0.08);
-}
-.label-btn-stamp {
-  border-color: var(--stamp);
-  background: var(--stamp);
-}
-.label-btn-stamp:hover {
-  background: #9c3a24;
-}
-.label-chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 34px;
-  padding: 0 14px;
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  background: var(--label);
-  color: var(--ink);
-  font-family: var(--font-plex-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.label-chip-active {
-  border-color: var(--navy);
-  background: var(--navy);
-  color: var(--label);
-}
-.label-stamp {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 2px dashed rgba(247, 238, 221, 0.7);
-  border-radius: 999px;
-  background: var(--stamp);
-  color: var(--label);
-  text-align: center;
-  transform: rotate(-12deg);
+
+.bal-kraft .bal-nav-links.bal-nav-links-open {
+  background: var(--kraft);
+  border-bottom: 2px solid var(--ink);
 }
 
 .bal-kraft-btn {
@@ -756,25 +668,6 @@ input {
 }
 
 @media (max-width: 1024px) {
-  /* Stacked horizontal cards put the divider under the photo... */
-  .bal-product-card-horizontal > a {
-    border-right: none !important;
-    border-bottom: 2px solid var(--ink) !important;
-  }
-  /* ...except in the cart, where they stay side by side. */
-  .bal-cart-related-grid .bal-product-card-horizontal > a {
-    border-right: 2px solid var(--ink) !important;
-    border-bottom: none !important;
-  }
-  .bal-product-story-band {
-    padding: 0 24px !important;
-  }
-  .bal-page-shell {
-    padding: 40px 24px 80px !important;
-  }
-  .bal-page-shell-card {
-    padding: 36px 28px 40px !important;
-  }
   .bal-kraft-hero {
     padding: 24px 24px 56px !important;
   }
@@ -845,24 +738,6 @@ input {
 }
 
 @media (max-width: 640px) {
-  /* Product page: let the detail columns shrink below their content and
-     stack the subscribe / flavor-notes row. */
-  .bal-product-detail-grid > * {
-    min-width: 0;
-  }
-  .bal-product-extras {
-    grid-template-columns: 1fr !important;
-    gap: 14px !important;
-  }
-  .label-shadow {
-    box-shadow: 6px 6px 0 var(--ink) !important;
-  }
-  .bal-page-shell {
-    padding: 24px 16px 64px !important;
-  }
-  .bal-page-shell-card {
-    padding: 28px 20px 32px !important;
-  }
   .bal-kraft-hero {
     padding: 16px 20px 48px !important;
   }
