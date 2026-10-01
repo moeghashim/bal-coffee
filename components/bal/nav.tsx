@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useCart } from "lib/commerce/cart-client";
 
-type NavVariant = "default" | "kraft";
-
 function Logo() {
   return (
     <a
@@ -44,78 +42,19 @@ function Logo() {
   );
 }
 
-// The packaging wordmark: condensed navy BAL over the red smile.
-function LabelLogo() {
-  return (
-    <a
-      href="/"
-      aria-label="BAL Coffee — home"
-      style={{
-        display: "inline-flex",
-        flexDirection: "column",
-        alignItems: "center",
-        color: "var(--navy)",
-      }}
-    >
-      <span
-        className="label-face"
-        style={{
-          fontSize: 32,
-          fontWeight: 700,
-          letterSpacing: "0.02em",
-          lineHeight: 1,
-        }}
-      >
-        BAL
-      </span>
-      <svg
-        width="50"
-        height="9"
-        viewBox="0 0 54 10"
-        fill="none"
-        aria-hidden
-        style={{ marginTop: -3 }}
-      >
-        <path
-          d="M2 2 Q27 14 52 2"
-          stroke="var(--stamp)"
-          strokeWidth="3.2"
-          strokeLinecap="round"
-        />
-      </svg>
-      <span
-        className="mono"
-        style={{ fontSize: 7, letterSpacing: "0.4em", marginTop: 1 }}
-      >
-        COFFEE
-      </span>
-    </a>
-  );
-}
-
-function CartIcon({
-  count = 0,
-  variant,
-}: {
-  count?: number;
-  variant: NavVariant;
-}) {
-  const kraft = variant === "kraft";
-
+function CartIcon({ count = 0 }: { count?: number }) {
   return (
     <a
       href="/cart"
       aria-label="View cart"
       style={{
         position: "relative",
-        width: kraft ? 44 : 36,
-        height: kraft ? 44 : 36,
+        width: 36,
+        height: 36,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         color: "var(--ink)",
-        border: kraft ? "2px solid var(--ink)" : undefined,
-        borderRadius: kraft ? 10 : undefined,
       }}
     >
       <svg
@@ -124,7 +63,7 @@ function CartIcon({
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth={kraft ? 1.8 : 1.6}
+        strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -136,18 +75,18 @@ function CartIcon({
           aria-label={`${count} items in cart`}
           style={{
             position: "absolute",
-            top: kraft ? -8 : 1,
-            right: kraft ? -8 : 0,
+            top: 1,
+            right: 0,
             display: "inline-flex",
-            minWidth: kraft ? 20 : 17,
-            height: kraft ? 20 : 17,
+            minWidth: 17,
+            height: 17,
             alignItems: "center",
             justifyContent: "center",
             padding: "0 4px",
             borderRadius: 999,
-            background: kraft ? "var(--stamp)" : "#32180d",
-            color: kraft ? "var(--label)" : "#fff4e8",
-            fontSize: kraft ? 11 : 10,
+            background: "#32180d",
+            color: "#fff4e8",
+            fontSize: 10,
             lineHeight: 1,
             fontWeight: 700,
           }}
@@ -159,24 +98,7 @@ function CartIcon({
   );
 }
 
-const defaultLinks = [
-  { href: "/products", label: "Shop" },
-  { href: "/#about", label: "About" },
-  { href: "/#process", label: "Process" },
-  { href: "/#journal", label: "Journal" },
-  { href: "/#subscription", label: "Subscription" },
-  { href: "/#contact", label: "Contact" },
-];
-
-const kraftLinks = [
-  { href: "/#shop", label: "Shop" },
-  { href: "/#process", label: "What's in the bag" },
-  { href: "/#about", label: "Our story" },
-  { href: "/#subscription", label: "Subscribe" },
-];
-
-export function Nav({ variant = "default" }: { variant?: NavVariant }) {
-  const kraft = variant === "kraft";
+export function Nav() {
   const cartCount = useCart((state) => state.data.totalQuantity);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -187,9 +109,14 @@ export function Nav({ variant = "default" }: { variant?: NavVariant }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const links = kraft ? kraftLinks : defaultLinks;
-  const linkColor = kraft ? "var(--ink)" : "var(--ink-2)";
-  const linkHover = kraft ? "var(--stamp)" : "var(--terra-deep)";
+  const links = [
+    { href: "/products", label: "Shop" },
+    { href: "/#about", label: "About" },
+    { href: "/#process", label: "Process" },
+    { href: "/#journal", label: "Journal" },
+    { href: "/#subscription", label: "Subscription" },
+    { href: "/#contact", label: "Contact" },
+  ];
 
   return (
     <nav
@@ -198,48 +125,28 @@ export function Nav({ variant = "default" }: { variant?: NavVariant }) {
         position: "sticky",
         top: 0,
         zIndex: 100,
-        padding: kraft
-          ? scrolled
-            ? "12px 80px"
-            : "20px 80px"
-          : scrolled
-            ? "14px 56px"
-            : "22px 56px",
+        padding: scrolled ? "14px 56px" : "22px 56px",
         display: "grid",
         gridTemplateColumns: "1fr auto 1fr",
         alignItems: "center",
         transition: "all .25s ease",
-        background: kraft
-          ? scrolled
-            ? "rgba(214,186,140,0.94)"
-            : "var(--kraft)"
-          : scrolled
-            ? "rgba(244,239,230,0.92)"
-            : "var(--cream)",
+        background: scrolled ? "rgba(244,239,230,0.92)" : "var(--cream)",
         backdropFilter: scrolled ? "blur(10px)" : "none",
         borderBottom: scrolled
-          ? kraft
-            ? "2px solid var(--ink)"
-            : "1px solid var(--line-soft)"
-          : kraft
-            ? "2px solid transparent"
-            : "1px solid transparent",
+          ? "1px solid var(--line-soft)"
+          : "1px solid transparent",
       }}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
-        {kraft ? <LabelLogo /> : <Logo />}
+        <Logo />
       </div>
       <div
-        className={`bal-nav-links ${mobileOpen ? "bal-nav-links-open" : ""} ${
-          kraft ? "label-face" : ""
-        }`}
+        className={`bal-nav-links ${mobileOpen ? "bal-nav-links-open" : ""}`}
         style={{
           display: "flex",
-          gap: kraft ? 38 : 36,
-          fontSize: kraft ? 16 : 14,
-          fontWeight: kraft ? 500 : undefined,
-          letterSpacing: kraft ? "0.08em" : undefined,
-          color: linkColor,
+          gap: 36,
+          fontSize: 14,
+          color: "var(--ink-2)",
         }}
       >
         {links.map((l) => (
@@ -249,8 +156,10 @@ export function Nav({ variant = "default" }: { variant?: NavVariant }) {
             style={{
               transition: "color .2s ease",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = linkHover)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = linkColor)}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = "var(--terra-deep)")
+            }
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-2)")}
           >
             {l.label}
           </a>
@@ -295,7 +204,7 @@ export function Nav({ variant = "default" }: { variant?: NavVariant }) {
             )}
           </svg>
         </button>
-        <CartIcon count={cartCount} variant={variant} />
+        <CartIcon count={cartCount} />
       </div>
     </nav>
   );
