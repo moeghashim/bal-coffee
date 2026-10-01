@@ -3,147 +3,135 @@ import { ProductMedia } from "components/bal/product-media";
 import { getProduct } from "lib/products";
 import type { Product } from "lib/products";
 
-// Tag colors cycle through the packaging palette so a row of bags reads as
-// distinct labels.
-const TAG_COLORS = ["var(--stamp)", "var(--navy)", "var(--olive)"];
-
 type ProductCardProps = {
   product: Product;
   horizontal?: boolean;
-  index?: number;
 };
 
-export function ProductCard({
-  product,
-  horizontal = false,
-  index = 0,
-}: ProductCardProps) {
+export function ProductCard({ product, horizontal = false }: ProductCardProps) {
   const localProduct = getProduct(product.slug);
   const displayName = localProduct?.name || product.name;
-  const badge = product.badge || localProduct?.badge;
-  const href = `/products/${product.slug}`;
+  const displayBlurb = localProduct?.blurb || product.blurb;
+  const hasLongName = displayName.length > 34;
+  const titleHeight = horizontal ? 60 : 58;
+  const blurbHeight = horizontal ? 48 : 42;
 
   return (
     <article
       id={`product-${product.slug}`}
-      className={`label-panel bal-kraft-card bal-product-card ${
-        horizontal ? "bal-product-card-horizontal" : ""
-      }`}
+      className={`bal-product-card ${horizontal ? "bal-product-card-horizontal" : ""}`}
       style={{
         display: horizontal ? "grid" : "flex",
-        gridTemplateColumns: horizontal ? "0.9fr 1fr" : undefined,
+        gridTemplateColumns: horizontal ? "1fr 0.95fr" : undefined,
         flexDirection: horizontal ? undefined : "column",
-        borderRadius: horizontal ? 16 : 22,
         overflow: "hidden",
+        border: "1px solid rgba(77,56,36,0.16)",
+        borderRadius: 14,
+        background: "rgba(255,252,246,0.9)",
         scrollMarginTop: 96,
       }}
     >
       <a
-        href={href}
+        href={`/products/${product.slug}`}
         aria-label={`View ${displayName}`}
-        className={horizontal ? undefined : "bal-kraft-card-photo"}
         style={{
-          position: "relative",
           display: "block",
-          height: horizontal ? undefined : 380,
-          minHeight: horizontal ? 190 : undefined,
-          borderBottom: horizontal ? undefined : "2px solid var(--ink)",
-          borderRight: horizontal ? "2px solid var(--ink)" : undefined,
+          position: "relative",
+          flex: "0 0 auto",
+          minHeight: 0,
           overflow: "hidden",
-          background: "var(--kraft)",
+          aspectRatio: horizontal ? "1.35 / 1" : "1.36 / 1",
         }}
       >
-        {/* The product shots are tall portraits with the bag or cup in the
-            lower half — bias the landscape crop down to keep it in frame. */}
-        <ProductMedia
-          product={product}
-          compact={horizontal}
-          fill
-          objectPosition="center 70%"
-        />
+        <ProductMedia product={product} compact={horizontal} fill />
       </a>
       <div
         style={{
-          flexGrow: 1,
-          padding: horizontal ? "16px 16px 14px" : "24px 24px 22px",
           display: "flex",
           flexDirection: "column",
-          gap: horizontal ? 6 : 10,
-          minWidth: 0,
+          height: horizontal ? "100%" : 196,
+          minHeight: horizontal ? 0 : 196,
+          overflow: "hidden",
+          padding: horizontal ? "22px 22px 18px" : "14px 18px 16px",
         }}
       >
-        {badge && !horizontal ? (
-          <span
-            className="mono"
-            style={{
-              alignSelf: "flex-start",
-              padding: "5px 10px",
-              borderRadius: 6,
-              background: TAG_COLORS[index % TAG_COLORS.length],
-              color: "var(--label)",
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-            }}
-          >
-            {badge}
-          </span>
-        ) : null}
-        <h3
-          className="label-title"
-          style={{ fontSize: horizontal ? 22 : 36, overflowWrap: "anywhere" }}
-        >
-          <a href={href}>{displayName}</a>
-        </h3>
-        <p
-          className="mono"
-          style={{
-            fontSize: horizontal ? 10 : 12,
-            fontWeight: 500,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color: "var(--ink-soft)",
-          }}
-        >
-          {product.type}
-        </p>
         <div
           style={{
-            marginTop: "auto",
-            paddingTop: horizontal ? 10 : 16,
-            borderTop: "2px dashed rgba(42,31,23,0.35)",
             display: "flex",
-            flexDirection: horizontal ? "column" : "row",
             justifyContent: "space-between",
-            alignItems: horizontal ? "stretch" : "flex-start",
-            gap: horizontal ? 8 : 16,
+            gap: 16,
+            minWidth: 0,
           }}
         >
-          <span
-            className="label-face"
+          <div style={{ minWidth: 0 }}>
+            <h3
+              className="serif"
+              style={{
+                fontSize: horizontal ? 18 : 26,
+                lineHeight: 1,
+                fontWeight: 400,
+                color: "var(--ink)",
+                letterSpacing: 0,
+                minHeight: titleHeight,
+              }}
+            >
+              <a
+                href={`/products/${product.slug}`}
+                style={{
+                  display: "-webkit-box",
+                  minHeight: titleHeight,
+                  overflow: "hidden",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: horizontal ? 3 : 2,
+                  fontSize: hasLongName ? (horizontal ? 15 : 20) : undefined,
+                  lineHeight: hasLongName ? 1.12 : undefined,
+                }}
+              >
+                {displayName}
+              </a>
+            </h3>
+            <p
+              style={{
+                marginTop: 8,
+                maxWidth: horizontal ? 160 : 230,
+                minHeight: blurbHeight,
+                maxHeight: blurbHeight,
+                display: "-webkit-box",
+                overflow: "hidden",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: horizontal ? 3 : 2,
+                fontSize: horizontal ? 12 : 15,
+                lineHeight: 1.2,
+                color: "var(--ink-2)",
+              }}
+            >
+              {displayBlurb}
+            </p>
+          </div>
+          <p
+            className="serif"
             style={{
-              fontSize: horizontal ? 22 : 30,
-              lineHeight: horizontal ? 1 : "48px",
-              fontWeight: 600,
+              flex: "0 0 auto",
+              fontSize: horizontal ? 18 : 28,
+              lineHeight: 1,
               color: "var(--ink)",
             }}
           >
             {product.price}
-          </span>
-          <div style={{ width: horizontal ? "100%" : 170 }}>
-            <AddToCartButton
-              compact
-              product={{
-                merchandiseId: product.merchandiseId,
-                handle: product.shopifyHandle,
-                title: product.name,
-                amount: String(product.priceAmount ?? 0),
-                currencyCode: product.currencyCode ?? "USD",
-                availableForSale: product.availableForSale,
-              }}
-            />
-          </div>
+          </p>
+        </div>
+        <div style={{ marginTop: "auto" }}>
+          <AddToCartButton
+            product={{
+              merchandiseId: product.merchandiseId,
+              handle: product.shopifyHandle,
+              title: product.name,
+              amount: String(product.priceAmount ?? 0),
+              currencyCode: product.currencyCode ?? "USD",
+              availableForSale: product.availableForSale,
+            }}
+            compact
+          />
         </div>
       </div>
     </article>

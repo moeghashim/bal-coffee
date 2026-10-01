@@ -52,8 +52,18 @@ function lineImage(line: CartLine): ShopifyImage | undefined {
 
 function EmptyCartPanel() {
   return (
-    <div className="label-panel label-shadow" style={{ padding: "44px" }}>
-      <h2 className="label-title" style={{ fontSize: 40 }}>
+    <div
+      style={{
+        padding: "42px",
+        border: "1px solid rgba(77,56,36,0.16)",
+        borderRadius: 14,
+        background: "rgba(255,252,246,0.82)",
+      }}
+    >
+      <h2
+        className="serif"
+        style={{ fontSize: 30, lineHeight: 1.1, fontWeight: 400 }}
+      >
         Your cart is empty.
       </h2>
       <p
@@ -67,7 +77,23 @@ function EmptyCartPanel() {
       >
         Add a roasted date seed coffee to begin your order.
       </p>
-      <a href="/products" className="label-btn" style={{ marginTop: 24 }}>
+      <a
+        href="/products"
+        className="mono"
+        style={{
+          display: "inline-flex",
+          marginTop: 24,
+          minHeight: 44,
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "0 24px",
+          borderRadius: 6,
+          background: "#32180d",
+          color: "#fff4e8",
+          fontSize: 11,
+          letterSpacing: 0,
+        }}
+      >
         Shop products
       </a>
     </div>
@@ -96,11 +122,11 @@ function CartLineRow({ line }: { line: CartLine }) {
       className="bal-cart-line"
       style={{
         display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) 112px 84px 94px 32px",
-        gap: 20,
+        gridTemplateColumns: "minmax(260px, 1fr) 112px 84px 94px 32px",
+        gap: 28,
         alignItems: "center",
-        padding: "16px 0",
-        borderTop: "2px dashed rgba(42,31,23,0.3)",
+        padding: "12px 0",
+        borderTop: "1px solid rgba(77,56,36,0.16)",
       }}
     >
       {/* Hidden set-quantity submit + line identity (progressive enhancement). */}
@@ -111,8 +137,8 @@ function CartLineRow({ line }: { line: CartLine }) {
         className="bal-cart-product-cell"
         style={{
           display: "grid",
-          gridTemplateColumns: "120px 1fr",
-          gap: 18,
+          gridTemplateColumns: "204px 1fr",
+          gap: 24,
           alignItems: "center",
           minWidth: 0,
         }}
@@ -122,29 +148,32 @@ function CartLineRow({ line }: { line: CartLine }) {
           aria-label={`View ${product.name}`}
           style={{
             display: "block",
-            position: "relative",
-            height: 120,
+            height: 150,
             overflow: "hidden",
-            borderRadius: 12,
-            border: "2px solid var(--ink)",
-            background: "var(--kraft)",
+            borderRadius: 10,
+            background: "var(--cream-2)",
           }}
         >
           <ProductMedia product={product} compact image={lineImage(line)} />
         </a>
         <div style={{ minWidth: 0 }}>
-          <h2 className="label-title" style={{ fontSize: 26 }}>
+          <h2
+            className="serif"
+            style={{
+              fontSize: 23,
+              lineHeight: 1.12,
+              fontWeight: 400,
+              color: "var(--ink)",
+            }}
+          >
             <a href={`/products/${product.slug}`}>{product.name}</a>
           </h2>
           <p
-            className="mono"
             style={{
               marginTop: 9,
-              color: "var(--ink-soft)",
-              fontSize: 11,
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
+              color: "var(--ink-2)",
+              fontSize: 14,
+              lineHeight: 1.35,
             }}
           >
             {product.type}
@@ -153,12 +182,10 @@ function CartLineRow({ line }: { line: CartLine }) {
             <p
               className="mono"
               style={{
-                marginTop: 8,
-                color: "var(--stamp)",
+                marginTop: 10,
+                color: "var(--ink-soft)",
                 fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
+                letterSpacing: 0,
               }}
             >
               {notes}
@@ -167,7 +194,7 @@ function CartLineRow({ line }: { line: CartLine }) {
           {lineError?.userErrors?.[0]?.message ? (
             <p
               role="alert"
-              style={{ marginTop: 8, fontSize: 12, color: "var(--stamp)" }}
+              style={{ marginTop: 8, fontSize: 12, color: "var(--terra-deep)" }}
             >
               {lineError.userErrors[0].message}
             </p>
@@ -181,10 +208,10 @@ function CartLineRow({ line }: { line: CartLine }) {
           display: "grid",
           gridTemplateColumns: "31px 1fr 31px",
           alignItems: "center",
-          minHeight: 44,
-          border: "2px solid var(--ink)",
+          minHeight: 42,
+          border: "1px solid rgba(77,56,36,0.2)",
           borderRadius: 10,
-          background: "var(--label)",
+          background: "rgba(255,252,246,0.76)",
         }}
       >
         <button
@@ -235,10 +262,9 @@ function CartLineRow({ line }: { line: CartLine }) {
       </div>
 
       <p
-        className="label-face bal-cart-price"
+        className="serif bal-cart-price"
         style={{
-          fontWeight: 600,
-          fontSize: 22,
+          fontSize: 21,
           lineHeight: 1,
           color: "var(--ink)",
           ...pendingStyle,
@@ -247,10 +273,9 @@ function CartLineRow({ line }: { line: CartLine }) {
         {unitPrice ? formatPrice(unitPrice) : ""}
       </p>
       <p
-        className="label-face bal-cart-subtotal"
+        className="serif bal-cart-subtotal"
         style={{
-          fontWeight: 600,
-          fontSize: 22,
+          fontSize: 21,
           lineHeight: 1,
           color: "var(--ink)",
           ...pendingStyle,
@@ -287,7 +312,7 @@ function PaymentBadges() {
         justifyItems: "center",
       }}
     >
-      <p className="label-kicker">We accept</p>
+      <p style={{ fontSize: 12, color: "var(--ink-2)" }}>We accept</p>
       <div
         style={{
           display: "flex",
@@ -306,10 +331,10 @@ function PaymentBadges() {
               height: 26,
               alignItems: "center",
               justifyContent: "center",
-              border: "2px solid var(--ink)",
-              borderRadius: 6,
-              background: "var(--label)",
-              color: "var(--navy)",
+              border: "1px solid rgba(77,56,36,0.16)",
+              borderRadius: 5,
+              background: "rgba(255,252,246,0.82)",
+              color: badge === "MC" ? "#d95d27" : "#1d5f9f",
               fontSize: 9,
               fontWeight: 700,
               letterSpacing: 0,
@@ -337,10 +362,20 @@ function OrderSummary() {
 
   return (
     <aside
-      className="bal-cart-summary label-panel label-shadow"
-      style={{ alignSelf: "start", padding: "32px" }}
+      className="bal-cart-summary"
+      style={{
+        alignSelf: "start",
+        padding: "34px",
+        border: "1px solid rgba(77,56,36,0.17)",
+        borderRadius: 14,
+        background: "rgba(255,252,246,0.78)",
+        boxShadow: "0 22px 60px rgba(50,24,13,0.06)",
+      }}
     >
-      <h2 className="label-title" style={{ fontSize: 32 }}>
+      <h2
+        className="serif"
+        style={{ fontSize: 27, lineHeight: 1.1, fontWeight: 400 }}
+      >
         Order Summary
       </h2>
       <div style={{ marginTop: 28, display: "grid", gap: 20 }}>
@@ -348,10 +383,7 @@ function OrderSummary() {
           style={{ display: "flex", justifyContent: "space-between", gap: 20 }}
         >
           <span style={{ fontSize: 14, color: "var(--ink-2)" }}>Subtotal</span>
-          <span
-            className="label-face"
-            style={{ fontSize: 20, fontWeight: 600 }}
-          >
+          <span className="serif" style={{ fontSize: 18 }}>
             {subtotal ? formatPrice(subtotal) : "—"}
           </span>
         </div>
@@ -375,10 +407,7 @@ function OrderSummary() {
           >
             Estimated Tax <InformationCircleIcon width={15} />
           </span>
-          <span
-            className="label-face"
-            style={{ fontSize: 20, fontWeight: 600 }}
-          >
+          <span className="serif" style={{ fontSize: 18 }}>
             At checkout
           </span>
         </div>
@@ -388,20 +417,17 @@ function OrderSummary() {
         style={{
           marginTop: 28,
           paddingTop: 26,
-          borderTop: "2px dashed rgba(42,31,23,0.35)",
+          borderTop: "1px solid rgba(77,56,36,0.18)",
           display: "flex",
           alignItems: "baseline",
           justifyContent: "space-between",
           gap: 20,
         }}
       >
-        <span className="label-title" style={{ fontSize: 30 }}>
+        <span className="serif" style={{ fontSize: 28, lineHeight: 1 }}>
           Total
         </span>
-        <span
-          className="label-face"
-          style={{ fontSize: 38, lineHeight: 1, fontWeight: 600 }}
-        >
+        <span className="serif" style={{ fontSize: 36, lineHeight: 1 }}>
           {total ? formatPrice(total, { withCents: true }) : "—"}
         </span>
       </div>
@@ -414,9 +440,9 @@ function OrderSummary() {
           gap: 14,
           alignItems: "center",
           padding: "15px 16px",
-          border: "2px solid var(--olive)",
-          borderRadius: 12,
-          background: "rgba(77,77,51,0.08)",
+          border: "1px solid rgba(77,83,42,0.3)",
+          borderRadius: 9,
+          background: "rgba(225,220,177,0.46)",
           color: "var(--olive-deep)",
         }}
       >
@@ -434,13 +460,18 @@ function OrderSummary() {
       <a
         href={checkoutUrl || "#"}
         aria-disabled={checkoutUrl ? undefined : true}
-        className="label-btn label-btn-stamp"
+        className="mono"
         style={{
           marginTop: 28,
           display: "flex",
-          width: "100%",
           minHeight: 58,
-          fontSize: 18,
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 9,
+          background: "#32180d",
+          color: "#fff4e8",
+          fontSize: 13,
+          letterSpacing: 0,
           pointerEvents: checkoutUrl ? undefined : "none",
           opacity: checkoutUrl ? 1 : 0.6,
         }}
@@ -469,22 +500,27 @@ function RelatedProducts({
     <section
       className="bal-cart-related"
       aria-labelledby="cart-related-heading"
-      style={{ marginTop: 56 }}
+      style={{ marginTop: 20 }}
     >
       <h2
         id="cart-related-heading"
-        className="label-title"
-        style={{ fontSize: 40 }}
+        className="serif"
+        style={{
+          fontSize: 30,
+          lineHeight: 1.1,
+          fontWeight: 400,
+          color: "var(--ink)",
+        }}
       >
         You may also like
       </h2>
       <div
         className="bal-cart-related-grid"
         style={{
-          marginTop: 24,
+          marginTop: 12,
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-          gap: 20,
+          gap: 12,
         }}
       >
         {recommended.map((product) => (
@@ -512,9 +548,9 @@ export function CartContents({ products }: { products: Product[] }) {
           aria-hidden
           style={{
             height: 260,
-            borderRadius: 18,
-            border: "2px solid rgba(42,31,23,0.25)",
-            background: "rgba(247,238,221,0.6)",
+            borderRadius: 14,
+            border: "1px solid rgba(77,56,36,0.12)",
+            background: "rgba(255,252,246,0.5)",
           }}
         />
       ) : hasItems ? (
@@ -522,29 +558,30 @@ export function CartContents({ products }: { products: Product[] }) {
           className="bal-cart-layout"
           style={{
             display: "grid",
-            gridTemplateColumns: "minmax(0, 1fr) 360px",
-            gap: 28,
+            gridTemplateColumns: "minmax(0, 1fr) 388px",
+            gap: 0,
             alignItems: "start",
           }}
         >
           <section
-            className="bal-cart-items label-panel"
+            className="bal-cart-items"
             aria-label="Cart items"
-            style={{ padding: "26px 24px" }}
+            style={{
+              padding: "28px 20px 28px 18px",
+              border: "1px solid rgba(77,56,36,0.17)",
+              borderRadius: "14px 0 0 14px",
+              background: "rgba(255,252,246,0.72)",
+            }}
           >
             <div
               className="bal-cart-table-header"
               style={{
                 display: "grid",
-                gridTemplateColumns: "minmax(0, 1fr) 112px 84px 94px 32px",
-                gap: 20,
-                padding: "0 0 14px",
-                color: "var(--ink-soft)",
-                fontFamily: "var(--font-plex-mono)",
-                fontSize: 11,
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
+                gridTemplateColumns: "minmax(260px, 1fr) 112px 84px 94px 32px",
+                gap: 28,
+                padding: "0 0 16px",
+                color: "var(--ink)",
+                fontSize: 13,
               }}
             >
               <span>Product</span>
@@ -563,10 +600,26 @@ export function CartContents({ products }: { products: Product[] }) {
                 gridTemplateColumns: "1fr",
                 justifyItems: "end",
                 paddingTop: 20,
-                borderTop: "2px dashed rgba(42,31,23,0.3)",
+                borderTop: "1px solid rgba(77,56,36,0.16)",
               }}
             >
-              <a href="/products" className="label-btn label-btn-outline">
+              <a
+                href="/products"
+                className="mono"
+                style={{
+                  display: "inline-flex",
+                  minHeight: 44,
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "0 18px",
+                  border: "1px solid rgba(77,56,36,0.18)",
+                  borderRadius: 9,
+                  background: "rgba(255,252,246,0.62)",
+                  color: "var(--olive-deep)",
+                  fontSize: 12,
+                  letterSpacing: 0,
+                }}
+              >
                 <ArrowLeftIcon width={16} />
                 Continue Shopping
               </a>

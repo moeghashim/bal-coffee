@@ -18,55 +18,62 @@ export function PageShell({
     <>
       <Nav />
       <main
-        className="bal-page-shell"
         style={{
-          maxWidth: 860,
+          maxWidth: 760,
           margin: "0 auto",
-          padding: "64px 56px 120px",
+          padding: "80px 56px 120px",
         }}
       >
-        <div
-          className="label-panel label-shadow bal-page-shell-card"
-          style={{ padding: "52px 56px 56px" }}
-        >
-          {eyebrow && <p className="label-kicker">{eyebrow}</p>}
-          <h1
-            className="label-title"
+        {eyebrow && (
+          <p
+            className="mono"
             style={{
-              marginTop: 14,
-              fontSize: "clamp(38px, 5vw, 60px)",
-              lineHeight: 0.98,
+              fontSize: 10,
+              letterSpacing: "0.24em",
+              textTransform: "uppercase",
+              color: "var(--ink-soft)",
             }}
           >
-            {title}
-          </h1>
-          {intro && (
-            <p
-              style={{
-                marginTop: 22,
-                fontSize: 17,
-                lineHeight: 1.65,
-                color: "var(--ink-2)",
-              }}
-            >
-              {intro}
-            </p>
-          )}
-          {children && (
-            <div
-              style={{
-                marginTop: 32,
-                paddingTop: 8,
-                borderTop: "2px dashed rgba(42,31,23,0.3)",
-                fontSize: 15,
-                lineHeight: 1.7,
-                color: "var(--ink-2)",
-              }}
-            >
-              {children}
-            </div>
-          )}
-        </div>
+            {eyebrow}
+          </p>
+        )}
+        <h1
+          className="serif"
+          style={{
+            marginTop: 14,
+            fontSize: "clamp(36px, 4.4vw, 56px)",
+            lineHeight: 1.05,
+            fontWeight: 500,
+            letterSpacing: "-0.01em",
+            color: "var(--ink)",
+          }}
+        >
+          {title}
+        </h1>
+        {intro && (
+          <p
+            style={{
+              marginTop: 24,
+              fontSize: 16,
+              lineHeight: 1.7,
+              color: "var(--ink-2)",
+            }}
+          >
+            {intro}
+          </p>
+        )}
+        {children && (
+          <div
+            style={{
+              marginTop: 40,
+              fontSize: 15,
+              lineHeight: 1.7,
+              color: "var(--ink-2)",
+            }}
+          >
+            {children}
+          </div>
+        )}
       </main>
       <Footer />
       <Grain />

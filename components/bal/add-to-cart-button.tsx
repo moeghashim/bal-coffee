@@ -18,10 +18,12 @@ export type AddToCartProduct = {
 
 function SubmitButton({
   label,
+  compact,
   disabled,
   pending,
 }: {
   label: string;
+  compact: boolean;
   disabled: boolean;
   pending: boolean;
 }) {
@@ -29,11 +31,17 @@ function SubmitButton({
     <button
       type="submit"
       disabled={disabled}
-      className="label-btn"
+      className="mono"
       style={{
         width: "100%",
-        padding: "0 20px",
-        background: pending ? "#4a5670" : undefined,
+        minHeight: compact ? 36 : 40,
+        padding: compact ? "9px 14px" : "12px 16px",
+        border: "1px solid #32180d",
+        borderRadius: 5,
+        fontSize: 11,
+        letterSpacing: 0,
+        background: pending ? "#6e594a" : "#32180d",
+        color: "#fff4e8",
         opacity: disabled ? 0.75 : 1,
       }}
     >
@@ -61,7 +69,10 @@ function AddToCartForm({
   const message = errorMessage ? errorMessage : added ? "Added to cart." : "";
 
   return (
-    <form {...formProps({ afterSubmit: () => setAdded(true) })}>
+    <form
+      {...formProps({ afterSubmit: () => setAdded(true) })}
+      style={{ marginTop: compact ? 10 : 16 }}
+    >
       <input type="hidden" {...register("merchandiseId", {})} />
       <input
         type="hidden"
@@ -72,8 +83,8 @@ function AddToCartForm({
         className="bal-add-to-cart-row"
         style={{
           display: showQuantity ? "grid" : "block",
-          gridTemplateColumns: showQuantity ? "124px 1fr" : undefined,
-          gap: 14,
+          gridTemplateColumns: showQuantity ? "108px 1fr" : undefined,
+          gap: 16,
           alignItems: "center",
         }}
       >
@@ -81,40 +92,38 @@ function AddToCartForm({
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "40px 1fr 40px",
+              gridTemplateColumns: "32px 1fr 32px",
               alignItems: "center",
-              minHeight: 48,
-              border: "2px solid var(--ink)",
-              borderRadius: 10,
+              minHeight: 40,
+              border: "1px solid rgba(77,56,36,0.22)",
+              borderRadius: 6,
               overflow: "hidden",
-              background: "var(--label)",
+              background: "rgba(255,252,246,0.72)",
             }}
           >
             <button
               type="button"
               aria-label="Decrease quantity"
               onClick={() => setQuantity((value) => Math.max(1, value - 1))}
-              style={{ height: "100%", fontSize: 20, color: "var(--ink)" }}
+              style={{ height: "100%", fontSize: 18, color: "var(--ink-2)" }}
             >
               -
             </button>
-            <span
-              className="label-face"
-              style={{ textAlign: "center", fontSize: 18, fontWeight: 600 }}
-            >
+            <span style={{ textAlign: "center", fontSize: 14 }}>
               {quantity}
             </span>
             <button
               type="button"
               aria-label="Increase quantity"
               onClick={() => setQuantity((value) => value + 1)}
-              style={{ height: "100%", fontSize: 20, color: "var(--ink)" }}
+              style={{ height: "100%", fontSize: 18, color: "var(--ink-2)" }}
             >
               +
             </button>
           </div>
         ) : null}
         <SubmitButton
+          compact={compact}
           disabled={pending || soldOut}
           pending={pending}
           label={soldOut ? "Sold out" : added ? "Added" : label}
@@ -127,7 +136,7 @@ function AddToCartForm({
           minHeight: compact ? 16 : 20,
           fontSize: compact ? 11 : 12,
           lineHeight: 1.5,
-          color: errorMessage ? "var(--stamp)" : "var(--ink-2)",
+          color: errorMessage ? "var(--terra-deep)" : "var(--ink-2)",
         }}
       >
         {message}
@@ -138,12 +147,11 @@ function AddToCartForm({
           className="mono"
           style={{
             display: "inline-flex",
-            marginTop: 4,
+            marginTop: 8,
             fontSize: 10,
-            fontWeight: 600,
             letterSpacing: "0.16em",
             textTransform: "uppercase",
-            color: "var(--stamp)",
+            color: "var(--terra-deep)",
           }}
         >
           View cart
@@ -166,7 +174,16 @@ export function AddToCartButton({
 }) {
   // No sellable variant — render an inert control instead of a broken form.
   if (!product.merchandiseId) {
-    return <SubmitButton disabled pending={false} label="Sold out" />;
+    return (
+      <div style={{ marginTop: compact ? 10 : 16 }}>
+        <SubmitButton
+          compact={compact}
+          disabled
+          pending={false}
+          label="Sold out"
+        />
+      </div>
+    );
   }
 
   const productInput = toProductInput({

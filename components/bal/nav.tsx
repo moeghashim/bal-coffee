@@ -3,50 +3,40 @@
 import { useEffect, useState } from "react";
 import { useCart } from "lib/commerce/cart-client";
 
-// The packaging wordmark: condensed navy BAL over the red smile.
-function LabelLogo() {
+function Logo() {
   return (
     <a
       href="/"
-      aria-label="BAL Coffee — home"
       style={{
-        display: "inline-flex",
-        flexDirection: "column",
+        display: "flex",
         alignItems: "center",
-        color: "var(--navy)",
+        gap: 6,
+        color: "var(--ink)",
       }}
+      aria-label="BAL Coffee — home"
     >
       <span
-        className="label-face"
+        className="serif"
         style={{
-          fontSize: 32,
-          fontWeight: 700,
-          letterSpacing: "0.02em",
+          fontSize: 26,
+          fontWeight: 600,
+          letterSpacing: "-0.02em",
           lineHeight: 1,
         }}
       >
         BAL
       </span>
-      <svg
-        width="50"
-        height="9"
-        viewBox="0 0 54 10"
-        fill="none"
-        aria-hidden
-        style={{ marginTop: -3 }}
-      >
-        <path
-          d="M2 2 Q27 14 52 2"
-          stroke="var(--stamp)"
-          strokeWidth="3.2"
-          strokeLinecap="round"
-        />
-      </svg>
       <span
         className="mono"
-        style={{ fontSize: 7, letterSpacing: "0.4em", marginTop: 1 }}
+        style={{
+          fontSize: 9,
+          letterSpacing: "0.32em",
+          textTransform: "uppercase",
+          color: "var(--ink-2)",
+          marginTop: 6,
+        }}
       >
-        COFFEE
+        coffee
       </span>
     </a>
   );
@@ -59,14 +49,12 @@ function CartIcon({ count = 0 }: { count?: number }) {
       aria-label="View cart"
       style={{
         position: "relative",
-        width: 44,
-        height: 44,
+        width: 36,
+        height: 36,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         color: "var(--ink)",
-        border: "2px solid var(--ink)",
-        borderRadius: 10,
       }}
     >
       <svg
@@ -75,7 +63,7 @@ function CartIcon({ count = 0 }: { count?: number }) {
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -87,18 +75,18 @@ function CartIcon({ count = 0 }: { count?: number }) {
           aria-label={`${count} items in cart`}
           style={{
             position: "absolute",
-            top: -8,
-            right: -8,
+            top: 1,
+            right: 0,
             display: "inline-flex",
-            minWidth: 20,
-            height: 20,
+            minWidth: 17,
+            height: 17,
             alignItems: "center",
             justifyContent: "center",
             padding: "0 4px",
             borderRadius: 999,
-            background: "var(--stamp)",
-            color: "var(--label)",
-            fontSize: 11,
+            background: "#32180d",
+            color: "#fff4e8",
+            fontSize: 10,
             lineHeight: 1,
             fontWeight: 700,
           }}
@@ -109,13 +97,6 @@ function CartIcon({ count = 0 }: { count?: number }) {
     </a>
   );
 }
-
-const links = [
-  { href: "/products", label: "Shop" },
-  { href: "/#process", label: "What's in the bag" },
-  { href: "/#about", label: "Our story" },
-  { href: "/#subscription", label: "Subscribe" },
-];
 
 export function Nav() {
   const cartCount = useCart((state) => state.data.totalQuantity);
@@ -128,8 +109,14 @@ export function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const linkColor = "var(--ink)";
-  const linkHover = "var(--stamp)";
+  const links = [
+    { href: "/products", label: "Shop" },
+    { href: "/#about", label: "About" },
+    { href: "/#process", label: "Process" },
+    { href: "/#journal", label: "Journal" },
+    { href: "/#subscription", label: "Subscription" },
+    { href: "/#contact", label: "Contact" },
+  ];
 
   return (
     <nav
@@ -138,32 +125,28 @@ export function Nav() {
         position: "sticky",
         top: 0,
         zIndex: 100,
-        padding: scrolled ? "12px 80px" : "20px 80px",
+        padding: scrolled ? "14px 56px" : "22px 56px",
         display: "grid",
         gridTemplateColumns: "1fr auto 1fr",
         alignItems: "center",
         transition: "all .25s ease",
-        background: scrolled ? "rgba(242,214,174,0.94)" : "var(--kraft)",
+        background: scrolled ? "rgba(244,239,230,0.92)" : "var(--cream)",
         backdropFilter: scrolled ? "blur(10px)" : "none",
         borderBottom: scrolled
-          ? "2px solid var(--ink)"
-          : "2px solid transparent",
+          ? "1px solid var(--line-soft)"
+          : "1px solid transparent",
       }}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
-        <LabelLogo />
+        <Logo />
       </div>
       <div
-        className={`bal-nav-links label-face ${
-          mobileOpen ? "bal-nav-links-open" : ""
-        }`}
+        className={`bal-nav-links ${mobileOpen ? "bal-nav-links-open" : ""}`}
         style={{
           display: "flex",
-          gap: 38,
-          fontSize: 16,
-          fontWeight: 500,
-          letterSpacing: "0.08em",
-          color: linkColor,
+          gap: 36,
+          fontSize: 14,
+          color: "var(--ink-2)",
         }}
       >
         {links.map((l) => (
@@ -173,8 +156,10 @@ export function Nav() {
             style={{
               transition: "color .2s ease",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = linkHover)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = linkColor)}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = "var(--terra-deep)")
+            }
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-2)")}
           >
             {l.label}
           </a>
