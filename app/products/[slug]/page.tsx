@@ -1,7 +1,9 @@
 import { AddToCartButton } from "components/bal/add-to-cart-button";
 import { BenefitsStrip } from "components/bal/benefits-strip";
+import { DrinkView } from "components/bal/drink-view";
 import { Footer } from "components/bal/footer";
 import { Grain } from "components/bal/grain";
+import { JsonLd } from "components/bal/json-ld";
 import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
 import {
@@ -15,8 +17,12 @@ import {
 } from "lib/catalog";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
 import { ProductViewedTracker } from "components/bal/product-viewed-tracker";
+import { shopifyImageUrl } from "lib/images";
+import { productImageAlt } from "lib/products";
+import { productJsonLd } from "lib/seo";
+import { baseUrl } from "lib/utils";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type ProductPageProps = {
   params: Promise<{
@@ -38,9 +44,23 @@ export async function generateMetadata({
     return {};
   }
 
+  const image = product.images?.[0];
+  const description = product.description || product.blurb;
+
   return {
     title: product.name,
-    description: product.description || product.blurb,
+    description,
+    alternates: { canonical: `/products/${product.slug}` },
+    openGraph: image?.url
+      ? {
+          images: [
+            {
+              url: shopifyImageUrl(image.url, 1200),
+              alt: productImageAlt(product, image),
+            },
+          ],
+        }
+      : undefined,
   };
 }
 
@@ -135,7 +155,7 @@ function StoryBand() {
         <div style={{ height: 190, overflow: "hidden" }}>
           <img
             src="/product-ritual.svg"
-            alt=""
+            alt="A warm tabletop scene with a Bal Coffee bag, a filled mug, date seeds, and soft morning light."
             style={{
               display: "block",
               width: "100%",
@@ -169,7 +189,7 @@ function StoryBand() {
             open flames and brewed for warmth, comfort, and connection.
           </p>
           <a
-            href="/#about"
+            href="/about"
             style={{
               display: "inline-flex",
               marginTop: 14,
@@ -208,6 +228,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
+  if (product.slug !== slug) {
+    redirect(`/products/${product.slug}`);
+  }
+
   const related = await getRelatedProductsWithShopify(product.slug);
   const shopAnalytics = await getShopAnalytics();
   const productImages =
@@ -216,8 +240,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
       : [undefined, undefined, undefined, undefined];
   const hasLongName = product.name.length > 42;
 
+  if (product.category === "drink") {
+    return (
+      <DrinkView
+        product={product}
+        related={related}
+        shopAnalytics={shopAnalytics}
+      />
+    );
+  }
+
   return (
     <>
+      <JsonLd
+        data={productJsonLd(product, `${baseUrl}/products/${product.slug}`)}
+      />
       <ProductImagePreload image={product.images?.[0]} />
       {shopAnalytics && product.productId && product.merchandiseId ? (
         <ProductViewedTracker
@@ -349,6 +386,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 >
                   <Stars />
                   <span style={{ fontSize: 13, color: "var(--ink-soft)" }}>
+                    {/* Hardcoded. Not loaded from Shopify or a reviews app. */}
                     (842 reviews)
                   </span>
                 </div>
@@ -437,44 +475,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   }}
                 >
                   <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        gap: 18,
-                        padding: "12px 14px",
-                        border: "1px solid rgba(77,56,36,0.18)",
-                        borderRadius: 8,
-                        background: "rgba(255,252,246,0.78)",
-                      }}
-                    >
-                      <div>
-                        <p style={{ fontSize: 14, color: "var(--ink)" }}>
-                          Subscribe & Save 10%
-                        </p>
-                        <p
-                          style={{
-                            marginTop: 4,
-                            fontSize: 12,
-                            color: "var(--ink-soft)",
-                          }}
-                        >
-                          Delivered monthly, skip or cancel anytime.
-                        </p>
-                      </div>
-                      <span
-                        style={{
-                          padding: "6px 10px",
-                          borderRadius: 999,
-                          background: "#eadfc6",
-                          color: "var(--ink)",
-                          fontSize: 12,
-                        }}
-                      >
-                        Save
-                      </span>
-                    </div>
                     <p
                       style={{
                         marginTop: 14,

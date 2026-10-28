@@ -37,8 +37,29 @@ test("add to cart succeeds and checkout points to Shopify", async ({
   await expect(checkout).toBeVisible();
   const href = await checkout.getAttribute("href");
   expect(href, "checkout href should exist").toBeTruthy();
+  const checkoutUrl = new URL(href || "http://invalid");
+  const shopifyHost =
+    checkoutUrl.hostname === "checkout.balcoffee.com" ||
+    checkoutUrl.hostname.endsWith(".myshopify.com") ||
+    checkoutUrl.hostname.endsWith("shopify.com") ||
+    checkoutUrl.hostname.endsWith("shop.app");
   expect(
-    /myshopify\.com|shopify\.com|checkout\.|balcoffee\.com/i.test(href || ""),
-    `checkout host should be Shopify-owned, got: ${href}`,
+    shopifyHost,
+    `checkout host should be Shopify-owned, got ${checkoutUrl.hostname}`,
+  ).toBeTruthy();
+  expect(checkoutUrl.hostname).not.toBe("balcoffee.com");
+  expect(checkoutUrl.hostname).not.toBe("www.balcoffee.com");
+
+  const response = await page.request.get(href!, { maxRedirects: 5 });
+  const finalHost = new URL(response.url()).hostname;
+  expect(
+    response.status(),
+    `checkout response ${response.status()} from ${finalHost}`,
+  ).toBeLessThan(400);
+  expect(
+    /checkout\.balcoffee\.com|shopify\.com|myshopify\.com|shop\.app/.test(
+      finalHost,
+    ),
+    `checkout did not reach Shopify, final host ${finalHost}`,
   ).toBeTruthy();
 });
