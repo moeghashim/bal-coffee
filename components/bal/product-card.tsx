@@ -12,6 +12,7 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
   const localProduct = getProduct(product.slug);
   const displayName = localProduct?.name || product.name;
   const displayBlurb = localProduct?.blurb || product.blurb;
+  const multiple = (product.variants?.length ?? 0) > 1;
   const hasLongName = displayName.length > 34;
   const titleHeight = horizontal ? 60 : 58;
   const blurbHeight = horizontal ? 48 : 42;
@@ -44,6 +45,25 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
         }}
       >
         <ProductMedia product={product} compact={horizontal} fill />
+        {product.missingImage ? (
+          <span
+            className="mono"
+            style={{
+              position: "absolute",
+              left: 12,
+              bottom: 12,
+              padding: "4px 8px",
+              borderRadius: 999,
+              background: "rgba(50,24,13,0.82)",
+              color: "#fff4e8",
+              fontSize: 10,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+            }}
+          >
+            Photo coming soon
+          </span>
+        ) : null}
       </a>
       <div
         style={{
@@ -121,17 +141,39 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
           </p>
         </div>
         <div style={{ marginTop: "auto" }}>
-          <AddToCartButton
-            product={{
-              merchandiseId: product.merchandiseId,
-              handle: product.shopifyHandle,
-              title: product.name,
-              amount: String(product.priceAmount ?? 0),
-              currencyCode: product.currencyCode ?? "USD",
-              availableForSale: product.availableForSale,
-            }}
-            compact
-          />
+          {multiple ? (
+            <a
+              href={`/products/${product.slug}`}
+              className="mono"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                minHeight: 36,
+                padding: "9px 14px",
+                border: "1px solid #32180d",
+                borderRadius: 5,
+                fontSize: 11,
+                background: "#32180d",
+                color: "#fff4e8",
+              }}
+            >
+              Choose options
+            </a>
+          ) : (
+            <AddToCartButton
+              product={{
+                merchandiseId: product.merchandiseId,
+                handle: product.shopifyHandle,
+                title: product.name,
+                amount: String(product.priceAmount ?? 0),
+                currencyCode: product.currencyCode ?? "USD",
+                availableForSale: product.availableForSale,
+              }}
+              compact
+            />
+          )}
         </div>
       </div>
     </article>

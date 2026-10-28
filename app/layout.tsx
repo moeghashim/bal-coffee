@@ -1,5 +1,7 @@
 import { ReactNode, Suspense } from "react";
 import "./globals.css";
+import { JsonLd } from "components/bal/json-ld";
+import { organizationJsonLd } from "lib/seo";
 import { baseUrl } from "lib/utils";
 import { CartProvider } from "lib/commerce/cart-client";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
@@ -16,6 +18,7 @@ export const metadata = {
     "A naturally caffeine-free coffee, made from a single native seed. Hand-roasted in small lots.",
   openGraph: { type: "website" },
   robots: { follow: true, index: true },
+  alternates: { canonical: "./" },
 };
 
 export default async function RootLayout({
@@ -48,6 +51,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
+        <JsonLd data={organizationJsonLd(baseUrl)} />
         {shopAnalytics ? (
           <Suspense fallback={null}>
             <AnalyticsTracker shop={shopAnalytics} />

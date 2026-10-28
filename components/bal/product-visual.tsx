@@ -138,17 +138,88 @@ function ProductBag({ product }: { product: Product }) {
   );
 }
 
+function drinkTitleLines(name: string) {
+  if (name.length <= 18) return [name];
+  const words = name.split(" ");
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    const next = current ? `${current} ${word}` : word;
+    if (next.length > 18 && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = next;
+    }
+  }
+  if (current) lines.push(current);
+  return lines.slice(0, 3);
+}
+
 export function ProductVisual({
   product,
   compact = false,
 }: ProductVisualProps) {
+  if (product.kind === "drink") {
+    const lines = drinkTitleLines(product.name);
+    return (
+      <svg
+        viewBox="0 0 420 320"
+        width="100%"
+        height="100%"
+        role="img"
+        aria-label={`${product.name}, illustrated café drink`}
+        style={{ display: "block" }}
+      >
+        <defs>
+          <linearGradient id={`${product.slug}-bg`} x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stopColor="#f3e6d2" />
+            <stop offset="0.55" stopColor="#c4a27c" />
+            <stop offset="1" stopColor="#efe2cc" />
+          </linearGradient>
+        </defs>
+        <rect width="420" height="320" fill={`url(#${product.slug}-bg)`} />
+        <path
+          d="M0 250 C 90 220 170 286 260 246 C 330 218 380 228 420 208 L420 320 H0 Z"
+          fill="#d8c2a4"
+          opacity="0.7"
+        />
+        <Cup x={210} y={118} />
+        {lines.map((line, index) => (
+          <text
+            key={line}
+            x="210"
+            y={58 + index * 22}
+            textAnchor="middle"
+            fontFamily="Georgia, serif"
+            fontSize={lines.length > 1 ? 18 : 22}
+            fill="#2c180f"
+          >
+            {line}
+          </text>
+        ))}
+        <text
+          x="210"
+          y="292"
+          textAnchor="middle"
+          fontFamily="IBM Plex Mono, monospace"
+          fontSize="11"
+          letterSpacing="3"
+          fill="#6f4d2f"
+        >
+          CAFÉ DRINK
+        </text>
+      </svg>
+    );
+  }
+
   return (
     <svg
       viewBox="0 0 420 320"
       width="100%"
       height="100%"
       role="img"
-      aria-label={`${product.name} product image`}
+      aria-label={`${product.name}, illustrated bag of date-seed coffee`}
       style={{ display: "block" }}
     >
       <defs>

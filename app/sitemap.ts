@@ -1,13 +1,42 @@
 import type { MetadataRoute } from "next";
+import { getProducts } from "lib/catalog";
 import { baseUrl } from "lib/utils";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const routes = ["", "/products", "/journal", "/privacy", "/terms"];
-  return routes.map((path) => ({
+  const staticRoutes = [
+    "",
+    "/products",
+    "/drinks",
+    "/journal",
+    "/about",
+    "/faq",
+    "/shipping",
+    "/returns",
+    "/contact",
+    "/privacy",
+    "/terms",
+  ];
+  let productRoutes: string[] = [];
+  try {
+    productRoutes = (await getProducts()).map(
+      (product) => `/products/${product.slug}`,
+    );
+  } catch {
+    productRoutes = [];
+  }
+
+  return [...staticRoutes, ...productRoutes].map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: now,
     changeFrequency: "weekly",
-    priority: path === "" ? 1 : path === "/products" ? 0.8 : 0.6,
+    priority:
+      path === ""
+        ? 1
+        : path === "/products" || path === "/drinks"
+          ? 0.8
+          : path.startsWith("/products/")
+            ? 0.7
+            : 0.5,
   }));
 }

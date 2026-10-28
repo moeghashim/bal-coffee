@@ -4,14 +4,26 @@ import type { ShopifyImage } from "lib/shopify";
 // lookups. Shopify-backed reads live in lib/catalog.ts (server-only) so this
 // module can be imported from client components without pulling `server-only`.
 
-export type ProductKind = "bag-dark" | "bag-light" | "bag-green";
+export type ProductKind = "bag-dark" | "bag-light" | "bag-green" | "drink";
+
+export type ProductVariant = {
+  id: string;
+  title: string;
+  availableForSale: boolean;
+  sku?: string;
+  priceLabel: string;
+  priceAmount: number;
+  currencyCode: string;
+  selectedOptions: { name: string; value: string }[];
+  image?: ShopifyImage;
+};
 
 export type Product = {
   name: string;
   slug: string;
   shopifyHandle: string;
   type: string;
-  category: "coffee" | "gift";
+  category: "coffee" | "drink" | "other";
   badge: string;
   blurb: string;
   price: string;
@@ -36,7 +48,32 @@ export type Product = {
   productId?: string;
   vendor?: string;
   variantTitle?: string;
+  sku?: string;
+  variants?: ProductVariant[];
+  priceVaries?: boolean;
+  // True when Shopify has no image for this product. UI shows an illustration.
+  missingImage?: boolean;
 };
+
+export function variantLabel(variant: ProductVariant) {
+  const meaningful = variant.selectedOptions.filter(
+    (option) => option.name !== "Title" && option.value !== "Default Title",
+  );
+  if (meaningful.length === 0) return variant.title;
+  return meaningful.map((option) => option.value).join(" · ");
+}
+
+export function productImageAlt(
+  product: Pick<Product, "name" | "category" | "type">,
+  image?: ShopifyImage | null,
+) {
+  const fromShopify = image?.altText?.trim();
+  if (fromShopify) return fromShopify;
+  if (product.category === "drink") {
+    return `${product.name} café drink`;
+  }
+  return `${product.name}, caffeine-free date-seed coffee`;
+}
 
 export const products: Product[] = [
   {

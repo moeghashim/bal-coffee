@@ -7,6 +7,7 @@
  * See HYDROGEN_MIGRATION.md.
  */
 export {
+  getStorefrontCatalog,
   getStorefrontProductByHandle,
   getStorefrontProductsByHandles,
 } from "./products";

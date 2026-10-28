@@ -1,5 +1,10 @@
 import { ProductVisual } from "components/bal/product-visual";
-import type { Product } from "lib/products";
+import {
+  shopifyImageSrcSet,
+  shopifyImageUrl,
+  shopifyLayoutSize,
+} from "lib/images";
+import { productImageAlt, type Product } from "lib/products";
 import type { ShopifyImage } from "lib/shopify";
 
 type ProductMediaProps = {
@@ -9,32 +14,6 @@ type ProductMediaProps = {
   fill?: boolean;
   priority?: boolean;
 };
-
-// Shopify's CDN resizes on the fly via a `width` query param. Serving a
-// viewport-appropriate size instead of the multi-MB original is the single
-// biggest mobile-LCP win (originals were up to 2.5 MB). No-op for non-Shopify
-// URLs (local assets).
-function isShopifyCdn(url: string) {
-  return url.includes("cdn.shopify.com");
-}
-
-function sized(url: string, width: number) {
-  if (!isShopifyCdn(url)) return url;
-  try {
-    const u = new URL(url);
-    u.searchParams.set("width", String(width));
-    return u.toString();
-  } catch {
-    return url;
-  }
-}
-
-const SRCSET_WIDTHS = [320, 480, 640, 828, 1080, 1200];
-
-function srcSet(url: string) {
-  if (!isShopifyCdn(url)) return undefined;
-  return SRCSET_WIDTHS.map((w) => `${sized(url, w)} ${w}w`).join(", ");
-}
 
 // Display-size hints. Non-compact = PDP main image + products hero, which sit in
 // a padded column (~90vw on mobile, not full-bleed); compact = cards,
@@ -50,13 +29,13 @@ const COMPACT_SIZES = "(max-width: 768px) 50vw, 360px";
  * page for the LCP image only.
  */
 export function ProductImagePreload({ image }: { image?: ShopifyImage }) {
-  if (!image?.url || !isShopifyCdn(image.url)) return null;
+  if (!image?.url) return null;
   return (
     <link
       rel="preload"
       as="image"
-      href={sized(image.url, 1200)}
-      imageSrcSet={srcSet(image.url)}
+      href={shopifyImageUrl(image.url, 1200)}
+      imageSrcSet={shopifyImageSrcSet(image.url)}
       imageSizes={NON_COMPACT_SIZES}
       fetchPriority="high"
     />
@@ -85,19 +64,18 @@ export function ProductMedia({
   }
 
   const url = productImage.url;
-  // Rough display widths: compact contexts (cards, thumbnails, cart lines) show
-  // ~half the viewport on mobile and a fixed column on desktop; the main/hero
-  // image fills its column.
+  const targetWidth = compact ? 600 : 1200;
+  const layout = shopifyLayoutSize(productImage, targetWidth);
   const sizes = compact ? COMPACT_SIZES : NON_COMPACT_SIZES;
 
   return (
     <img
-      src={sized(url, compact ? 600 : 1200)}
-      srcSet={srcSet(url)}
+      src={shopifyImageUrl(url, targetWidth)}
+      srcSet={shopifyImageSrcSet(url)}
       sizes={sizes}
-      alt={productImage.altText || `${product.name} product image`}
-      width={productImage.width || undefined}
-      height={productImage.height || undefined}
+      alt={productImageAlt(product, productImage)}
+      width={layout.width}
+      height={layout.height}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : undefined}
       decoding="async"
