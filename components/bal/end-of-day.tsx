@@ -2,7 +2,7 @@ function CoffeeBookArt() {
   return (
     <img
       src="/evening-ritual.svg"
-      alt="A warm evening coffee beside an open book"
+      alt="A warm evening scene with a glass mug beside an open book under soft lamplight."
       style={{
         display: "block",
         width: "100%",

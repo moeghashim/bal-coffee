@@ -1,4 +1,5 @@
 import { Bestsellers } from "components/bal/bestsellers";
+import { Drinks } from "components/bal/drinks";
 import { EndOfDay } from "components/bal/end-of-day";
 import { Features } from "components/bal/features";
 import { Footer } from "components/bal/footer";
@@ -12,6 +13,7 @@ import { SubscriptionCTA } from "components/bal/subscription-cta";
 export const metadata = {
   description:
     "A naturally caffeine-free coffee, made from date seeds. Roasted in small batches.",
+  alternates: { canonical: "/" },
 };
 
 export default async function HomePage() {
@@ -21,6 +23,7 @@ export default async function HomePage() {
       <Hero />
       <Features />
       <Bestsellers />
+      <Drinks />
       <Process />
       <EndOfDay />
       <Founder />

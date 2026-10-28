@@ -15,26 +15,44 @@ export type ShopifyImage = {
   height?: number | null;
 };
 
+export type ShopifySelectedOption = {
+  name: string;
+  value: string;
+};
+
+export type ShopifyVariant = {
+  id: string;
+  title: string;
+  availableForSale: boolean;
+  sku?: string | null;
+  price: ShopifyMoney;
+  selectedOptions?: ShopifySelectedOption[];
+  image?: ShopifyImage | null;
+};
+
+export type ShopifyProductOption = {
+  name: string;
+  optionValues?: { name: string }[];
+};
+
 export type ShopifyProduct = {
   id: string;
   handle: string;
   title: string;
   vendor?: string | null;
   description: string;
+  productType?: string | null;
+  tags?: string[];
   availableForSale: boolean;
   featuredImage?: ShopifyImage | null;
   images: {
     nodes: ShopifyImage[];
   };
+  options?: ShopifyProductOption[];
   priceRange: {
     minVariantPrice: ShopifyMoney;
   };
   variants: {
-    nodes: {
-      id: string;
-      title: string;
-      availableForSale: boolean;
-      price: ShopifyMoney;
-    }[];
+    nodes: ShopifyVariant[];
   };
 };

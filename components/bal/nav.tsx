@@ -111,11 +111,11 @@ export function Nav() {
 
   const links = [
     { href: "/products", label: "Shop" },
-    { href: "/#about", label: "About" },
+    { href: "/drinks", label: "Drinks" },
+    { href: "/about", label: "About" },
     { href: "/#process", label: "Process" },
-    { href: "/#journal", label: "Journal" },
-    { href: "/#subscription", label: "Subscription" },
-    { href: "/#contact", label: "Contact" },
+    { href: "/journal", label: "Journal" },
+    { href: "/contact", label: "Contact" },
   ];
 
   return (
@@ -151,7 +151,7 @@ export function Nav() {
       >
         {links.map((l) => (
           <a
-            key={l.href}
+            key={l.label}
             href={l.href}
             style={{
               transition: "color .2s ease",

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, ReactNode } from "react";
 
 const linkColumns: {
   title: string;
@@ -13,28 +13,27 @@ const linkColumns: {
       { label: "Eastern Brew", href: "/products/eastern-brew" },
       { label: "GrounDate", href: "/products/groundate" },
       { label: "DateSpresso", href: "/products/datespresso" },
-      { label: "Gift cards", href: "/#subscription" },
-      { label: "Subscription", href: "/#subscription" },
+      { label: "Café drinks", href: "/drinks" },
     ],
   },
   {
     title: "About",
     links: [
-      { label: "Our Story", href: "/#about" },
+      { label: "Our Story", href: "/about" },
       { label: "Our Process", href: "/#process" },
       { label: "Sustainability", href: "/#process" },
-      { label: "Wholesale", href: "/#contact" },
-      { label: "Careers", href: "/#contact" },
+      { label: "Wholesale", href: "/contact" },
+      { label: "Careers", href: "/contact" },
     ],
   },
   {
     title: "Help",
     links: [
-      { label: "FAQ", href: "/#contact" },
-      { label: "Shipping & Delivery", href: "/#contact" },
-      { label: "Returns & Exchanges", href: "/#contact" },
-      { label: "Track Your Order", href: "/#contact" },
-      { label: "Contact Us", href: "/#contact" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Shipping & Delivery", href: "/shipping" },
+      { label: "Returns & Exchanges", href: "/returns" },
+      { label: "Track Your Order", href: "/contact#orders" },
+      { label: "Contact Us", href: "/contact" },
     ],
   },
 ];
@@ -134,10 +133,29 @@ function LeafMark() {
   );
 }
 
+// TODO(owner): Instagram, TikTok, and Facebook profile URLs are not in the
+// repo or Shopify config. Leave href null until a real URL is known — null
+// entries are not rendered. Do not invent handles.
+const socialLinks: {
+  label: string;
+  href: string | null;
+  icon: ReactNode;
+}[] = [
+  { label: "Instagram", href: null, icon: <InstagramIcon /> },
+  { label: "Facebook", href: null, icon: <FacebookIcon /> },
+  { label: "TikTok", href: null, icon: <TikTokIcon /> },
+  {
+    label: "Email",
+    href: "mailto:judy@balcoffee.com",
+    icon: <MailIcon />,
+  },
+];
+
 export function Footer() {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
+  const year = new Date().getFullYear();
 
   return (
     <footer
@@ -208,18 +226,17 @@ export function Footer() {
               color: "#d0b890",
             }}
           >
-            <a href="#instagram" aria-label="Instagram">
-              <InstagramIcon />
-            </a>
-            <a href="#facebook" aria-label="Facebook">
-              <FacebookIcon />
-            </a>
-            <a href="#tiktok" aria-label="TikTok">
-              <TikTokIcon />
-            </a>
-            <a href="#email" aria-label="Email">
-              <MailIcon />
-            </a>
+            {socialLinks.map((social) =>
+              social.href ? (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                >
+                  {social.icon}
+                </a>
+              ) : null,
+            )}
           </div>
         </div>
 
@@ -350,7 +367,7 @@ export function Footer() {
               color: "#bfa887",
             }}
           >
-            © 2024 BAL Coffee. All rights reserved.
+            © {year} BAL Coffee. All rights reserved.
           </span>
         </div>
         <div
@@ -363,8 +380,8 @@ export function Footer() {
             color: "#bfa887",
           }}
         >
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#terms">Terms of Service</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
         </div>
       </div>
     </footer>
