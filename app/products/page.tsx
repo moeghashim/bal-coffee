@@ -7,7 +7,7 @@ import {
   ProductImagePreload,
   ProductMedia,
 } from "components/bal/product-media";
-import { getCoffeeProducts, getDrinkProducts, getProducts } from "lib/catalog";
+import { getCoffeeProducts, getProducts } from "lib/catalog";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -126,7 +126,6 @@ function Seal() {
 export default async function ProductsPage() {
   const products = await getProducts();
   const coffees = await getCoffeeProducts();
-  const drinks = await getDrinkProducts();
   const heroProduct = coffees[0] ?? products[0];
   const chips = ["All Products", ...coffees.map((product) => product.name)];
 
@@ -272,44 +271,6 @@ export default async function ProductsPage() {
                 <ProductCard key={product.slug} product={product} />
               ))}
             </div>
-            {drinks.length > 0 ? (
-              <div id="drinks" style={{ marginTop: 42 }}>
-                <h2
-                  className="serif"
-                  style={{
-                    fontSize: 32,
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                  }}
-                >
-                  Café drinks
-                </h2>
-                <p
-                  style={{
-                    marginTop: 8,
-                    maxWidth: 460,
-                    fontSize: 14,
-                    color: "var(--ink-2)",
-                  }}
-                >
-                  Choose whole milk or oat on the drink page when both are
-                  offered.
-                </p>
-                <div
-                  className="bal-products-grid"
-                  style={{
-                    marginTop: 18,
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: 18,
-                  }}
-                >
-                  {drinks.map((product) => (
-                    <ProductCard key={product.slug} product={product} />
-                  ))}
-                </div>
-              </div>
-            ) : null}
             <BenefitsStrip />
           </div>
         </section>

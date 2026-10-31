@@ -1,6 +1,5 @@
 import { AddToCartButton } from "components/bal/add-to-cart-button";
 import { BenefitsStrip } from "components/bal/benefits-strip";
-import { DrinkView } from "components/bal/drink-view";
 import { Footer } from "components/bal/footer";
 import { Grain } from "components/bal/grain";
 import { JsonLd } from "components/bal/json-ld";
@@ -40,7 +39,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const product = await getProductWithShopify(slug);
 
-  if (!product) {
+  if (!product || product.category === "drink") {
     return {};
   }
 
@@ -224,7 +223,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const product = await getProductWithShopify(slug);
 
-  if (!product) {
+  // category "drink" is set by isCafeDrink in lib/catalog.ts. Prepared drinks
+  // are event/POS only and must not render on the public site.
+  if (!product || product.category === "drink") {
     notFound();
   }
 
@@ -239,16 +240,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
       ? product.images.slice(0, 4)
       : [undefined, undefined, undefined, undefined];
   const hasLongName = product.name.length > 42;
-
-  if (product.category === "drink") {
-    return (
-      <DrinkView
-        product={product}
-        related={related}
-        shopAnalytics={shopAnalytics}
-      />
-    );
-  }
 
   return (
     <>

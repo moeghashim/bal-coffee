@@ -111,7 +111,6 @@ export function Nav() {
 
   const links = [
     { href: "/products", label: "Shop" },
-    { href: "/drinks", label: "Drinks" },
     { href: "/about", label: "About" },
     { href: "/#process", label: "Process" },
     { href: "/journal", label: "Journal" },

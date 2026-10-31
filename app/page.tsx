@@ -1,5 +1,4 @@
 import { Bestsellers } from "components/bal/bestsellers";
-import { Drinks } from "components/bal/drinks";
 import { EndOfDay } from "components/bal/end-of-day";
 import { Features } from "components/bal/features";
 import { Footer } from "components/bal/footer";
@@ -23,7 +22,6 @@ export default async function HomePage() {
       <Hero />
       <Features />
       <Bestsellers />
-      <Drinks />
       <Process />
       <EndOfDay />
       <Founder />
