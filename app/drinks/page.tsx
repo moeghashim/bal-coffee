@@ -9,6 +9,7 @@ export const metadata = {
   title: "Café drinks",
   description:
     "Café drinks from BAL Coffee, including milk options when a drink has them.",
+  robots: { index: false, follow: true },
 };
 
 export default async function DrinksPage() {
@@ -70,7 +71,7 @@ export default async function DrinksPage() {
             }}
           >
             Choose whole milk or oat on the drink page when both are offered.
-            Free shipping on orders over $50.
+            Shipping is calculated at checkout.
           </p>
           {missingPhoto ? (
             <p

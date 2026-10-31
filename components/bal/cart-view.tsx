@@ -6,7 +6,6 @@ import {
   MinusIcon,
   PlusIcon,
   TrashIcon,
-  TruckIcon,
 } from "@heroicons/react/24/outline";
 import { ProductCard } from "components/bal/product-card";
 import { ProductMedia } from "components/bal/product-media";
@@ -391,7 +390,9 @@ function OrderSummary() {
           style={{ display: "flex", justifyContent: "space-between", gap: 20 }}
         >
           <span style={{ fontSize: 14, color: "var(--ink-2)" }}>Shipping</span>
-          <span style={{ fontSize: 15, color: "var(--olive-deep)" }}>Free</span>
+          <span style={{ fontSize: 15, color: "var(--ink-2)" }}>
+            Calculated at checkout
+          </span>
         </div>
         <div
           style={{ display: "flex", justifyContent: "space-between", gap: 20 }}
@@ -430,31 +431,6 @@ function OrderSummary() {
         <span className="serif" style={{ fontSize: 36, lineHeight: 1 }}>
           {total ? formatPrice(total, { withCents: true }) : "—"}
         </span>
-      </div>
-
-      <div
-        style={{
-          marginTop: 26,
-          display: "grid",
-          gridTemplateColumns: "34px 1fr",
-          gap: 14,
-          alignItems: "center",
-          padding: "15px 16px",
-          border: "1px solid rgba(77,83,42,0.3)",
-          borderRadius: 9,
-          background: "rgba(225,220,177,0.46)",
-          color: "var(--olive-deep)",
-        }}
-      >
-        <TruckIcon width={28} />
-        <div>
-          <p style={{ fontSize: 13, lineHeight: 1.25 }}>
-            You have unlocked free shipping
-          </p>
-          <p style={{ marginTop: 4, fontSize: 12, lineHeight: 1.3 }}>
-            Enjoy free standard shipping on this order.
-          </p>
-        </div>
       </div>
 
       <a

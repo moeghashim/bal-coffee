@@ -13,6 +13,8 @@ type ProductMediaProps = {
   image?: ShopifyImage;
   fill?: boolean;
   priority?: boolean;
+  sizes?: string;
+  targetWidth?: number;
 };
 
 // Display-size hints. Non-compact = PDP main image + products hero, which sit in
@@ -48,6 +50,8 @@ export function ProductMedia({
   image,
   fill = false,
   priority = false,
+  sizes,
+  targetWidth,
 }: ProductMediaProps) {
   const productImage = image || product.images?.[0];
 
@@ -64,15 +68,15 @@ export function ProductMedia({
   }
 
   const url = productImage.url;
-  const targetWidth = compact ? 600 : 1200;
-  const layout = shopifyLayoutSize(productImage, targetWidth);
-  const sizes = compact ? COMPACT_SIZES : NON_COMPACT_SIZES;
+  const requestedWidth = targetWidth ?? (compact ? 480 : 1200);
+  const layout = shopifyLayoutSize(productImage, requestedWidth);
+  const imageSizes = sizes ?? (compact ? COMPACT_SIZES : NON_COMPACT_SIZES);
 
   return (
     <img
-      src={shopifyImageUrl(url, targetWidth)}
+      src={shopifyImageUrl(url, requestedWidth)}
       srcSet={shopifyImageSrcSet(url)}
-      sizes={sizes}
+      sizes={imageSizes}
       alt={productImageAlt(product, productImage)}
       width={layout.width}
       height={layout.height}

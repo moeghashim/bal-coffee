@@ -70,7 +70,13 @@ function HeroImage() {
     >
       <img
         src="/product-ritual.svg"
-        alt="Bal Coffee bag beside a filled mug and date seeds"
+        alt="Illustration of a BAL Coffee bag beside a filled mug and date seeds"
+        width={1200}
+        height={960}
+        sizes="(max-width: 1024px) 100vw, 55vw"
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
         style={{
           display: "block",
           width: "100%",
@@ -108,26 +114,29 @@ export function Hero() {
           className="bal-hero-copy"
           style={{ paddingLeft: 80, paddingRight: 20 }}
         >
+          <p
+            className="serif"
+            style={{
+              fontSize: "clamp(22px, 2.4vw, 28px)",
+              lineHeight: 1.15,
+              fontStyle: "italic",
+              fontWeight: 400,
+              color: "var(--terra-deep)",
+            }}
+          >
+            Coffee from the seed
+          </p>
           <h1
             className="serif"
             style={{
-              fontSize: "clamp(44px, 5.6vw, 80px)",
-              lineHeight: 1.02,
+              marginTop: 12,
+              fontSize: "clamp(36px, 4.4vw, 58px)",
+              lineHeight: 1.05,
               fontWeight: 500,
               color: "var(--ink)",
             }}
           >
-            Coffee
-            <br />
-            <span
-              style={{
-                fontStyle: "italic",
-                fontWeight: 400,
-                color: "var(--terra-deep)",
-              }}
-            >
-              from the seed
-            </span>
+            Roasted date seed coffee, naturally caffeine-free
           </h1>
           <p
             style={{
@@ -135,14 +144,12 @@ export function Hero() {
               fontSize: 16,
               lineHeight: 1.7,
               color: "var(--ink-2)",
-              maxWidth: 380,
+              maxWidth: 420,
             }}
           >
-            A naturally caffeine-free ritual,
-            <br />
-            roasted from date seeds.
-            <br />
-            Warm. Grounding. Yours, any time of day.
+            A caffeine-free coffee alternative roasted from date seeds, not
+            coffee beans. Brew it in the morning or at night. We ship 12 oz bags
+            across the United States.
           </p>
           <div
             className="bal-hero-buttons"
@@ -163,7 +170,7 @@ export function Hero() {
                 alignItems: "center",
               }}
             >
-              Shop the collection
+              Shop date seed coffee
             </a>
             <a
               href="#process"
@@ -181,7 +188,7 @@ export function Hero() {
                 gap: 10,
               }}
             >
-              How it brews
+              How it is made
               <svg
                 width="10"
                 height="10"
@@ -193,6 +200,24 @@ export function Hero() {
               </svg>
             </a>
           </div>
+          <p
+            style={{
+              marginTop: 18,
+              fontSize: 14,
+              lineHeight: 1.6,
+              color: "var(--ink-2)",
+            }}
+          >
+            <a href="/faq" style={{ color: "var(--terra-deep)" }}>
+              Is date seed coffee caffeine-free?
+            </a>
+            <span style={{ margin: "0 10px", color: "var(--ink-soft)" }}>
+              ·
+            </span>
+            <a href="/about" style={{ color: "var(--terra-deep)" }}>
+              Our story
+            </a>
+          </p>
         </div>
         <div>
           <HeroImage />

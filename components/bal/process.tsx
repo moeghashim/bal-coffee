@@ -204,9 +204,7 @@ export function Process() {
               color: "#f1eacf",
             }}
           >
-            From seed
-            <br />
-            to sacred
+            How date seed coffee is made
           </h2>
         </div>
         <div

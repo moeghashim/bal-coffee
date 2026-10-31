@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 const pages = [
   ["/about", "Rooted in heritage"],
-  ["/faq", "Frequently asked questions"],
+  ["/faq", "Date seed coffee FAQ"],
   ["/shipping", "Shipping & delivery"],
   ["/returns", "Returns & exchanges"],
   ["/contact", "Say hello"],
@@ -45,10 +45,9 @@ test("footer points at real pages and hides unknown socials", async ({
     "href",
     "/contact",
   );
-  await expect(page.getByRole("link", { name: "Our Story" })).toHaveAttribute(
-    "href",
-    "/about",
-  );
+  await expect(
+    page.getByRole("link", { name: "Our Story", exact: true }),
+  ).toHaveAttribute("href", "/about");
   await expect(page.getByRole("link", { name: "Email" })).toHaveAttribute(
     "href",
     "mailto:judy@balcoffee.com",
@@ -62,11 +61,39 @@ test("footer points at real pages and hides unknown socials", async ({
   await expect(page.getByText(/subscribe and save/i)).toHaveCount(0);
 });
 
+const freeShippingRoutes = [
+  "/",
+  "/products",
+  "/products/datespresso",
+  "/products/groundate",
+  "/products/eastern-brew",
+  "/faq",
+  "/shipping",
+  "/returns",
+  "/about",
+  "/contact",
+  "/cart",
+  "/journal",
+  "/drinks",
+] as const;
+
+test("no page claims free shipping", async ({ page }) => {
+  for (const route of freeShippingRoutes) {
+    const response = await page.goto(route);
+    expect(response?.ok(), route).toBeTruthy();
+    const html = await page.content();
+    expect(html, route).not.toMatch(/free shipping/i);
+    expect(html, route).not.toMatch(/unlocked free/i);
+    expect(html, route).not.toMatch(/shipping over \$50/i);
+  }
+});
+
 test("product page does not offer a fake subscription", async ({ page }) => {
   await page.goto("/products/datespresso");
   await expect(page.getByText(/subscribe & save/i)).toHaveCount(0);
+  await expect(page.getByText(/free shipping/i)).toHaveCount(0);
   await expect(
-    page.getByText(/free shipping on orders over \$50/i),
+    page.getByText(/shipping is calculated at checkout/i).first(),
   ).toBeVisible();
   const canonical = page.locator('link[rel="canonical"]');
   await expect(canonical).toHaveAttribute("href", /\/products\/datespresso$/);

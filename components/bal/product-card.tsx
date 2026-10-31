@@ -1,17 +1,24 @@
 import { AddToCartButton } from "components/bal/add-to-cart-button";
 import { ProductMedia } from "components/bal/product-media";
+import { brewLinkLabel } from "lib/seo";
 import { getProduct } from "lib/products";
 import type { Product } from "lib/products";
 
 type ProductCardProps = {
   product: Product;
   horizontal?: boolean;
+  showBrewLink?: boolean;
 };
 
-export function ProductCard({ product, horizontal = false }: ProductCardProps) {
+export function ProductCard({
+  product,
+  horizontal = false,
+  showBrewLink = false,
+}: ProductCardProps) {
   const localProduct = getProduct(product.slug);
   const displayName = localProduct?.name || product.name;
   const displayBlurb = localProduct?.blurb || product.blurb;
+  const brewLabel = showBrewLink ? brewLinkLabel(product.slug) : undefined;
   const multiple = (product.variants?.length ?? 0) > 1;
   const hasLongName = displayName.length > 34;
   const titleHeight = horizontal ? 60 : 58;
@@ -69,8 +76,8 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
         style={{
           display: "flex",
           flexDirection: "column",
-          height: horizontal ? "100%" : 196,
-          minHeight: horizontal ? 0 : 196,
+          height: horizontal ? "100%" : brewLabel ? 228 : 196,
+          minHeight: horizontal ? 0 : brewLabel ? 228 : 196,
           overflow: "hidden",
           padding: horizontal ? "22px 22px 18px" : "14px 18px 16px",
         }}
@@ -127,6 +134,20 @@ export function ProductCard({ product, horizontal = false }: ProductCardProps) {
             >
               {displayBlurb}
             </p>
+            {brewLabel ? (
+              <a
+                href={`/products/${product.slug}`}
+                style={{
+                  display: "inline-block",
+                  marginTop: 8,
+                  fontSize: 13,
+                  lineHeight: 1.35,
+                  color: "var(--terra-deep)",
+                }}
+              >
+                {brewLabel}
+              </a>
+            ) : null}
           </div>
           <p
             className="serif"

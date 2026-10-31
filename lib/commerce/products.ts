@@ -18,6 +18,7 @@ const PRODUCT_QUERY = gql(`
       productType
       tags
       availableForSale
+      updatedAt
       featuredImage {
         url
         altText
@@ -82,6 +83,7 @@ const CATALOG_QUERY = gql(`
         productType
         tags
         availableForSale
+        updatedAt
         featuredImage {
           url
           altText

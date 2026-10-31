@@ -7,14 +7,21 @@ import {
   ProductImagePreload,
   ProductMedia,
 } from "components/bal/product-media";
+import { JsonLd } from "components/bal/json-ld";
 import { getCoffeeProducts, getDrinkProducts, getProducts } from "lib/catalog";
-import type { Metadata } from "next";
+import {
+  breadcrumbJsonLd,
+  collectionJsonLd,
+  pageMetadata,
+  pageSeo,
+} from "lib/seo";
+import { baseUrl } from "lib/utils";
 
-export const metadata: Metadata = {
-  title: "All products",
-  description:
-    "Shop naturally caffeine-free coffee made from roasted date seeds.",
-};
+export const metadata = pageMetadata({
+  title: pageSeo.products.title,
+  description: pageSeo.products.description,
+  path: "/products",
+});
 
 function FilterIcon() {
   return (
@@ -101,7 +108,7 @@ function Seal() {
         x="62"
         y="18"
         textAnchor="middle"
-        fontFamily="IBM Plex Mono, monospace"
+        fontFamily="ui-monospace, monospace"
         fontSize="8"
         letterSpacing="2"
         fill="#766f35"
@@ -112,7 +119,7 @@ function Seal() {
         x="62"
         y="109"
         textAnchor="middle"
-        fontFamily="IBM Plex Mono, monospace"
+        fontFamily="ui-monospace, monospace"
         fontSize="8"
         letterSpacing="2"
         fill="#766f35"
@@ -132,6 +139,21 @@ export default async function ProductsPage() {
 
   return (
     <>
+      <JsonLd
+        data={collectionJsonLd(
+          baseUrl,
+          (coffees.length > 0 ? coffees : products).map((product) => ({
+            name: product.name,
+            slug: product.slug,
+          })),
+        )}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", url: baseUrl },
+          { name: "Shop", url: `${baseUrl}/products` },
+        ])}
+      />
       <ProductImagePreload image={heroProduct?.images?.[0]} />
       <Nav />
       <main>
@@ -169,19 +191,24 @@ export default async function ProductsPage() {
                   letterSpacing: 0,
                 }}
               >
-                All products
+                Shop date seed coffee
               </h1>
               <p
                 style={{
                   marginTop: 18,
-                  maxWidth: 360,
+                  maxWidth: 420,
                   fontSize: 18,
                   lineHeight: 1.35,
                   color: "var(--ink-2)",
                 }}
               >
-                Naturally caffeine-free coffee made from roasted date seeds.
-                Rooted in tradition. Roasted with care.
+                Three roasted date seed coffees, each ground for a different
+                brew. DateSpresso, GrounDate, and Eastern Brew are naturally
+                caffeine-free.{" "}
+                <a href="/faq" style={{ color: "var(--terra-deep)" }}>
+                  Questions about caffeine
+                </a>
+                .
               </p>
             </div>
             <div
@@ -206,6 +233,29 @@ export default async function ProductsPage() {
           style={{ padding: "18px 56px 20px", background: "var(--cream)" }}
         >
           <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+            <h2
+              className="serif"
+              style={{
+                fontSize: 32,
+                fontWeight: 400,
+                color: "var(--ink)",
+              }}
+            >
+              Choose by brew method
+            </h2>
+            <p
+              style={{
+                marginTop: 8,
+                maxWidth: 640,
+                fontSize: 15,
+                lineHeight: 1.5,
+                color: "var(--ink-2)",
+              }}
+            >
+              Espresso and iced drinks, drip and French press, or a
+              Turkish-style cup in a cezve. Pick the bag that matches how you
+              brew.
+            </p>
             <div
               className="bal-products-toolbar"
               style={{
@@ -269,9 +319,36 @@ export default async function ProductsPage() {
               }}
             >
               {(coffees.length > 0 ? coffees : products).map((product) => (
-                <ProductCard key={product.slug} product={product} />
+                <ProductCard
+                  key={product.slug}
+                  product={product}
+                  showBrewLink
+                />
               ))}
             </div>
+            <h2
+              className="serif"
+              style={{
+                marginTop: 36,
+                fontSize: 32,
+                fontWeight: 400,
+                color: "var(--ink)",
+              }}
+            >
+              What is in every bag
+            </h2>
+            <p
+              style={{
+                marginTop: 8,
+                maxWidth: 640,
+                fontSize: 15,
+                lineHeight: 1.5,
+                color: "var(--ink-2)",
+              }}
+            >
+              Each 12 oz bag is roasted date seeds. There are no coffee beans,
+              and the cup is naturally caffeine-free.
+            </p>
             {drinks.length > 0 ? (
               <div id="drinks" style={{ marginTop: 42 }}>
                 <h2

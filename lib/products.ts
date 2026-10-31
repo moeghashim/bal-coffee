@@ -49,6 +49,7 @@ export type Product = {
   vendor?: string;
   variantTitle?: string;
   sku?: string;
+  updatedAt?: string;
   variants?: ProductVariant[];
   priceVaries?: boolean;
   // True when Shopify has no image for this product. UI shows an illustration.

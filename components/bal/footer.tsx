@@ -21,7 +21,6 @@ const linkColumns: {
     links: [
       { label: "Our Story", href: "/about" },
       { label: "Our Process", href: "/#process" },
-      { label: "Sustainability", href: "/#process" },
       { label: "Wholesale", href: "/contact" },
       { label: "Careers", href: "/contact" },
     ],

@@ -138,7 +138,10 @@ export function DrinkView({
                     color: "var(--ink-soft)",
                   }}
                 >
-                  Free shipping on orders over $50
+                  Shipping is calculated at checkout.{" "}
+                  <a href="/shipping" style={{ color: "var(--ink)" }}>
+                    Shipping details
+                  </a>
                 </p>
               </div>
             </div>

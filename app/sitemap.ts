@@ -1,42 +1,40 @@
 import type { MetadataRoute } from "next";
-import { getProducts } from "lib/catalog";
+import { getCoffeeProducts } from "lib/catalog";
 import { baseUrl } from "lib/utils";
 
+// Copy on these routes was revised on this date. Product URLs use Shopify
+// `updatedAt` when the Storefront API returns it.
+const STATIC_LASTMOD = "2026-10-31";
+
+const staticRoutes = [
+  "",
+  "/products",
+  "/about",
+  "/faq",
+  "/shipping",
+  "/returns",
+  "/contact",
+  "/privacy",
+  "/terms",
+];
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
-  const staticRoutes = [
-    "",
-    "/products",
-    "/drinks",
-    "/journal",
-    "/about",
-    "/faq",
-    "/shipping",
-    "/returns",
-    "/contact",
-    "/privacy",
-    "/terms",
-  ];
-  let productRoutes: string[] = [];
+  let products: { slug: string; updatedAt?: string }[] = [];
   try {
-    productRoutes = (await getProducts()).map(
-      (product) => `/products/${product.slug}`,
-    );
+    products = await getCoffeeProducts();
   } catch {
-    productRoutes = [];
+    products = [];
   }
 
-  return [...staticRoutes, ...productRoutes].map((path) => ({
+  const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${baseUrl}${path}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority:
-      path === ""
-        ? 1
-        : path === "/products" || path === "/drinks"
-          ? 0.8
-          : path.startsWith("/products/")
-            ? 0.7
-            : 0.5,
+    lastModified: STATIC_LASTMOD,
   }));
+
+  const productEntries: MetadataRoute.Sitemap = products.map((product) => ({
+    url: `${baseUrl}/products/${product.slug}`,
+    ...(product.updatedAt ? { lastModified: product.updatedAt } : {}),
+  }));
+
+  return [...staticEntries, ...productEntries];
 }

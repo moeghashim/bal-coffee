@@ -144,6 +144,7 @@ function toCatalogProduct(shopifyProduct: ShopifyProduct): Product {
       min ?? Number(shopifyProduct.priceRange.minVariantPrice.amount),
     currencyCode: currency,
     availableForSale: shopifyProduct.availableForSale,
+    updatedAt: shopifyProduct.updatedAt ?? undefined,
     merchandiseId: selected?.id,
     variantTitle: selected?.title,
     productId: shopifyProduct.id,

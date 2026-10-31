@@ -43,7 +43,7 @@ export function SubscriptionCTA() {
             }}
           >
             A recurring subscription isn&apos;t available yet. Shop a bag
-            whenever you like. Free shipping on orders over $50.
+            whenever you like. Shipping is calculated at checkout.
           </p>
         </div>
         <a

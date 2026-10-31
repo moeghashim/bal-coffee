@@ -17,9 +17,12 @@ import {
 } from "lib/catalog";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
 import { ProductViewedTracker } from "components/bal/product-viewed-tracker";
-import { shopifyImageUrl } from "lib/images";
-import { productImageAlt } from "lib/products";
-import { productJsonLd } from "lib/seo";
+import {
+  breadcrumbJsonLd,
+  coffeeSeo,
+  pageMetadata,
+  productJsonLd,
+} from "lib/seo";
 import { baseUrl } from "lib/utils";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -44,24 +47,23 @@ export async function generateMetadata({
     return {};
   }
 
-  const image = product.images?.[0];
-  const description = product.description || product.blurb;
+  const seo = coffeeSeo(product.slug);
+  const description = seo?.description || product.blurb || product.name;
 
-  return {
-    title: product.name,
+  if (product.category === "drink") {
+    return {
+      title: product.name,
+      description: product.blurb || product.name,
+      robots: { index: false, follow: true },
+      alternates: { canonical: `/products/${product.slug}` },
+    };
+  }
+
+  return pageMetadata({
+    title: seo?.title || `${product.name} | BAL Coffee`,
     description,
-    alternates: { canonical: `/products/${product.slug}` },
-    openGraph: image?.url
-      ? {
-          images: [
-            {
-              url: shopifyImageUrl(image.url, 1200),
-              alt: productImageAlt(product, image),
-            },
-          ],
-        }
-      : undefined,
-  };
+    path: `/products/${product.slug}`,
+  });
 }
 
 function Stars() {
@@ -232,13 +234,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
     redirect(`/products/${product.slug}`);
   }
 
-  const related = await getRelatedProductsWithShopify(product.slug);
+  const related = (await getRelatedProductsWithShopify(product.slug)).filter(
+    (item) => item.category !== "drink",
+  );
   const shopAnalytics = await getShopAnalytics();
+  const seo = coffeeSeo(product.slug);
   const productImages =
     product.images && product.images.length > 0
       ? product.images.slice(0, 4)
       : [undefined, undefined, undefined, undefined];
-  const hasLongName = product.name.length > 42;
+  const heading = seo?.h1 ?? product.name;
+  const hasLongName = heading.length > 42;
+  const productUrl = `${baseUrl}/products/${product.slug}`;
 
   if (product.category === "drink") {
     return (
@@ -252,8 +259,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <>
+      <JsonLd data={productJsonLd(product, productUrl, seo?.description)} />
       <JsonLd
-        data={productJsonLd(product, `${baseUrl}/products/${product.slug}`)}
+        data={breadcrumbJsonLd([
+          { name: "Home", url: baseUrl },
+          { name: "Shop", url: `${baseUrl}/products` },
+          { name: product.name, url: productUrl },
+        ])}
       />
       <ProductImagePreload image={product.images?.[0]} />
       {shopAnalytics && product.productId && product.merchandiseId ? (
@@ -354,7 +366,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         aspectRatio: "1.35 / 1",
                       }}
                     >
-                      <ProductMedia product={product} image={image} compact />
+                      <ProductMedia
+                        product={product}
+                        image={image}
+                        compact
+                        targetWidth={480}
+                        sizes="(max-width: 768px) 22vw, 180px"
+                      />
                     </div>
                   ))}
                 </div>
@@ -373,7 +391,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     letterSpacing: 0,
                   }}
                 >
-                  {product.name}
+                  {heading}
                 </h1>
                 <div
                   className="bal-product-purchase-grid"
@@ -415,25 +433,36 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     gap: 9,
                   }}
                 >
-                  {[
-                    "Caffeine-Free",
-                    "Prebiotic-Rich",
-                    "Roasted Date Seeds",
-                  ].map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        padding: "5px 12px",
-                        borderRadius: 999,
-                        border: "1px solid rgba(115,116,59,0.35)",
-                        background: "#e9dec3",
-                        color: "#5f6030",
-                        fontSize: 12,
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  <a
+                    href="/faq#caffeine"
+                    style={{
+                      padding: "5px 12px",
+                      borderRadius: 999,
+                      border: "1px solid rgba(115,116,59,0.35)",
+                      background: "#e9dec3",
+                      color: "#5f6030",
+                      fontSize: 12,
+                    }}
+                  >
+                    Caffeine-free
+                  </a>
+                  {["Prebiotic-Rich", "Roasted date seeds", "12 oz bag"].map(
+                    (tag) => (
+                      <span
+                        key={tag}
+                        style={{
+                          padding: "5px 12px",
+                          borderRadius: 999,
+                          border: "1px solid rgba(115,116,59,0.35)",
+                          background: "#e9dec3",
+                          color: "#5f6030",
+                          fontSize: 12,
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ),
+                  )}
                 </div>
 
                 <div
@@ -479,10 +508,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       style={{
                         marginTop: 14,
                         fontSize: 13,
+                        lineHeight: 1.5,
                         color: "var(--ink-soft)",
                       }}
                     >
-                      Free shipping on orders over $50
+                      Shipping is calculated at checkout.{" "}
+                      <a href="/shipping" style={{ color: "var(--ink)" }}>
+                        Shipping details
+                      </a>
+                      .{" "}
+                      <a href="/faq#decaf" style={{ color: "var(--ink)" }}>
+                        How it differs from decaf
+                      </a>
+                      .
                     </p>
                   </div>
 
@@ -494,12 +532,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       background: "rgba(255,252,246,0.72)",
                     }}
                   >
-                    <p
+                    <h2
                       className="serif"
-                      style={{ fontSize: 18, color: "var(--ink)" }}
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 400,
+                        color: "var(--ink)",
+                      }}
                     >
-                      Flavor Notes
-                    </p>
+                      What it tastes like
+                    </h2>
                     <p
                       style={{
                         marginTop: 18,
@@ -591,7 +633,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     letterSpacing: 0,
                   }}
                 >
-                  How to brew
+                  {seo?.brewHeading ?? "How to brew"}
                 </h2>
                 <div
                   style={{
@@ -645,7 +687,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     letterSpacing: 0,
                   }}
                 >
-                  What&apos;s inside
+                  Ingredients and nutrition
                 </h2>
                 <p
                   style={{
@@ -826,17 +868,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   letterSpacing: 0,
                 }}
               >
-                Frequently Asked Questions
+                Frequently asked questions
               </h2>
               <div style={{ marginTop: 12, display: "grid", gap: 8 }}>
                 {[
-                  `Is ${product.name} really caffeine-free?`,
-                  "What does it taste like?",
-                  "How should I store it?",
-                  "Is it safe during pregnancy?",
+                  {
+                    href: "/faq#caffeine",
+                    label: `Is ${product.name} caffeine-free?`,
+                  },
+                  {
+                    href: "/faq#taste",
+                    label: "What does date seed coffee taste like?",
+                  },
+                  { href: "/faq#brew", label: "How do I brew it?" },
+                  {
+                    href: "/faq#shipping",
+                    label: "How much is shipping?",
+                  },
                 ].map((question) => (
-                  <div
-                    key={question}
+                  <a
+                    key={question.href}
+                    href={question.href}
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -848,9 +900,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       color: "var(--ink-2)",
                     }}
                   >
-                    <span>{question}</span>
-                    <span>+</span>
-                  </div>
+                    <span>{question.label}</span>
+                    <span aria-hidden>→</span>
+                  </a>
                 ))}
               </div>
             </div>
