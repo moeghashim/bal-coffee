@@ -3,7 +3,8 @@ import { getCoffeeProducts } from "lib/catalog";
 import { baseUrl } from "lib/utils";
 
 // Copy on these routes was revised on this date. Product URLs use Shopify
-// `updatedAt` when the Storefront API returns it.
+// `updatedAt` when the Storefront API returns it. Café drinks and /journal
+// stay out of the sitemap.
 const STATIC_LASTMOD = "2026-10-31";
 
 const staticRoutes = [

@@ -8,7 +8,7 @@ import {
   ProductMedia,
 } from "components/bal/product-media";
 import { JsonLd } from "components/bal/json-ld";
-import { getCoffeeProducts, getDrinkProducts, getProducts } from "lib/catalog";
+import { getCoffeeProducts, getProducts } from "lib/catalog";
 import {
   breadcrumbJsonLd,
   collectionJsonLd,
@@ -133,7 +133,6 @@ function Seal() {
 export default async function ProductsPage() {
   const products = await getProducts();
   const coffees = await getCoffeeProducts();
-  const drinks = await getDrinkProducts();
   const heroProduct = coffees[0] ?? products[0];
   const chips = ["All Products", ...coffees.map((product) => product.name)];
 
@@ -349,44 +348,6 @@ export default async function ProductsPage() {
               Each 12 oz bag is roasted date seeds. There are no coffee beans,
               and the cup is naturally caffeine-free.
             </p>
-            {drinks.length > 0 ? (
-              <div id="drinks" style={{ marginTop: 42 }}>
-                <h2
-                  className="serif"
-                  style={{
-                    fontSize: 32,
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                  }}
-                >
-                  Café drinks
-                </h2>
-                <p
-                  style={{
-                    marginTop: 8,
-                    maxWidth: 460,
-                    fontSize: 14,
-                    color: "var(--ink-2)",
-                  }}
-                >
-                  Choose whole milk or oat on the drink page when both are
-                  offered.
-                </p>
-                <div
-                  className="bal-products-grid"
-                  style={{
-                    marginTop: 18,
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: 18,
-                  }}
-                >
-                  {drinks.map((product) => (
-                    <ProductCard key={product.slug} product={product} />
-                  ))}
-                </div>
-              </div>
-            ) : null}
             <BenefitsStrip />
           </div>
         </section>

@@ -12,7 +12,13 @@ const productNames = ["DateSpresso", "GrounDate", "Eastern Brew"] as const;
 
 test("the Shopify handle arabica resolves to the Eastern Brew URL", async ({
   page,
+  request,
 }) => {
+  const redirect = await request.get("/products/arabica", { maxRedirects: 0 });
+  expect(redirect.status()).toBe(308);
+  expect(redirect.headers().location ?? "").toMatch(
+    /\/products\/eastern-brew$/,
+  );
   const response = await page.goto("/products/arabica");
   expect(response?.ok()).toBeTruthy();
   await expect(page).toHaveURL(/\/products\/eastern-brew$/);

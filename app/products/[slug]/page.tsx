@@ -24,7 +24,7 @@ import {
 } from "lib/seo";
 import { baseUrl } from "lib/utils";
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 type ProductPageProps = {
   params: Promise<{
@@ -193,12 +193,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const product = await getProductWithShopify(slug);
 
-  if (!product) {
+  // category "drink" is set by isCafeDrink in lib/catalog.ts. Prepared drinks
+  // are event/POS only and must not render on the public site.
+  if (!product || product.category === "drink") {
     notFound();
   }
 
   if (product.slug !== slug) {
-    redirect(`/products/${product.slug}`);
+    permanentRedirect(`/products/${product.slug}`);
   }
 
   const related = (await getRelatedProductsWithShopify(product.slug)).filter(
@@ -213,10 +215,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const heading = seo?.h1 ?? product.name;
   const hasLongName = heading.length > 42;
   const productUrl = `${baseUrl}/products/${product.slug}`;
-
-  if (product.category === "drink") {
-    notFound();
-  }
 
   return (
     <>
