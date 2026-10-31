@@ -13,7 +13,6 @@ const linkColumns: {
       { label: "Eastern Brew", href: "/products/eastern-brew" },
       { label: "GrounDate", href: "/products/groundate" },
       { label: "DateSpresso", href: "/products/datespresso" },
-      { label: "Café drinks", href: "/drinks" },
     ],
   },
   {

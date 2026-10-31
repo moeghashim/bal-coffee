@@ -15,9 +15,12 @@ import type { ShopifyImage, ShopifyProduct, ShopifyVariant } from "lib/shopify";
 
 /**
  * Shopify-backed catalog reads. Editorial copy for the bagged coffees lives in
- * lib/products.ts. Everything else published to the storefront — including café
- * drinks — is built from Shopify fields so prices, variants, and images stay
- * in sync with the shop.
+ * lib/products.ts. Everything else published to the shop is built from Shopify
+ * fields so prices, variants, and images stay in sync.
+ *
+ * Café drinks (isCafeDrink) are sold only at events and POS. They are kept out
+ * of the public catalog: listings, related products, the sitemap, and JSON-LD.
+ * Product pages call notFound() when category is "drink".
  */
 
 function normalizeDescription(description: string) {
@@ -188,20 +191,22 @@ async function loadShopifyProducts() {
   }
 }
 
-export const getProducts = cache(async () => {
+const getCatalog = cache(async () => {
   const nodes = await loadShopifyProducts();
   return orderCatalog(nodes.map(toCatalogProduct));
+});
+
+function isPublicCatalogProduct(product: Product) {
+  return product.category !== "drink";
+}
+
+export const getProducts = cache(async () => {
+  return (await getCatalog()).filter(isPublicCatalogProduct);
 });
 
 export async function getCoffeeProducts() {
   return (await getProducts()).filter(
     (product) => product.category === "coffee",
-  );
-}
-
-export async function getDrinkProducts() {
-  return (await getProducts()).filter(
-    (product) => product.category === "drink",
   );
 }
 
@@ -212,7 +217,7 @@ export async function getFeaturedProducts() {
 }
 
 export async function getProductWithShopify(slug: string) {
-  const products = await getProducts();
+  const products = await getCatalog();
   return products.find(
     (product) => product.slug === slug || product.shopifyHandle === slug,
   );

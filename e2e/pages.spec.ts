@@ -8,7 +8,6 @@ const pages = [
   ["/contact", "Say hello"],
   ["/privacy", "Privacy Policy"],
   ["/terms", "Terms of Service"],
-  ["/drinks", "Café drinks"],
 ] as const;
 
 for (const [path, heading] of pages) {
