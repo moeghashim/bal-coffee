@@ -16,12 +16,15 @@ import {
 } from "lib/catalog";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
 import { ProductViewedTracker } from "components/bal/product-viewed-tracker";
-import { shopifyImageUrl } from "lib/images";
-import { productImageAlt } from "lib/products";
-import { productJsonLd } from "lib/seo";
+import {
+  breadcrumbJsonLd,
+  coffeeSeo,
+  pageMetadata,
+  productJsonLd,
+} from "lib/seo";
 import { baseUrl } from "lib/utils";
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 type ProductPageProps = {
   params: Promise<{
@@ -43,32 +46,14 @@ export async function generateMetadata({
     return {};
   }
 
-  const image = product.images?.[0];
-  const description = product.description || product.blurb;
+  const seo = coffeeSeo(product.slug);
+  const description = seo?.description || product.blurb || product.name;
 
-  return {
-    title: product.name,
+  return pageMetadata({
+    title: seo?.title || `${product.name} | BAL Coffee`,
     description,
-    alternates: { canonical: `/products/${product.slug}` },
-    openGraph: image?.url
-      ? {
-          images: [
-            {
-              url: shopifyImageUrl(image.url, 1200),
-              alt: productImageAlt(product, image),
-            },
-          ],
-        }
-      : undefined,
-  };
-}
-
-function Stars() {
-  return (
-    <span style={{ color: "#6c6c2f", letterSpacing: 2, fontSize: 15 }}>
-      ★★★★★
-    </span>
-  );
+    path: `/products/${product.slug}`,
+  });
 }
 
 function CheckIcon() {
@@ -204,21 +189,6 @@ function StoryBand() {
   );
 }
 
-const reviews = [
-  {
-    author: "Sarah M.",
-    quote: "Rich, bold, and so satisfying. My new nightly ritual!",
-  },
-  {
-    author: "James L.",
-    quote: "Love that it's caffeine-free but still feels like a real espresso.",
-  },
-  {
-    author: "Priya K.",
-    quote: "Smooth, delicious, and I feel great after every cup.",
-  },
-];
-
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const product = await getProductWithShopify(slug);
@@ -230,21 +200,31 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   if (product.slug !== slug) {
-    redirect(`/products/${product.slug}`);
+    permanentRedirect(`/products/${product.slug}`);
   }
 
-  const related = await getRelatedProductsWithShopify(product.slug);
+  const related = (await getRelatedProductsWithShopify(product.slug)).filter(
+    (item) => item.category !== "drink",
+  );
   const shopAnalytics = await getShopAnalytics();
+  const seo = coffeeSeo(product.slug);
   const productImages =
     product.images && product.images.length > 0
       ? product.images.slice(0, 4)
       : [undefined, undefined, undefined, undefined];
-  const hasLongName = product.name.length > 42;
+  const heading = seo?.h1 ?? product.name;
+  const hasLongName = heading.length > 42;
+  const productUrl = `${baseUrl}/products/${product.slug}`;
 
   return (
     <>
+      <JsonLd data={productJsonLd(product, productUrl, seo?.description)} />
       <JsonLd
-        data={productJsonLd(product, `${baseUrl}/products/${product.slug}`)}
+        data={breadcrumbJsonLd([
+          { name: "Home", url: baseUrl },
+          { name: "Shop", url: `${baseUrl}/products` },
+          { name: product.name, url: productUrl },
+        ])}
       />
       <ProductImagePreload image={product.images?.[0]} />
       {shopAnalytics && product.productId && product.merchandiseId ? (
@@ -345,7 +325,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         aspectRatio: "1.35 / 1",
                       }}
                     >
-                      <ProductMedia product={product} image={image} compact />
+                      <ProductMedia
+                        product={product}
+                        image={image}
+                        compact
+                        targetWidth={480}
+                        sizes="(max-width: 768px) 22vw, 180px"
+                      />
                     </div>
                   ))}
                 </div>
@@ -364,23 +350,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     letterSpacing: 0,
                   }}
                 >
-                  {product.name}
+                  {heading}
                 </h1>
-                <div
-                  className="bal-product-purchase-grid"
-                  style={{
-                    marginTop: 12,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                  }}
-                >
-                  <Stars />
-                  <span style={{ fontSize: 13, color: "var(--ink-soft)" }}>
-                    {/* Hardcoded. Not loaded from Shopify or a reviews app. */}
-                    (842 reviews)
-                  </span>
-                </div>
                 <p
                   className="serif"
                   style={{ marginTop: 18, fontSize: 28, color: "var(--ink)" }}
@@ -406,11 +377,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     gap: 9,
                   }}
                 >
-                  {[
-                    "Caffeine-Free",
-                    "Prebiotic-Rich",
-                    "Roasted Date Seeds",
-                  ].map((tag) => (
+                  <a
+                    href="/faq#caffeine"
+                    style={{
+                      padding: "5px 12px",
+                      borderRadius: 999,
+                      border: "1px solid rgba(115,116,59,0.35)",
+                      background: "#e9dec3",
+                      color: "#5f6030",
+                      fontSize: 12,
+                    }}
+                  >
+                    Caffeine-free
+                  </a>
+                  {["Roasted date seeds", "12 oz bag"].map((tag) => (
                     <span
                       key={tag}
                       style={{
@@ -470,10 +450,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       style={{
                         marginTop: 14,
                         fontSize: 13,
+                        lineHeight: 1.5,
                         color: "var(--ink-soft)",
                       }}
                     >
-                      Free shipping on orders over $50
+                      Shipping is calculated at checkout.{" "}
+                      <a href="/shipping" style={{ color: "var(--ink)" }}>
+                        Shipping details
+                      </a>
+                      .{" "}
+                      <a href="/faq#decaf" style={{ color: "var(--ink)" }}>
+                        How it differs from decaf
+                      </a>
+                      .
                     </p>
                   </div>
 
@@ -485,12 +474,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       background: "rgba(255,252,246,0.72)",
                     }}
                   >
-                    <p
+                    <h2
                       className="serif"
-                      style={{ fontSize: 18, color: "var(--ink)" }}
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 400,
+                        color: "var(--ink)",
+                      }}
                     >
-                      Flavor Notes
-                    </p>
+                      What it tastes like
+                    </h2>
                     <p
                       style={{
                         marginTop: 18,
@@ -499,16 +492,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       }}
                     >
                       {product.notes.join(" · ")}
-                    </p>
-                    <p
-                      style={{
-                        marginTop: 14,
-                        fontSize: 12.5,
-                        lineHeight: 1.5,
-                        color: "var(--ink-2)",
-                      }}
-                    >
-                      Dark chocolate, roasted nuts, date caramel, smooth finish.
                     </p>
                   </aside>
                 </div>
@@ -543,7 +526,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     letterSpacing: 0,
                   }}
                 >
-                  Why you&apos;ll love it
+                  In this bag
                 </h2>
                 <div style={{ marginTop: 18, display: "grid", gap: 12 }}>
                   {product.benefits.map((benefit) => (
@@ -582,7 +565,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     letterSpacing: 0,
                   }}
                 >
-                  How to brew
+                  {seo?.brewHeading ?? "How to brew"}
                 </h2>
                 <div
                   style={{
@@ -636,7 +619,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     letterSpacing: 0,
                   }}
                 >
-                  What&apos;s inside
+                  Ingredients
                 </h2>
                 <p
                   style={{
@@ -656,26 +639,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     color: "var(--ink-2)",
                   }}
                 >
-                  That&apos;s it. No additives. No caffeine. Just pure roasted
-                  goodness.
+                  Roasted date seeds. No coffee beans.
                 </p>
-                <div style={{ marginTop: 14, display: "grid", gap: 5 }}>
-                  {product.nutrition.map((item) => (
-                    <p
-                      key={item.label}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        borderBottom: "1px solid rgba(77,56,36,0.12)",
-                        fontSize: 12,
-                        color: "var(--ink-2)",
-                      }}
-                    >
-                      <span>{item.label}</span>
-                      <span>{item.value}</span>
-                    </p>
-                  ))}
-                </div>
               </section>
             </div>
           </div>
@@ -728,122 +693,63 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </section>
 
         <section
-          className="bal-product-reviews-section"
+          className="bal-product-faq-section"
           style={{ padding: "18px 56px 0" }}
         >
-          <div
-            className="bal-product-reviews-grid"
-            style={{
-              maxWidth: 1180,
-              margin: "0 auto",
-              display: "grid",
-              gridTemplateColumns: "1.35fr 1fr",
-              gap: 22,
-            }}
-          >
-            <div>
-              <div
-                className="bal-product-section-heading"
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <h2
-                  className="serif"
+          <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+            <h2
+              className="serif"
+              style={{
+                fontSize: 22,
+                fontWeight: 400,
+                color: "var(--ink)",
+                letterSpacing: 0,
+              }}
+            >
+              Frequently asked questions
+            </h2>
+            <div
+              style={{
+                marginTop: 12,
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: 8,
+              }}
+              className="bal-product-faq-grid"
+            >
+              {[
+                {
+                  href: "/faq#caffeine",
+                  label: `Is ${product.name} caffeine-free?`,
+                },
+                {
+                  href: "/faq#taste",
+                  label: "What does date seed coffee taste like?",
+                },
+                { href: "/faq#brew", label: "How do I brew it?" },
+                {
+                  href: "/faq#shipping",
+                  label: "How much is shipping?",
+                },
+              ].map((question) => (
+                <a
+                  key={question.href}
+                  href={question.href}
                   style={{
-                    fontSize: 22,
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                    letterSpacing: 0,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "10px 14px",
+                    border: "1px solid rgba(77,56,36,0.14)",
+                    borderRadius: 7,
+                    background: "rgba(255,252,246,0.76)",
+                    fontSize: 13,
+                    color: "var(--ink-2)",
                   }}
                 >
-                  What our customers say
-                </h2>
-                <a
-                  href="#reviews"
-                  style={{ fontSize: 12, color: "var(--ink)" }}
-                >
-                  View all reviews →
+                  <span>{question.label}</span>
+                  <span aria-hidden>→</span>
                 </a>
-              </div>
-              <div
-                className="bal-product-testimonials-grid"
-                style={{
-                  marginTop: 12,
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: 14,
-                }}
-              >
-                {reviews.map((review) => (
-                  <article
-                    key={review.author}
-                    style={{
-                      padding: 18,
-                      border: "1px solid rgba(77,56,36,0.16)",
-                      borderRadius: 8,
-                      background: "rgba(255,252,246,0.76)",
-                    }}
-                  >
-                    <Stars />
-                    <p
-                      style={{
-                        marginTop: 10,
-                        fontSize: 12.5,
-                        lineHeight: 1.4,
-                        color: "var(--ink-2)",
-                      }}
-                    >
-                      &quot;{review.quote}&quot;
-                    </p>
-                    <p
-                      style={{
-                        marginTop: 14,
-                        fontSize: 12,
-                        color: "var(--ink-soft)",
-                      }}
-                    >
-                      {review.author}
-                    </p>
-                  </article>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h2
-                className="serif"
-                style={{
-                  fontSize: 22,
-                  fontWeight: 400,
-                  color: "var(--ink)",
-                  letterSpacing: 0,
-                }}
-              >
-                Frequently Asked Questions
-              </h2>
-              <div style={{ marginTop: 12, display: "grid", gap: 8 }}>
-                {[
-                  `Is ${product.name} really caffeine-free?`,
-                  "What does it taste like?",
-                  "How should I store it?",
-                  "Is it safe during pregnancy?",
-                ].map((question) => (
-                  <div
-                    key={question}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      padding: "10px 14px",
-                      border: "1px solid rgba(77,56,36,0.14)",
-                      borderRadius: 7,
-                      background: "rgba(255,252,246,0.76)",
-                      fontSize: 13,
-                      color: "var(--ink-2)",
-                    }}
-                  >
-                    <span>{question}</span>
-                    <span>+</span>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </section>

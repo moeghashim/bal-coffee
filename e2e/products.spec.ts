@@ -10,11 +10,27 @@ import { test, expect } from "@playwright/test";
 const productSlugs = ["datespresso", "groundate", "eastern-brew"] as const;
 const productNames = ["DateSpresso", "GrounDate", "Eastern Brew"] as const;
 
+test("the Shopify handle arabica resolves to the Eastern Brew URL", async ({
+  page,
+  request,
+}) => {
+  const redirect = await request.get("/products/arabica", { maxRedirects: 0 });
+  expect(redirect.status()).toBe(308);
+  expect(redirect.headers().location ?? "").toMatch(
+    /\/products\/eastern-brew$/,
+  );
+  const response = await page.goto("/products/arabica");
+  expect(response?.ok()).toBeTruthy();
+  await expect(page).toHaveURL(/\/products\/eastern-brew$/);
+  const canonical = page.locator('link[rel="canonical"]');
+  await expect(canonical).toHaveAttribute("href", /\/products\/eastern-brew$/);
+});
+
 test("products page lists the live catalog", async ({ page }) => {
   const response = await page.goto("/products");
   expect(response?.ok()).toBeTruthy();
   await expect(
-    page.getByRole("heading", { name: "All products", level: 1 }),
+    page.getByRole("heading", { name: "Shop date seed coffee", level: 1 }),
   ).toBeVisible();
   for (const name of productNames) {
     await expect(page.getByText(name, { exact: false }).first()).toBeVisible();

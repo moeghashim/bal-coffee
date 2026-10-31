@@ -9,7 +9,16 @@ import { test, expect } from "@playwright/test";
 test("homepage renders with nav and hero", async ({ page }) => {
   const response = await page.goto("/");
   expect(response?.ok()).toBeTruthy();
-  await expect(page).toHaveTitle(/Bal/);
+  await expect(page).toHaveTitle(
+    "Date Seed Coffee | Caffeine-Free Coffee Alternative | BAL",
+  );
+  const description = await page
+    .locator('meta[name="description"]')
+    .getAttribute("content");
+  expect(description?.length ?? 999).toBeLessThanOrEqual(155);
+  await expect(page.locator("h1")).toContainText(
+    "Roasted date seed coffee, naturally caffeine-free",
+  );
   // Primary nav shop link is present
   await expect(page.getByRole("link", { name: "Shop" }).first()).toBeVisible();
 });

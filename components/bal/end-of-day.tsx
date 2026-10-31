@@ -195,8 +195,8 @@ export function EndOfDay() {
               maxWidth: 380,
             }}
           >
-            No caffeine. No jitters. Just a warm, comforting cup that helps you
-            unwind and reconnect with what matters.
+            No coffee beans, so the cup has no caffeine. A warm cup for the end
+            of the day.
           </p>
           <div
             className="bal-endofday-perks"
@@ -209,8 +209,8 @@ export function EndOfDay() {
             }}
           >
             {[
-              { icon: <CalmingIcon />, label: "Calming\nby nature" },
-              { icon: <MoonIcon />, label: "Gentle on\nyour sleep" },
+              { icon: <CalmingIcon />, label: "No\ncaffeine" },
+              { icon: <MoonIcon />, label: "Any time\nof day" },
               { icon: <TreeIcon />, label: "Rooted in\ntradition" },
             ].map((it, i) => (
               <div key={i} style={{ textAlign: "center" }}>

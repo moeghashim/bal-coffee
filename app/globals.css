@@ -13,9 +13,11 @@
   --line-soft: rgba(42, 31, 23, 0.09);
   --paper-grain: rgba(42, 31, 23, 0.03);
 
-  --font-fraunces: "Fraunces", serif;
-  --font-plex-mono: "IBM Plex Mono", monospace;
-  --font-inter-tight: "Inter Tight", system-ui, sans-serif;
+  --font-fraunces:
+    var(--font-fraunces-loaded), "Iowan Old Style", "Palatino Linotype",
+    Palatino, serif;
+  --font-inter-tight: var(--font-inter-loaded), system-ui, sans-serif;
+  --font-plex-mono: var(--font-inter-tight);
 }
 
 *,
@@ -131,6 +133,9 @@ input {
     grid-template-columns: 1fr !important;
     gap: 32px !important;
   }
+  .bal-hero-grid > :last-child {
+    order: -1;
+  }
   .bal-hero-copy {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -229,7 +234,8 @@ input {
   .bal-products-shop,
   .bal-product-detail-section,
   .bal-product-related-section,
-  .bal-product-reviews-section {
+  .bal-product-reviews-section,
+  .bal-product-faq-section {
     padding-left: 24px !important;
     padding-right: 24px !important;
   }
@@ -290,7 +296,8 @@ input {
     gap: 16px !important;
   }
   .bal-product-related-grid,
-  .bal-product-testimonials-grid {
+  .bal-product-testimonials-grid,
+  .bal-product-faq-grid {
     grid-template-columns: 1fr !important;
   }
   .bal-product-card-horizontal {
@@ -435,7 +442,8 @@ input {
   .bal-products-shop,
   .bal-product-detail-section,
   .bal-product-related-section,
-  .bal-product-reviews-section {
+  .bal-product-reviews-section,
+  .bal-product-faq-section {
     padding-left: 16px !important;
     padding-right: 16px !important;
   }

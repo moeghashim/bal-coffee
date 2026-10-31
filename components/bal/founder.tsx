@@ -92,7 +92,7 @@ export function Founder() {
                 color: "var(--ink-soft)",
               }}
             >
-              Our story
+              Judy Ghashim
             </p>
             <h2
               className="serif"
@@ -105,9 +105,7 @@ export function Founder() {
                 color: "var(--ink)",
               }}
             >
-              Rooted in heritage,
-              <br />
-              crafted with heart
+              Our story
             </h2>
             <p
               style={{
@@ -120,7 +118,11 @@ export function Founder() {
             >
               BAL Coffee was born from a simple belief: the best rituals come
               from nature. As a mother and coffee lover, I created a brew that
-              brings people together—anytime, day or night.
+              brings people together—anytime, day or night.{" "}
+              <a href="/about" style={{ color: "var(--terra-deep)" }}>
+                Read the full story
+              </a>
+              .
             </p>
             <p
               className="serif"
@@ -183,8 +185,8 @@ export function Founder() {
                 fontWeight: 400,
               }}
             >
-              I wanted to create a coffee that my family could enjoy at any time
-              of day—one that honors our heritage and the goodness of the land.
+              I wanted a coffee my family could drink at any time of day, one
+              that honors our heritage.
             </p>
             <BeansAccent />
           </div>

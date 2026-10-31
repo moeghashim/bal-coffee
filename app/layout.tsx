@@ -1,22 +1,50 @@
 import { ReactNode, Suspense } from "react";
+import { Fraunces, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { JsonLd } from "components/bal/json-ld";
-import { organizationJsonLd } from "lib/seo";
+import { organizationJsonLd, pageSeo, websiteJsonLd } from "lib/seo";
 import { baseUrl } from "lib/utils";
 import { CartProvider } from "lib/commerce/cart-client";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
 import { AnalyticsTracker } from "components/bal/analytics-tracker";
 import { CartAnalyticsBridge } from "components/bal/cart-analytics-bridge";
 
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  variable: "--font-fraunces-loaded",
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+});
+
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  variable: "--font-inter-loaded",
+  weight: ["400", "500", "600"],
+});
+
 export const metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Bal — Coffee from the seed",
-    template: "%s | Bal Coffee",
+    default: pageSeo.home.title,
+    template: "%s | BAL Coffee",
   },
-  description:
-    "A naturally caffeine-free coffee, made from a single native seed. Hand-roasted in small lots.",
-  openGraph: { type: "website" },
+  description: pageSeo.home.description,
+  openGraph: {
+    type: "website" as const,
+    siteName: "BAL Coffee",
+    locale: "en_US",
+    title: pageSeo.home.title,
+    description: pageSeo.home.description,
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: pageSeo.home.title,
+    description: pageSeo.home.description,
+  },
   robots: { follow: true, index: true },
   alternates: { canonical: "./" },
 };
@@ -29,29 +57,10 @@ export default async function RootLayout({
   const shopAnalytics = await getShopAnalytics();
 
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=IBM+Plex+Mono:wght@300;400;500&family=Inter+Tight:wght@300;400;500;600&display=swap"
-          rel="stylesheet"
-        />
-        {/* Shopify Standard Actions runtime — performs the cart mutations the
-            Hydrogen cart store dispatches (add/update/remove). Must be a module
-            script so its internal relative imports resolve from the CDN. */}
-        <script
-          type="module"
-          src="https://cdn.shopify.com/storefront/standard-actions.js"
-          crossOrigin="anonymous"
-        />
-      </head>
+    <html lang="en" className={`${fraunces.variable} ${interTight.variable}`}>
       <body>
         <JsonLd data={organizationJsonLd(baseUrl)} />
+        <JsonLd data={websiteJsonLd(baseUrl)} />
         {shopAnalytics ? (
           <Suspense fallback={null}>
             <AnalyticsTracker shop={shopAnalytics} />
@@ -61,6 +70,14 @@ export default async function RootLayout({
           <CartAnalyticsBridge />
           {children}
         </CartProvider>
+        {/* Shopify Standard Actions runtime — performs the cart mutations the
+            Hydrogen cart store dispatches (add/update/remove). A module script
+            at the end of body so it does not sit in front of the hero image. */}
+        <script
+          type="module"
+          src="https://cdn.shopify.com/storefront/standard-actions.js"
+          crossOrigin="anonymous"
+        />
       </body>
     </html>
   );

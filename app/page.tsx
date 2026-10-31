@@ -8,12 +8,13 @@ import { Hero } from "components/bal/hero";
 import { Nav } from "components/bal/nav";
 import { Process } from "components/bal/process";
 import { SubscriptionCTA } from "components/bal/subscription-cta";
+import { pageMetadata, pageSeo } from "lib/seo";
 
-export const metadata = {
-  description:
-    "A naturally caffeine-free coffee, made from date seeds. Roasted in small batches.",
-  alternates: { canonical: "/" },
-};
+export const metadata = pageMetadata({
+  title: pageSeo.home.title,
+  description: pageSeo.home.description,
+  path: "/",
+});
 
 export default async function HomePage() {
   return (

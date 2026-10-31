@@ -94,7 +94,7 @@ function ProductBag({ product }: { product: Product }) {
         x="206"
         y="124"
         textAnchor="middle"
-        fontFamily="IBM Plex Mono, monospace"
+        fontFamily="ui-monospace, monospace"
         fontSize="9"
         letterSpacing="5"
         fill={labelColor}
@@ -116,7 +116,7 @@ function ProductBag({ product }: { product: Product }) {
         x="206"
         y="188"
         textAnchor="middle"
-        fontFamily="IBM Plex Mono, monospace"
+        fontFamily="ui-monospace, monospace"
         fontSize="8"
         letterSpacing="1.6"
         fill={subColor}
@@ -202,7 +202,7 @@ export function ProductVisual({
           x="210"
           y="292"
           textAnchor="middle"
-          fontFamily="IBM Plex Mono, monospace"
+          fontFamily="ui-monospace, monospace"
           fontSize="11"
           letterSpacing="3"
           fill="#6f4d2f"

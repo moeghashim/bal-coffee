@@ -93,7 +93,7 @@ test("coffee products still render", async ({ page }) => {
   const listing = await page.goto("/products");
   expect(listing?.ok()).toBeTruthy();
   await expect(
-    page.getByRole("heading", { name: "All products", level: 1 }),
+    page.getByRole("heading", { name: "Shop date seed coffee", level: 1 }),
   ).toBeVisible();
   for (const name of ["DateSpresso", "GrounDate", "Eastern Brew"]) {
     await expect(page.getByText(name, { exact: false }).first()).toBeVisible();
@@ -105,5 +105,5 @@ test("coffee products still render", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: /add to cart/i }).first(),
   ).toBeVisible();
-  await expect(page.getByText("(842 reviews)")).toBeVisible();
+  await expect(page.getByText("(842 reviews)")).toHaveCount(0);
 });

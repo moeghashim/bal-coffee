@@ -56,10 +56,20 @@ export async function Bestsellers() {
               letterSpacing: 0,
             }}
           >
-            Our most
-            <br />
-            loved brews
+            Our date seed coffees
           </h2>
+          <p
+            className="serif"
+            style={{
+              marginTop: 16,
+              fontSize: 22,
+              lineHeight: 1.2,
+              fontWeight: 400,
+              color: "var(--ink)",
+            }}
+          >
+            Which BAL coffee fits your brew method
+          </p>
           <p
             style={{
               marginTop: 20,
@@ -69,8 +79,18 @@ export async function Bestsellers() {
               maxWidth: 270,
             }}
           >
-            Three ways to experience BAL. Each one crafted to bring warmth,
-            comfort, and connection to your daily ritual.
+            <a href="/products/datespresso" style={{ color: "var(--ink)" }}>
+              DateSpresso, for espresso
+            </a>
+            .{" "}
+            <a href="/products/groundate" style={{ color: "var(--ink)" }}>
+              GrounDate, for drip and French press
+            </a>
+            .{" "}
+            <a href="/products/eastern-brew" style={{ color: "var(--ink)" }}>
+              Eastern Brew, for a Turkish-style cup
+            </a>
+            .
           </p>
           <a
             href="/products"
@@ -91,7 +111,7 @@ export async function Bestsellers() {
           </a>
         </div>
         {featuredProducts.map((product) => (
-          <ProductCard key={product.slug} product={product} />
+          <ProductCard key={product.slug} product={product} showBrewLink />
         ))}
       </div>
     </section>

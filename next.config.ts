@@ -1,4 +1,18 @@
 export default {
+  async redirects() {
+    return [
+      {
+        source: "/collections",
+        destination: "/products",
+        permanent: true,
+      },
+      {
+        source: "/collections/:path*",
+        destination: "/products",
+        permanent: true,
+      },
+    ];
+  },
   turbopack: {
     root: process.cwd(),
   },

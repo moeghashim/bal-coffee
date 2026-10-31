@@ -44,6 +44,7 @@ export type ShopifyProduct = {
   productType?: string | null;
   tags?: string[];
   availableForSale: boolean;
+  updatedAt?: string | null;
   featuredImage?: ShopifyImage | null;
   images: {
     nodes: ShopifyImage[];

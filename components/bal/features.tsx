@@ -93,12 +93,12 @@ const features: Feature[] = [
   {
     icon: <LeafIcon />,
     title: "Naturally\ncaffeine-free",
-    body: "Gentle on the body.\nPerfect any time of day.",
+    body: "No coffee beans.\nDrink it any time of day.",
   },
   {
     icon: <SeedIcon />,
     title: "Date-seed\nbased",
-    body: "Upcycled goodness\nfrom the date fruit.",
+    body: "Roasted from date seeds,\nnot from coffee beans.",
   },
   {
     icon: <CupIcon />,
@@ -123,56 +123,68 @@ export function Features() {
         borderBottom: "1px solid var(--line-soft)",
       }}
     >
-      <div
-        className="bal-features-grid"
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 32,
-        }}
-      >
-        {features.map((f, i) => (
-          <div
-            key={i}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "auto 1fr",
-              gap: 18,
-              alignItems: "start",
-            }}
-          >
-            <div style={{ paddingTop: 2 }}>{f.icon}</div>
-            <div>
-              <p
-                className="mono"
-                style={{
-                  fontSize: 11,
-                  letterSpacing: "0.16em",
-                  textTransform: "uppercase",
-                  color: "var(--ink)",
-                  fontWeight: 500,
-                  whiteSpace: "pre-line",
-                  lineHeight: 1.5,
-                }}
-              >
-                {f.title}
-              </p>
-              <p
-                style={{
-                  marginTop: 8,
-                  fontSize: 12.5,
-                  lineHeight: 1.55,
-                  color: "var(--ink-2)",
-                  whiteSpace: "pre-line",
-                }}
-              >
-                {f.body}
-              </p>
+      <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+        <h2
+          className="serif"
+          style={{
+            marginBottom: 28,
+            fontSize: "clamp(28px, 3vw, 36px)",
+            lineHeight: 1.15,
+            fontWeight: 500,
+            color: "var(--ink)",
+          }}
+        >
+          Caffeine-free, without coffee beans
+        </h2>
+        <div
+          className="bal-features-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 32,
+          }}
+        >
+          {features.map((f, i) => (
+            <div
+              key={i}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto 1fr",
+                gap: 18,
+                alignItems: "start",
+              }}
+            >
+              <div style={{ paddingTop: 2 }}>{f.icon}</div>
+              <div>
+                <p
+                  className="mono"
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--ink)",
+                    fontWeight: 500,
+                    whiteSpace: "pre-line",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {f.title}
+                </p>
+                <p
+                  style={{
+                    marginTop: 8,
+                    fontSize: 12.5,
+                    lineHeight: 1.55,
+                    color: "var(--ink-2)",
+                    whiteSpace: "pre-line",
+                  }}
+                >
+                  {f.body}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

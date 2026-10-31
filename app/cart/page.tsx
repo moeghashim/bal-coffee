@@ -8,7 +8,9 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Cart",
-  description: "Review your Bal Coffee cart.",
+  description:
+    "Review your BAL Coffee cart. Shipping is calculated at checkout.",
+  robots: { index: false, follow: true },
 };
 
 function CartHeroArt() {
