@@ -19,9 +19,8 @@ export default function AboutPage() {
         intro="Meet Judy, the heart and soul behind BAL Coffee. Based in Houston, Texas, shipping across the United States."
       >
         <p>
-          A devoted coffee lover, Judy&apos;s journey with coffee has been a
-          search for a cup that doesn&apos;t compromise well-being. Even a
-          single shot of decaf left her feeling the effects on her heart rate.
+          Judy Ghashim started BAL Coffee in Houston so her family could share a
+          coffee ritual any time of day.
         </p>
         <h2
           className="serif"
@@ -31,15 +30,15 @@ export default function AboutPage() {
         </h2>
         <p style={{ marginTop: 12 }}>
           She looked at alternatives, including mushroom coffee, and they
-          didn&apos;t bring the comfort she wanted from the ritual. That is when
-          BAL Coffee started: a date-seed coffee meant to be good for the person
-          drinking it and easier on the land than growing more coffee trees.
+          didn&apos;t bring the comfort she wanted from the ritual. Decaf is
+          still made from coffee beans. BAL roasts date seeds, which are usually
+          discarded, and puts no coffee beans in the bag.
         </p>
         <p style={{ marginTop: 16 }}>
-          Date seeds are usually discarded. Roasting them is how BAL makes a
-          naturally caffeine-free cup. Judy wanted something her family could
-          drink any time of day, one that honors that heritage. BAL is
-          online-only. There is no café or store to visit.
+          Roasting date seeds is how BAL makes a naturally caffeine-free cup.
+          Judy wanted something her family could drink any time of day, one that
+          honors that heritage. BAL is online-only. There is no café or store to
+          visit. Orders ship across the United States.
         </p>
         <h2
           className="serif"

@@ -1,22 +1,17 @@
 const benefits = [
   {
     title: "Naturally Caffeine-Free",
-    body: "Gentle on you, any time of day.",
+    body: "No coffee beans in the bag.",
     icon: "leaf",
   },
   {
     title: "Roasted Date Seeds",
-    body: "Upcycled goodness, roasted with care.",
+    body: "Made from roasted date seeds.",
     icon: "seed",
   },
   {
-    title: "Prebiotic-Rich",
-    body: "Good for your gut, good for you.",
-    icon: "gut",
-  },
-  {
-    title: "Sustainable by Nature",
-    body: "Better for you, better for the planet.",
+    title: "Ships in the US",
+    body: "From Houston to addresses across the United States.",
     icon: "earth",
   },
 ];
@@ -53,12 +48,6 @@ function BenefitIcon({ icon }: { icon: string }) {
           <path d="M20 34 C 25 26, 30 22, 36 20" />
         </>
       ) : null}
-      {icon === "gut" ? (
-        <>
-          <path d="M24 14 V 23 C 24 27 18 27 18 33 C 18 39 28 40 28 32 V 20" />
-          <path d="M32 15 V 25 C 32 29 38 29 38 35 C 38 41 28 42 28 32" />
-        </>
-      ) : null}
       {icon === "earth" ? (
         <>
           <circle cx="27" cy="27" r="14" />
@@ -79,7 +68,7 @@ export function BenefitsStrip() {
         maxWidth: 1180,
         margin: "28px auto 0",
         display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
+        gridTemplateColumns: "repeat(3, 1fr)",
         border: "1px solid rgba(77,56,36,0.18)",
         borderRadius: 14,
         background: "rgba(253,247,236,0.78)",

@@ -27,8 +27,9 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
     answer: (
       <>
         Each bag tastes a little different. DateSpresso is rich and bold.
-        GrounDate is smooth and mellow. Eastern Brew is warm and spiced. The
-        flavor notes on each product page describe that bag:{" "}
+        GrounDate is smooth and mellow. Eastern Brew is a warm, fine grind for a
+        Turkish-style cup. The flavor notes on each product page describe that
+        bag:{" "}
         <a href="/products/datespresso" style={{ color: "var(--terra-deep)" }}>
           DateSpresso
         </a>

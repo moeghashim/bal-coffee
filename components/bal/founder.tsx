@@ -185,8 +185,8 @@ export function Founder() {
                 fontWeight: 400,
               }}
             >
-              I wanted to create a coffee that my family could enjoy at any time
-              of day—one that honors our heritage and the goodness of the land.
+              I wanted a coffee my family could drink at any time of day, one
+              that honors our heritage.
             </p>
             <BeansAccent />
           </div>

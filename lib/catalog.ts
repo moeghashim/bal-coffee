@@ -191,7 +191,10 @@ async function loadShopifyProducts() {
 
 export const getProducts = cache(async () => {
   const nodes = await loadShopifyProducts();
-  return orderCatalog(nodes.map(toCatalogProduct));
+  // Café drinks stay unpublished on this site. A drink URL 404s.
+  return orderCatalog(nodes.map(toCatalogProduct)).filter(
+    (product) => product.category !== "drink",
+  );
 });
 
 export async function getCoffeeProducts() {

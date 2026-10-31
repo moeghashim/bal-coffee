@@ -8,7 +8,6 @@ const pages = [
   ["/contact", "Say hello"],
   ["/privacy", "Privacy Policy"],
   ["/terms", "Terms of Service"],
-  ["/drinks", "Café drinks"],
 ] as const;
 
 for (const [path, heading] of pages) {
@@ -55,6 +54,8 @@ test("footer points at real pages and hides unknown socials", async ({
   await expect(page.getByRole("link", { name: "Instagram" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "TikTok" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Facebook" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Drinks" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Café drinks" })).toHaveCount(0);
   await expect(page.getByText(/© \d{4} BAL Coffee/)).toBeVisible();
   await expect(page.getByText("© 2024")).toHaveCount(0);
   await expect(page.getByText(/15% off/i)).toHaveCount(0);
@@ -74,7 +75,6 @@ const freeShippingRoutes = [
   "/contact",
   "/cart",
   "/journal",
-  "/drinks",
 ] as const;
 
 test("no page claims free shipping", async ({ page }) => {
@@ -86,6 +86,16 @@ test("no page claims free shipping", async ({ page }) => {
     expect(html, route).not.toMatch(/unlocked free/i);
     expect(html, route).not.toMatch(/shipping over \$50/i);
   }
+});
+
+test("café drinks stay hidden", async ({ page }) => {
+  const response = await page.goto("/drinks");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Page not found",
+  );
+  await expect(page.getByRole("link", { name: "Drinks" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Café drinks" })).toHaveCount(0);
 });
 
 test("product page does not offer a fake subscription", async ({ page }) => {
@@ -104,6 +114,16 @@ test("product page does not offer a fake subscription", async ({ page }) => {
   expect(jsonLd).toContain('"@type":"Organization"');
   expect(jsonLd).not.toContain("aggregateRating");
   expect(jsonLd).not.toContain("842");
+  await expect(page.getByText("842")).toHaveCount(0);
+  await expect(page.getByText("Sarah M.")).toHaveCount(0);
+  await expect(page.getByText("James L.")).toHaveCount(0);
+  await expect(page.getByText("Priya K.")).toHaveCount(0);
+  await expect(page.getByText(/what our customers say/i)).toHaveCount(0);
+  await expect(page.getByText(/prebiotic/i)).toHaveCount(0);
+  await expect(page.getByText(/gut health/i)).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "Ingredients" }),
+  ).toBeVisible();
   const image = page.locator("img[alt*='DateSpresso']").first();
   const width = Number(await image.getAttribute("width"));
   expect(width).toBeGreaterThan(0);

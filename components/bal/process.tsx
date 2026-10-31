@@ -151,7 +151,7 @@ const steps = [
     num: "4",
     title: "Brew",
     icon: <StepBrew />,
-    body: "Brew your moment.\nSavor warmth, clarity,\nand connection.",
+    body: "Brew your moment.\nPour a cup and\ntake your time.",
   },
 ];
 

@@ -58,7 +58,7 @@ export async function Bestsellers() {
           >
             Our date seed coffees
           </h2>
-          <h2
+          <p
             className="serif"
             style={{
               marginTop: 16,
@@ -69,7 +69,7 @@ export async function Bestsellers() {
             }}
           >
             Which BAL coffee fits your brew method
-          </h2>
+          </p>
           <p
             style={{
               marginTop: 20,

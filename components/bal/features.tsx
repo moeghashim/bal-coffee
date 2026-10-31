@@ -93,12 +93,12 @@ const features: Feature[] = [
   {
     icon: <LeafIcon />,
     title: "Naturally\ncaffeine-free",
-    body: "Gentle on the body.\nPerfect any time of day.",
+    body: "No coffee beans.\nDrink it any time of day.",
   },
   {
     icon: <SeedIcon />,
     title: "Date-seed\nbased",
-    body: "Upcycled goodness\nfrom the date fruit.",
+    body: "Roasted from date seeds,\nnot from coffee beans.",
   },
   {
     icon: <CupIcon />,

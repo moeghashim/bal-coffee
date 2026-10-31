@@ -79,7 +79,7 @@ export const pageSeo = {
     intent: "Explain that rates are calculated at checkout for US orders.",
     title: "Shipping & Delivery | BAL Coffee",
     description:
-      "How BAL Coffee ships date seed coffee across the US: shipping rates at checkout, order processing and tracking by email.",
+      "How BAL Coffee ships date seed coffee across the US. Rates are calculated at checkout. Tracking is sent by email.",
   },
   returns: {
     primary: "returns and exchanges",
