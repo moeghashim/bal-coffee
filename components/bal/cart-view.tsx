@@ -9,7 +9,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { ProductCard } from "components/bal/product-card";
 import { ProductMedia } from "components/bal/product-media";
+import { GaViewCart } from "components/bal/ga-events";
 import { useCart, useCartForm, type CartLine } from "lib/commerce/cart-client";
+import { cartLinesToGaItems, trackBeginCheckout } from "lib/ga";
 import { formatPrice } from "lib/commerce/money";
 import { getProductByShopifyHandle, type Product } from "lib/products";
 import type { ShopifyImage } from "lib/shopify";
@@ -358,6 +360,7 @@ function OrderSummary() {
     | string
     | null
     | undefined;
+  const lines = useCart((state) => state.data.lines.nodes) as CartLine[];
 
   return (
     <aside
@@ -436,6 +439,13 @@ function OrderSummary() {
       <a
         href={checkoutUrl || "#"}
         aria-disabled={checkoutUrl ? undefined : true}
+        onClick={(event) => {
+          if (!checkoutUrl) return;
+          const tracked = trackBeginCheckout(cartLinesToGaItems(lines), () => {
+            window.location.assign(checkoutUrl);
+          });
+          if (tracked) event.preventDefault();
+        }}
         className="mono"
         style={{
           marginTop: 28,
@@ -519,6 +529,7 @@ export function CartContents({ products }: { products: Product[] }) {
 
   return (
     <>
+      <GaViewCart />
       {loading ? (
         <div
           aria-hidden

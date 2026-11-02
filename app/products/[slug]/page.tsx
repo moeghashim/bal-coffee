@@ -15,7 +15,9 @@ import {
   getRelatedProductsWithShopify,
 } from "lib/catalog";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
+import { GaViewItem } from "components/bal/ga-events";
 import { ProductViewedTracker } from "components/bal/product-viewed-tracker";
+import { gaMeasurementId } from "lib/ga";
 import {
   breadcrumbJsonLd,
   coffeeSeo,
@@ -238,6 +240,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
             variantId: product.merchandiseId,
             variantTitle: product.variantTitle ?? "",
           }}
+        />
+      ) : null}
+      {gaMeasurementId() ? (
+        <GaViewItem
+          itemId={product.merchandiseId || product.productId}
+          itemName={product.name}
+          price={product.priceAmount}
         />
       ) : null}
       <Nav />

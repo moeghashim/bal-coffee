@@ -1,4 +1,5 @@
 import { PageShell } from "components/bal/page-shell";
+import { shouldShowAnalyticsNote } from "lib/ga";
 import { getShopifyPolicy } from "lib/policies";
 
 export const metadata = {
@@ -8,6 +9,7 @@ export const metadata = {
 
 export default async function PrivacyPage() {
   const policy = await getShopifyPolicy("privacy-policy");
+  const showAnalyticsNote = shouldShowAnalyticsNote(policy?.html ?? null);
 
   return (
     <PageShell
@@ -49,6 +51,24 @@ export default async function PrivacyPage() {
           </p>
         </>
       )}
+      {showAnalyticsNote ? (
+        <>
+          <h2
+            className="serif"
+            style={{ fontSize: 22, marginTop: 32, color: "var(--ink)" }}
+          >
+            Analytics and cookies
+          </h2>
+          <p style={{ marginTop: 12 }}>
+            When analytics is turned on, this site uses Google Analytics 4.
+            Google Analytics sets cookies and receives information about the
+            pages and products you view, items you add to the cart, and when you
+            start checkout. It does not receive your name, email address,
+            shipping address, or payment details from this site. Orders are
+            completed on Shopify checkout.
+          </p>
+        </>
+      ) : null}
       <p style={{ marginTop: 28 }}>
         Questions about privacy? Email{" "}
         <a

@@ -8,6 +8,7 @@ import { CartProvider } from "lib/commerce/cart-client";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
 import { AnalyticsTracker } from "components/bal/analytics-tracker";
 import { CartAnalyticsBridge } from "components/bal/cart-analytics-bridge";
+import { GaScripts } from "components/bal/ga-scripts";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -78,6 +79,7 @@ export default async function RootLayout({
           src="https://cdn.shopify.com/storefront/standard-actions.js"
           crossOrigin="anonymous"
         />
+        <GaScripts />
       </body>
     </html>
   );

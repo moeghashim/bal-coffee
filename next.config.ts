@@ -1,4 +1,7 @@
 export default {
+  // Isolated cache for the GA4 Playwright server so it does not reuse a
+  // bundle compiled without NEXT_PUBLIC_GA_MEASUREMENT_ID.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   async redirects() {
     return [
       {

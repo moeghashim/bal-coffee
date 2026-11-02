@@ -10,14 +10,17 @@
     "check:boundary": "node scripts/check-import-boundary.mjs",
     "check:graphql": "gql.tada check",
     "hooks:install": "git config core.hooksPath .githooks",
-    "test": "pnpm prettier:check && pnpm check:boundary && pnpm check:graphql",
+    "test": "pnpm prettier:check && pnpm check:boundary && pnpm check:graphql && pnpm test:unit",
+    "test:unit": "node --experimental-strip-types --test lib/ga.test.ts",
     "e2e": "playwright test",
+    "e2e:ga": "playwright test -c playwright.ga.config.ts",
     "e2e:report": "playwright show-report",
     "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@next/third-parties": "16.2.10",
     "@shopify/hydrogen": "0.0.0-preview-8a708a8-20260708155454",
     "clsx": "^2.1.1",
     "geist": "^1.3.1",
