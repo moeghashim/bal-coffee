@@ -20,14 +20,17 @@ export default defineConfig({
   timeout: 60_000,
   expect: { timeout: 20_000 },
   use: {
-    baseURL: `http://127.0.0.1:${port}`,
+    // localhost, not 127.0.0.1. Next.js dev blocks cross-origin dev resources
+    // when the browser host does not match the server host, which skips
+    // hydration and never injects the afterInteractive gtag script.
+    baseURL: `http://localhost:${port}`,
     trace: "on-first-retry",
     actionTimeout: 15_000,
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: `pnpm dev --port ${port}`,
-    url: `http://127.0.0.1:${port}`,
+    command: `rm -rf .next-ga && pnpm dev --hostname localhost --port ${port}`,
+    url: `http://localhost:${port}`,
     timeout: 180_000,
     reuseExistingServer: false,
     env: {
