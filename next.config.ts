@@ -1,4 +1,11 @@
 export default {
+  // Isolated cache for the GA4 Playwright server so it does not reuse a
+  // bundle compiled without NEXT_PUBLIC_GA_MEASUREMENT_ID.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
+  // Dev-only. Playwright must be able to load /_next dev resources from
+  // localhost; a blocked host skips hydration and never injects afterInteractive
+  // scripts such as the GA4 tag.
+  allowedDevOrigins: ["localhost", "127.0.0.1"],
   async redirects() {
     return [
       {

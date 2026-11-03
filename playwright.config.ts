@@ -29,5 +29,10 @@ export default defineConfig({
     url: "http://localhost:3000",
     timeout: 180_000,
     reuseExistingServer: !process.env.CI,
+    env: {
+      // Absence assertions must see a build with GA disabled, even if the
+      // developer shell has a measurement id.
+      NEXT_PUBLIC_GA_MEASUREMENT_ID: "",
+    },
   },
 });

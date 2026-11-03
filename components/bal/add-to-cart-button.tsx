@@ -6,6 +6,7 @@ import {
   toProductInput,
   useProductForm,
 } from "lib/commerce/cart-client";
+import { toGaItem, trackEcommerce } from "lib/ga";
 
 export type AddToCartProduct = {
   merchandiseId?: string;
@@ -54,10 +55,16 @@ function AddToCartForm({
   label,
   compact,
   showQuantity,
+  itemId,
+  itemName,
+  price,
 }: {
   label: string;
   compact: boolean;
   showQuantity: boolean;
+  itemId: string;
+  itemName: string;
+  price: string;
 }) {
   const { register, formProps, pending, selectedVariant, errors } =
     useProductForm();
@@ -70,7 +77,18 @@ function AddToCartForm({
 
   return (
     <form
-      {...formProps({ afterSubmit: () => setAdded(true) })}
+      {...formProps({
+        afterSubmit: () => {
+          setAdded(true);
+          const item = toGaItem({
+            itemId,
+            itemName,
+            price,
+            quantity,
+          });
+          if (item) trackEcommerce("add_to_cart", [item]);
+        },
+      })}
       style={{ marginTop: compact ? 10 : 16 }}
     >
       <input type="hidden" {...register("merchandiseId", {})} />
@@ -201,6 +219,9 @@ export function AddToCartButton({
         label={label}
         compact={compact}
         showQuantity={showQuantity}
+        itemId={product.merchandiseId}
+        itemName={product.title}
+        price={product.amount}
       />
     </ProductProvider>
   );

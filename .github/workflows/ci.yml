@@ -79,8 +79,14 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       # playwright.config.ts starts `pnpm dev` itself (reuseExistingServer is
-      # off when CI=true) and inherits the Shopify env above.
+      # off when CI=true) and inherits the Shopify env above. GA stays off.
       - run: pnpm e2e
+
+      # Separate dev server with a test measurement id. Proves gtag loads and
+      # the ecommerce events reach dataLayer. Not a real GA4 property.
+      - run: pnpm e2e:ga
+        env:
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: G-TESTBAL01
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
