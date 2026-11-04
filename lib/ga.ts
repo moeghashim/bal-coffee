@@ -39,9 +39,12 @@ export type GaEcommerceEvent =
   | "view_cart"
   | "checkout_click";
 
+const GA_CONFIG_FLAG = "__balGaConfigured";
+
 type GtagWindow = Window & {
   dataLayer?: unknown[];
   gtag?: (...args: unknown[]) => void;
+  [GA_CONFIG_FLAG]?: string;
 };
 
 type GaCartLine = {
@@ -126,6 +129,27 @@ export function shouldShowAnalyticsNote(policyHtml: string | null): boolean {
   return !textMentionsAnalyticsOrCookies(policyHtml);
 }
 
+/**
+ * Inline bootstrap for the document head. Runs during HTML parse, before React
+ * effects, and queues `js` then `config` once. gtag.js drops ecommerce events
+ * that sit ahead of `config` in dataLayer, which is how view_item was lost.
+ */
+export function gtagBootstrapSource(measurementId: string): string {
+  if (!MEASUREMENT_ID.test(measurementId)) {
+    throw new Error("Invalid GA4 measurement id");
+  }
+  const id = JSON.stringify(measurementId);
+  return (
+    "window.dataLayer=window.dataLayer||[];" +
+    "window.gtag=window.gtag||function gtag(){window.dataLayer.push(arguments);};" +
+    `if(window.${GA_CONFIG_FLAG}!==${id}){` +
+    "window.gtag('js',new Date());" +
+    `window.gtag('config',${id});` +
+    `window.${GA_CONFIG_FLAG}=${id};` +
+    "}"
+  );
+}
+
 /** Queue a GA4 ecommerce event. Returns false when the tag is disabled. */
 export function trackEcommerce(
   eventName: GaEcommerceEvent,
@@ -160,6 +184,9 @@ export function trackCheckoutClick(items: GaItem[]): boolean {
 function sendGtag(...args: unknown[]): boolean {
   const gtag = ensureGtag();
   if (!gtag) return false;
+  // Config first. An event already in the queue when gtag.js starts is never
+  // delivered, even if `config` is pushed later by the tag snippet.
+  ensureGaConfig(gtag);
   gtag(...args);
   return true;
 }
@@ -175,6 +202,25 @@ function ensureGtag(): ((...args: unknown[]) => void) | null {
     };
   }
   return gtagWindow.gtag;
+}
+
+function ensureGaConfig(gtag: (...args: unknown[]) => void) {
+  const id = gaMeasurementId();
+  if (!id || typeof window === "undefined") return;
+  const gtagWindow = window as GtagWindow;
+  if (gtagWindow[GA_CONFIG_FLAG] === id) return;
+  if (!dataLayerHasConfig(gtagWindow.dataLayer ?? [], id)) {
+    gtag("js", new Date());
+    gtag("config", id);
+  }
+  gtagWindow[GA_CONFIG_FLAG] = id;
+}
+
+function dataLayerHasConfig(dataLayer: unknown[], measurementId: string) {
+  return dataLayer.some((entry) => {
+    const command = entry as { 0?: unknown; 1?: unknown };
+    return command[0] === "config" && command[1] === measurementId;
+  });
 }
 
 function normalizePrice(price: number | string | null | undefined): number {

@@ -59,6 +59,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${fraunces.variable} ${interTight.variable}`}>
+      <head>
+        <GaScripts />
+      </head>
       <body>
         <JsonLd data={organizationJsonLd(baseUrl)} />
         <JsonLd data={websiteJsonLd(baseUrl)} />
@@ -79,7 +82,6 @@ export default async function RootLayout({
           src="https://cdn.shopify.com/storefront/standard-actions.js"
           crossOrigin="anonymous"
         />
-        <GaScripts />
       </body>
     </html>
   );

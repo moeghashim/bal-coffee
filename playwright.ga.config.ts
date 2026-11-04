@@ -3,10 +3,11 @@ import { defineConfig, devices } from "@playwright/test";
 /**
  * GA4-on server. Separate dist directory so the client bundle is compiled with
  * NEXT_PUBLIC_GA_MEASUREMENT_ID instead of reusing the default `.next` cache.
- * The id is a test double, not a production property.
+ * The id is the public production measurement id so the view_item regression
+ * can assert the g/collect `tid`. Specs fulfill those hits locally.
  */
 const port = 3100;
-const measurementId = "G-TESTBAL01";
+const measurementId = "G-5DJRRRRNKC";
 
 export default defineConfig({
   testDir: "./e2e-ga",
