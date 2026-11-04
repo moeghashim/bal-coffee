@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const GA_ID = "G-TESTBAL01";
+const GA_ID = "G-5DJRRRRNKC";
 
 type GaItem = {
   item_id?: string;
@@ -53,6 +53,11 @@ function expectItem(item: GaItem | undefined) {
 test("GA4 loads and ecommerce events fire with the measurement id", async ({
   page,
 }) => {
+  // The measurement id is the production property. Keep the hits in the
+  // browser so this spec does not write page_view or cart events to GA4.
+  await page.route(/\/g\/collect/i, (route) =>
+    route.fulfill({ status: 204, body: "" }),
+  );
   const response = await page.goto("/products/datespresso");
   expect(response?.ok()).toBeTruthy();
   await expect(page.locator("h1")).toBeVisible();

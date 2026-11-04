@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
+import vm from "node:vm";
 import { afterEach, test } from "node:test";
 import {
   cartLinesToGaItems,
   ecommerceParams,
   gaMeasurementId,
+  gtagBootstrapSource,
   shouldShowAnalyticsNote,
   textMentionsAnalyticsOrCookies,
   toGaItem,
@@ -54,6 +56,10 @@ function queuedEvents() {
       },
     };
   });
+}
+
+function ecommerceEvents() {
+  return queuedEvents().filter((event) => event.command === "event");
 }
 
 test("measurement id is absent unless the env var is a GA4 id", () => {
@@ -152,7 +158,7 @@ test("events queue on dataLayer when the measurement id is set", () => {
   assert.equal(trackEcommerce("checkout_click", []), false);
   assert.equal(trackCheckoutClick([]), false);
 
-  const events = queuedEvents();
+  const events = ecommerceEvents();
   assert.deepEqual(
     events.map((event) => event.name),
     ["view_item", "add_to_cart", "view_cart"],
@@ -164,6 +170,15 @@ test("events queue on dataLayer when the measurement id is set", () => {
     assert.equal("transport_type" in event.params, false);
   }
   assert.equal(events[2]?.params.items?.length, 0);
+
+  const queued = queuedEvents();
+  assert.deepEqual(
+    queued.map((event) => event.command),
+    ["js", "config", "event", "event", "event"],
+  );
+  assert.ok(queued[0]?.name instanceof Date);
+  assert.equal(queued[1]?.name, MEASUREMENT_ID);
+  assert.equal(queued.filter((event) => event.command === "config").length, 1);
 });
 
 test("checkout_click queues beacon params and does not navigate", () => {
@@ -183,7 +198,9 @@ test("checkout_click queues beacon params and does not navigate", () => {
   assert.equal(assigned, 0);
   assert.equal(win.location.href, "https://www.balcoffee.com/cart");
 
-  const event = queuedEvents()[0];
+  const event = ecommerceEvents().find(
+    (queued) => queued.name === "checkout_click",
+  );
   assert.equal(event?.command, "event");
   assert.equal(event?.name, "checkout_click");
   assert.equal(event?.params.currency, "USD");
@@ -192,8 +209,42 @@ test("checkout_click queues beacon params and does not navigate", () => {
   assert.equal(event?.params.event_callback, undefined);
   assert.deepEqual(event?.params.items, [item]);
   assert.equal(JSON.stringify(event?.params).includes("@"), false);
+  const names = queuedEvents().map((queued) => queued.name);
+  assert.equal(names.includes("begin_checkout"), false);
+  assert.equal(names.includes("purchase"), false);
+  assert.ok(
+    queuedEvents().findIndex((queued) => queued.command === "config") <
+      queuedEvents().findIndex((queued) => queued.name === "checkout_click"),
+  );
+});
+
+test("bootstrap config is not repeated when an event is queued", () => {
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = MEASUREMENT_ID;
+  const win = installWindow();
+  vm.runInNewContext(gtagBootstrapSource(MEASUREMENT_ID), { window: win });
+  assert.equal(trackEcommerce("view_item", [item]), true);
+  assert.equal(trackEcommerce("add_to_cart", [item]), true);
+  assert.equal(trackCheckoutClick([item]), true);
+
+  const queued = queuedEvents();
+  assert.deepEqual(
+    queued.map((event) => event.command),
+    ["js", "config", "event", "event", "event"],
+  );
+  assert.equal(queued[1]?.name, MEASUREMENT_ID);
+  assert.deepEqual(
+    ecommerceEvents().map((event) => event.name),
+    ["view_item", "add_to_cart", "checkout_click"],
+  );
+  const checkout = ecommerceEvents().find(
+    (event) => event.name === "checkout_click",
+  );
+  assert.equal(checkout?.params.transport_type, "beacon");
+  assert.equal(checkout?.params.currency, "USD");
   assert.equal(
-    queuedEvents().some((queued) => queued.name === "begin_checkout"),
+    queued.some(
+      (event) => event.name === "begin_checkout" || event.name === "purchase",
+    ),
     false,
   );
 });

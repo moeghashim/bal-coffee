@@ -82,11 +82,13 @@ jobs:
       # off when CI=true) and inherits the Shopify env above. GA stays off.
       - run: pnpm e2e
 
-      # Separate dev server with a test measurement id. Proves gtag loads and
-      # the ecommerce events reach dataLayer. Not a real GA4 property.
+      # Separate dev server. Proves gtag loads, ecommerce events reach
+      # dataLayer, and view_item is delivered to g/collect for the production
+      # measurement id. The Playwright config sets that id; specs fulfill
+      # g/collect locally.
       - run: pnpm e2e:ga
         env:
-          NEXT_PUBLIC_GA_MEASUREMENT_ID: G-TESTBAL01
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: G-5DJRRRRNKC
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
