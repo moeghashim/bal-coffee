@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { afterEach, mock, test } from "node:test";
+import { afterEach, test } from "node:test";
 import {
   cartLinesToGaItems,
   ecommerceParams,
@@ -7,7 +7,7 @@ import {
   shouldShowAnalyticsNote,
   textMentionsAnalyticsOrCookies,
   toGaItem,
-  trackBeginCheckout,
+  trackCheckoutClick,
   trackEcommerce,
   type GaItem,
 } from "./ga.ts";
@@ -25,7 +25,6 @@ const item: GaItem = {
 afterEach(() => {
   delete process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   delete (globalThis as { window?: unknown }).window;
-  mock.timers.reset();
 });
 
 function installWindow() {
@@ -50,6 +49,8 @@ function queuedEvents() {
         currency?: string;
         value?: number;
         items?: GaItem[];
+        transport_type?: string;
+        event_callback?: unknown;
       },
     };
   });
@@ -137,14 +138,7 @@ test("events do not touch dataLayer when the measurement id is unset", () => {
   assert.equal(trackEcommerce("view_item", [item]), false);
   assert.equal(trackEcommerce("add_to_cart", [item]), false);
   assert.equal(trackEcommerce("view_cart", []), false);
-  let navigated = 0;
-  assert.equal(
-    trackBeginCheckout([item], () => {
-      navigated += 1;
-    }),
-    false,
-  );
-  assert.equal(navigated, 0);
+  assert.equal(trackCheckoutClick([item]), false);
   assert.deepEqual(queuedEvents(), []);
 });
 
@@ -155,7 +149,8 @@ test("events queue on dataLayer when the measurement id is set", () => {
   assert.equal(trackEcommerce("view_item", [item]), true);
   assert.equal(trackEcommerce("add_to_cart", [item]), true);
   assert.equal(trackEcommerce("view_cart", []), true);
-  assert.equal(trackEcommerce("begin_checkout", []), false);
+  assert.equal(trackEcommerce("checkout_click", []), false);
+  assert.equal(trackCheckoutClick([]), false);
 
   const events = queuedEvents();
   assert.deepEqual(
@@ -166,29 +161,47 @@ test("events queue on dataLayer when the measurement id is set", () => {
     assert.equal(event.command, "event");
     assert.equal(event.params.currency, "USD");
     assert.equal(JSON.stringify(event.params).includes("@"), false);
+    assert.equal("transport_type" in event.params, false);
   }
   assert.equal(events[2]?.params.items?.length, 0);
 });
 
-test("begin_checkout still navigates if gtag.js never calls back", () => {
+test("checkout_click queues beacon params and does not navigate", () => {
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = MEASUREMENT_ID;
-  mock.timers.enable({ apis: ["setTimeout"] });
-  installWindow();
-  let navigated = 0;
+  const win = installWindow() as {
+    location?: { href?: string; assign?: (url: string) => void };
+  };
+  let assigned = 0;
+  win.location = {
+    href: "https://www.balcoffee.com/cart",
+    assign: () => {
+      assigned += 1;
+    },
+  };
+
+  assert.equal(trackCheckoutClick([item]), true);
+  assert.equal(assigned, 0);
+  assert.equal(win.location.href, "https://www.balcoffee.com/cart");
+
+  const event = queuedEvents()[0];
+  assert.equal(event?.command, "event");
+  assert.equal(event?.name, "checkout_click");
+  assert.equal(event?.params.currency, "USD");
+  assert.equal(event?.params.value, 27);
+  assert.equal(event?.params.transport_type, "beacon");
+  assert.equal(event?.params.event_callback, undefined);
+  assert.deepEqual(event?.params.items, [item]);
+  assert.equal(JSON.stringify(event?.params).includes("@"), false);
   assert.equal(
-    trackBeginCheckout([item], () => {
-      navigated += 1;
-    }),
-    true,
+    queuedEvents().some((queued) => queued.name === "begin_checkout"),
+    false,
   );
-  assert.equal(navigated, 0);
-  assert.equal(queuedEvents()[0]?.name, "begin_checkout");
-  mock.timers.tick(549);
-  assert.equal(navigated, 0);
-  mock.timers.tick(1);
-  assert.equal(navigated, 1);
-  mock.timers.tick(1000);
-  assert.equal(navigated, 1);
+});
+
+test("checkout_click is a no-op before the document exists", () => {
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = MEASUREMENT_ID;
+  delete (globalThis as { window?: unknown }).window;
+  assert.equal(trackCheckoutClick([item]), false);
 });
 
 test("analytics note is added only when the policy never mentions it", () => {

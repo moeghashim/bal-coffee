@@ -11,7 +11,7 @@ import { ProductCard } from "components/bal/product-card";
 import { ProductMedia } from "components/bal/product-media";
 import { GaViewCart } from "components/bal/ga-events";
 import { useCart, useCartForm, type CartLine } from "lib/commerce/cart-client";
-import { cartLinesToGaItems, trackBeginCheckout } from "lib/ga";
+import { cartLinesToGaItems, trackCheckoutClick } from "lib/ga";
 import { formatPrice } from "lib/commerce/money";
 import { getProductByShopifyHandle, type Product } from "lib/products";
 import type { ShopifyImage } from "lib/shopify";
@@ -439,12 +439,13 @@ function OrderSummary() {
       <a
         href={checkoutUrl || "#"}
         aria-disabled={checkoutUrl ? undefined : true}
-        onClick={(event) => {
+        onClick={() => {
+          // Follow the href. preventDefault plus location.assign(checkoutUrl)
+          // drops the _gl param gtag writes onto this anchor and can send a
+          // stale checkout URL. checkout_click uses beacon transport, and is
+          // a no-op when the measurement id is unset.
           if (!checkoutUrl) return;
-          const tracked = trackBeginCheckout(cartLinesToGaItems(lines), () => {
-            window.location.assign(checkoutUrl);
-          });
-          if (tracked) event.preventDefault();
+          trackCheckoutClick(cartLinesToGaItems(lines));
         }}
         className="mono"
         style={{
