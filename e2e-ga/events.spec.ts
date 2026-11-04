@@ -14,6 +14,7 @@ type GaParams = {
   currency?: string;
   value?: number;
   items?: GaItem[];
+  transport_type?: string;
 };
 
 async function gaEvents(page: Page) {
@@ -94,26 +95,60 @@ test("GA4 loads and ecommerce events fire with the measurement id", async ({
   await expect(checkout).toBeVisible();
   const href = await checkout.getAttribute("href");
   expect(href).toBeTruthy();
-  // Actionability check waits for hydration; the click itself stays in the
-  // page so we can read dataLayer before the deferred checkout navigation.
+  // Actionability check waits for hydration. The click below is observed in
+  // the page: the storefront must not cancel the anchor, and it must queue
+  // checkout_click rather than begin_checkout.
   await checkout.click({ trial: true });
 
-  const begin = await page.evaluate(() => {
+  const checkoutClick = await page.evaluate(() => {
     const link = [...document.querySelectorAll("a")].find((anchor) =>
       /proceed to checkout/i.test(anchor.textContent ?? ""),
     );
-    link?.click();
+    if (!link) return null;
+
+    let sawClick = false;
+    let defaultPrevented = true;
+    const onClick = (event: Event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest("a") !== link) return;
+      sawClick = true;
+      defaultPrevented = event.defaultPrevented;
+      event.preventDefault();
+    };
+    window.addEventListener("click", onClick);
+    link.click();
+    window.removeEventListener("click", onClick);
+
     const layer = window.dataLayer ?? [];
+    let params: GaParams | null = null;
+    let checkoutClicks = 0;
+    let beginCheckout = 0;
     for (const entry of layer) {
       const command = entry as { 0?: unknown; 1?: unknown; 2?: GaParams };
-      if (command[0] === "event" && command[1] === "begin_checkout") {
-        return command[2] ?? {};
+      if (command[0] !== "event" || typeof command[1] !== "string") continue;
+      if (command[1] === "checkout_click") {
+        checkoutClicks += 1;
+        params = command[2] ?? {};
       }
+      if (command[1] === "begin_checkout") beginCheckout += 1;
     }
-    return null;
+    return {
+      sawClick,
+      defaultPrevented,
+      params,
+      checkoutClicks,
+      beginCheckout,
+    };
   });
-  expect(begin?.currency).toBe("USD");
-  expect(begin?.items?.[0]?.item_id).toBe(viewedId);
-  expect(begin?.items?.[0]?.quantity).toBe(2);
-  expect(JSON.stringify(begin?.items ?? [])).not.toMatch(/@/);
+
+  expect(checkoutClick?.sawClick).toBe(true);
+  expect(checkoutClick?.defaultPrevented).toBe(false);
+  expect(checkoutClick?.beginCheckout).toBe(0);
+  expect(checkoutClick?.checkoutClicks).toBe(1);
+  expect(checkoutClick?.params?.currency).toBe("USD");
+  expect(checkoutClick?.params?.transport_type).toBe("beacon");
+  expect(checkoutClick?.params?.items?.[0]?.item_id).toBe(viewedId);
+  expect(checkoutClick?.params?.items?.[0]?.quantity).toBe(2);
+  expect(JSON.stringify(checkoutClick?.params?.items ?? [])).not.toMatch(/@/);
 });

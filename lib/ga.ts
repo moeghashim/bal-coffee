@@ -6,12 +6,13 @@
  * Payloads are limited to product ids, names, prices, quantities, and USD.
  * Do not add customer fields (name, email, phone, address, payment).
  *
- * `purchase` is intentionally not sent here. Checkout and payment run on
- * Shopify (checkout.balcoffee.com). Purchase events and cross-domain session
- * stitching require the same Measurement ID on Shopify (Google & YouTube
- * channel or a customer-events pixel) and GA4 cross-domain configuration for
- * www.balcoffee.com and checkout.balcoffee.com. This module does not change
- * Shopify.
+ * `begin_checkout` and `purchase` are intentionally not sent here. Checkout
+ * and payment run on Shopify (checkout.balcoffee.com), where the Google &
+ * YouTube channel pixel owns begin_checkout (including reloads), plus
+ * add_shipping_info, add_payment_info, and purchase. The cart button records
+ * `checkout_click` with the same item, value, and currency fields and then
+ * lets the anchor navigate so gtag can decorate the href. This module does
+ * not change Shopify or the GA4 domain list.
  */
 
 export const GA_CURRENCY = "USD" as const;
@@ -36,7 +37,7 @@ export type GaEcommerceEvent =
   | "view_item"
   | "add_to_cart"
   | "view_cart"
-  | "begin_checkout";
+  | "checkout_click";
 
 type GtagWindow = Window & {
   dataLayer?: unknown[];
@@ -132,40 +133,28 @@ export function trackEcommerce(
 ): boolean {
   if (!gaMeasurementId()) return false;
   if (eventName !== "view_cart" && items.length === 0) return false;
-  return sendGtag("event", eventName, ecommerceParams(items));
+  const params = ecommerceParams(items);
+  if (eventName !== "checkout_click") {
+    return sendGtag("event", eventName, params);
+  }
+  // Beacon so the hit can leave with the checkout navigation. The caller must
+  // not cancel that navigation.
+  return sendGtag("event", eventName, {
+    ...params,
+    transport_type: "beacon",
+  });
 }
 
 /**
- * Fire begin_checkout, then navigate. Returns false when GA is disabled so the
- * caller can leave the checkout link's default navigation untouched.
- * A short fallback timeout keeps checkout moving if gtag.js never loads.
+ * Queue checkout_click and return. Does not navigate.
+ *
+ * The checkout control is an anchor. Leaving its default action in place lets
+ * gtag's cross-domain linker decorate the href; beacon transport lets this
+ * hit leave with that navigation. Returns false when GA is disabled or there
+ * is nothing to report, which also leaves the anchor alone.
  */
-export function trackBeginCheckout(
-  items: GaItem[],
-  navigate: () => void,
-): boolean {
-  if (!gaMeasurementId() || items.length === 0) return false;
-  if (typeof window === "undefined") return false;
-
-  let finished = false;
-  const finish = () => {
-    if (finished) return;
-    finished = true;
-    navigate();
-  };
-
-  sendGtag("event", "begin_checkout", {
-    ...ecommerceParams(items),
-    transport_type: "beacon",
-    // Defer so a synchronous gtag callback cannot navigate before the click
-    // handler finishes (and before preventDefault runs).
-    event_callback: () => {
-      setTimeout(finish, 0);
-    },
-    event_timeout: 400,
-  });
-  setTimeout(finish, 550);
-  return true;
+export function trackCheckoutClick(items: GaItem[]): boolean {
+  return trackEcommerce("checkout_click", items);
 }
 
 function sendGtag(...args: unknown[]): boolean {
