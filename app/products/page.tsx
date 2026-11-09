@@ -303,7 +303,7 @@ export default async function ProductsPage() {
                 className="bal-products-sort-row"
                 style={{ display: "flex", alignItems: "center", gap: 12 }}
               >
-                <DropdownButton label="Best Selling" />
+                <DropdownButton label="Our coffees" />
                 <FilterIcon />
               </div>
             </div>

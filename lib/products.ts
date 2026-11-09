@@ -83,7 +83,7 @@ export const products: Product[] = [
     shopifyHandle: "datespresso",
     type: "Espresso-style depth",
     category: "coffee",
-    badge: "Best Seller",
+    badge: "",
     blurb: "Bold & indulgent with espresso-style depth.",
     price: "$27",
     description:
@@ -103,9 +103,12 @@ export const products: Product[] = [
     ingredients: "Roasted date seeds.",
     nutrition: [],
     brewSteps: [
-      { title: "Scoop", body: "Add 1-2 tsp to your cup." },
-      { title: "Pour", body: "Add 8 oz hot water." },
-      { title: "Stir & Enjoy", body: "Stir well and savor." },
+      { title: "Dose", body: "Use 18 to 20 grams for two shots." },
+      { title: "Filter", body: "For best results, use a dual wall filter." },
+      {
+        title: "Adjust",
+        body: "Adjust the amount based on your machine and taste preference.",
+      },
     ],
     kind: "bag-dark",
     accent: "#351c10",

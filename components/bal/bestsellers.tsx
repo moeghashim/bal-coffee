@@ -43,7 +43,7 @@ export async function Bestsellers() {
               color: "var(--ink-soft)",
             }}
           >
-            Bestsellers
+            Our coffees
           </p>
           <h2
             className="serif"
