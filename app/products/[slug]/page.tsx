@@ -289,28 +289,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   }}
                 >
                   <ProductMedia product={product} priority />
-                  <span
-                    className="mono"
-                    style={{
-                      position: "absolute",
-                      left: 18,
-                      top: 18,
-                      width: 66,
-                      height: 66,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 999,
-                      border: "1px solid rgba(255,244,232,0.7)",
-                      background: "rgba(50,24,13,0.82)",
-                      color: "#fff4e8",
-                      fontSize: 10,
-                      textAlign: "center",
-                      lineHeight: 1.1,
-                    }}
-                  >
-                    {product.badge}
-                  </span>
+                  {product.badge ? (
+                    <span
+                      className="mono"
+                      style={{
+                        position: "absolute",
+                        left: 18,
+                        top: 18,
+                        width: 66,
+                        height: 66,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 999,
+                        border: "1px solid rgba(255,244,232,0.7)",
+                        background: "rgba(50,24,13,0.82)",
+                        color: "#fff4e8",
+                        fontSize: 10,
+                        textAlign: "center",
+                        lineHeight: 1.1,
+                      }}
+                    >
+                      {product.badge}
+                    </span>
+                  ) : null}
                 </div>
                 <div
                   className="bal-product-thumbs"
