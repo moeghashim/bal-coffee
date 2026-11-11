@@ -9,6 +9,7 @@ const linkColumns: {
   {
     title: "Shop",
     links: [
+      { label: "What is date seed coffee?", href: "/date-seed-coffee" },
       { label: "All Products", href: "/products" },
       { label: "Eastern Brew", href: "/products/eastern-brew" },
       { label: "GrounDate", href: "/products/groundate" },

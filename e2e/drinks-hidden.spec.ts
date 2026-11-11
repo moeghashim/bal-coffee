@@ -84,6 +84,7 @@ test("sitemap has no drink URLs and still lists coffee", async ({
   for (const title of drinkTitles) {
     expect(xml).not.toContain(title);
   }
+  expect(xml).toContain("/date-seed-coffee");
   expect(xml).toContain("/products/datespresso");
   expect(xml).toContain("/products/groundate");
   expect(xml).toContain("/products/eastern-brew");

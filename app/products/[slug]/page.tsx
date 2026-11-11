@@ -174,17 +174,24 @@ function StoryBand() {
             For generations, nothing went to waste. Date seeds were roasted over
             open flames and brewed for warmth, comfort, and connection.
           </p>
-          <a
-            href="/about"
+          <p
             style={{
-              display: "inline-flex",
               marginTop: 14,
-              color: "var(--ink)",
-              fontSize: 14,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "8px 18px",
             }}
           >
-            Our Story →
-          </a>
+            <a href="/about" style={{ color: "var(--ink)", fontSize: 14 }}>
+              Our Story →
+            </a>
+            <a
+              href="/date-seed-coffee"
+              style={{ color: "var(--ink)", fontSize: 14 }}
+            >
+              What is date seed coffee? →
+            </a>
+          </p>
         </div>
       </div>
     </section>
@@ -734,7 +741,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   label: `Is ${product.name} caffeine-free?`,
                 },
                 {
-                  href: "/faq#taste",
+                  href: "/date-seed-coffee#taste",
                   label: "What does date seed coffee taste like?",
                 },
                 { href: "/faq#brew", label: "How do I brew it?" },

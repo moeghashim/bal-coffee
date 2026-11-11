@@ -182,8 +182,7 @@ export function EndOfDay() {
               color: "var(--ink)",
             }}
           >
-            The perfect
-            <br />
+            The perfect <br />
             end to your day
           </h2>
           <p

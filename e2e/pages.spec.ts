@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 const pages = [
   ["/about", "Rooted in heritage"],
-  ["/faq", "Date seed coffee FAQ"],
+  ["/faq", "BAL Coffee FAQ"],
   ["/shipping", "Shipping & delivery"],
   ["/returns", "Returns & exchanges"],
   ["/contact", "Say hello"],
@@ -65,6 +65,7 @@ test("footer points at real pages and hides unknown socials", async ({
 const freeShippingRoutes = [
   "/",
   "/products",
+  "/date-seed-coffee",
   "/products/datespresso",
   "/products/groundate",
   "/products/eastern-brew",
@@ -86,6 +87,63 @@ test("no page claims free shipping", async ({ page }) => {
     expect(html, route).not.toMatch(/unlocked free/i);
     expect(html, route).not.toMatch(/shipping over \$50/i);
   }
+});
+
+test("date seed coffee landing page is indexable", async ({
+  page,
+  request,
+}) => {
+  const response = await page.goto("/date-seed-coffee");
+  expect(response?.ok()).toBeTruthy();
+  await expect(page).toHaveTitle(
+    "Date Seed Coffee: Caffeine-Free Brew from Date Pits | BAL",
+  );
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    "content",
+    "Date seed coffee is brewed from roasted date seeds, also called date pits. Naturally caffeine-free and acid-free, with no coffee beans. Find your brew.",
+  );
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    /\/date-seed-coffee$/,
+  );
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Date seed coffee: a caffeine-free cup roasted from date seeds",
+  );
+  await expect(
+    page.getByRole("link", { name: "DateSpresso, for espresso" }).first(),
+  ).toHaveAttribute("href", "/products/datespresso");
+  await expect(
+    page
+      .getByRole("link", { name: "GrounDate, for drip and French press" })
+      .first(),
+  ).toHaveAttribute("href", "/products/groundate");
+  await expect(
+    page
+      .getByRole("link", { name: "Eastern Brew, for a Turkish-style cup" })
+      .first(),
+  ).toHaveAttribute("href", "/products/eastern-brew");
+  await expect(page.getByText("18 to 20 grams for two shots")).toBeVisible();
+  await expect(page.getByText(/what our customers say/i)).toHaveCount(0);
+  await expect(page.getByText(/\borganic\b/i)).toHaveCount(0);
+  await expect(page.getByText(/best seller/i)).toHaveCount(0);
+  await expect(page.getByText(/free shipping/i)).toHaveCount(0);
+  const jsonLd = (
+    await page.locator('script[type="application/ld+json"]').allTextContents()
+  ).join("\n");
+  expect(jsonLd).toContain('"@type":"WebPage"');
+  expect(jsonLd).toContain('"@type":"BreadcrumbList"');
+  expect(jsonLd).toContain('"@type":"ItemList"');
+  expect(jsonLd).toContain('"@type":"FAQPage"');
+  expect(jsonLd).toContain("/date-seed-coffee#webpage");
+  expect(jsonLd).toContain("/products/datespresso");
+  expect(jsonLd).toContain("/products/groundate");
+  expect(jsonLd).toContain("/products/eastern-brew");
+  expect(jsonLd).not.toContain('"@type":"Product"');
+  expect(jsonLd).not.toContain("aggregateRating");
+  expect(jsonLd).not.toContain("AggregateRating");
+  const sitemap = await request.get("/sitemap.xml");
+  expect(sitemap.ok()).toBeTruthy();
+  expect(await sitemap.text()).toContain("/date-seed-coffee");
 });
 
 test("café drinks stay hidden", async ({ page }) => {

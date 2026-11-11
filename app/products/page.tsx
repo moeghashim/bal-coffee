@@ -203,7 +203,14 @@ export default async function ProductsPage() {
               >
                 Three roasted date seed coffees, each ground for a different
                 brew. DateSpresso, GrounDate, and Eastern Brew are naturally
-                caffeine-free.{" "}
+                caffeine-free. New to it? Read{" "}
+                <a
+                  href="/date-seed-coffee"
+                  style={{ color: "var(--terra-deep)" }}
+                >
+                  what date seed coffee is
+                </a>{" "}
+                and how each grind brews.{" "}
                 <a href="/faq" style={{ color: "var(--terra-deep)" }}>
                   Questions about caffeine
                 </a>

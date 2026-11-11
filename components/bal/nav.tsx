@@ -111,9 +111,9 @@ export function Nav() {
 
   const links = [
     { href: "/products", label: "Shop" },
+    { href: "/date-seed-coffee", label: "Date Seed Coffee" },
     { href: "/about", label: "About" },
     { href: "/#process", label: "Process" },
-    { href: "/journal", label: "Journal" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -143,7 +143,7 @@ export function Nav() {
         className={`bal-nav-links ${mobileOpen ? "bal-nav-links-open" : ""}`}
         style={{
           display: "flex",
-          gap: 36,
+          gap: 28,
           fontSize: 14,
           color: "var(--ink-2)",
         }}

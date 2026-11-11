@@ -206,6 +206,20 @@ export function Process() {
           >
             How date seed coffee is made
           </h2>
+          <a
+            href="/date-seed-coffee"
+            style={{
+              display: "inline-block",
+              marginTop: 18,
+              color: "#f1eacf",
+              fontSize: 14,
+              lineHeight: 1.4,
+              textDecoration: "underline",
+              textUnderlineOffset: 3,
+            }}
+          >
+            More about date seed coffee
+          </a>
         </div>
         <div
           className="bal-process-divider"

@@ -2,31 +2,48 @@ import type { Metadata } from "next";
 import { shopifyImageUrl } from "lib/images";
 import type { Product } from "lib/products";
 
+export {
+  breadcrumbJsonLd,
+  faqPageJsonLd,
+  itemListJsonLd,
+  webPageJsonLd,
+} from "./structured-data";
+
 function priceString(amount: number) {
   return amount.toFixed(2);
 }
 
 /**
  * One primary intent per URL so the pages do not compete for the same query.
- * Search Console (6–29 Oct 2026) has impressions for brand and product names
- * only, so each coffee title starts with DateSpresso, GrounDate, or Eastern
+ * /date-seed-coffee owns "date seed coffee". The homepage owns the broader
+ * caffeine-free coffee alternative. /products is the shop page. /faq is
+ * support. Each coffee title starts with DateSpresso, GrounDate, or Eastern
  * Brew and then names the brew method.
  */
 export const pageSeo = {
   home: {
+    primary: "BAL Coffee; caffeine-free coffee alternative",
+    intent:
+      "Brand page for the caffeine-free coffee alternative. The date seed coffee explainer lives on /date-seed-coffee.",
+    title: "BAL Coffee | Caffeine-Free Coffee Alternative from Houston",
+    description:
+      "BAL Coffee roasts date seeds into a naturally caffeine-free coffee alternative. Three brew styles in 12 oz bags, shipped from Houston across the US.",
+  },
+  dateSeedCoffee: {
     primary: "date seed coffee",
     intent:
-      "Introduce the category and the caffeine-free alternative, then send shoppers to the bags.",
-    title: "Date Seed Coffee | Caffeine-Free Coffee Alternative | BAL",
+      "Explain date seed coffee, then send shoppers to the bag that matches how they brew.",
+    title: "Date Seed Coffee: Caffeine-Free Brew from Date Pits | BAL",
     description:
-      "BAL makes roasted date seed coffee: a naturally caffeine-free coffee alternative with no coffee beans. Shop 12 oz bags shipped across the US.",
+      "Date seed coffee is brewed from roasted date seeds, also called date pits. Naturally caffeine-free and acid-free, with no coffee beans. Find your brew.",
+    h1: "Date seed coffee: a caffeine-free cup roasted from date seeds",
   },
   products: {
-    primary: "roasted date seed coffee",
-    intent: "Compare the three bags and choose a brew method.",
-    title: "Shop Roasted Date Seed Coffee | Caffeine-Free | BAL",
+    primary: "buy date seed coffee",
+    intent: "Shop the three bags by brew method.",
+    title: "Shop Date Seed Coffee: Espresso, Drip & Turkish | BAL",
     description:
-      "Shop BAL's roasted date seed coffees: DateSpresso, GrounDate and Eastern Brew. 100% roasted date seeds, naturally caffeine-free, 12 oz bags.",
+      "Shop BAL date seed coffee by brew method: DateSpresso for espresso, GrounDate for drip and French press, Eastern Brew for a cezve. 12 oz bags.",
   },
   datespresso: {
     primary: "date seed espresso alternative",
@@ -60,11 +77,13 @@ export const pageSeo = {
     brewLink: "Eastern Brew, for a Turkish-style cup",
   },
   faq: {
-    primary: "date seed coffee questions",
-    intent: "Answer caffeine, decaf, taste, brewing, and shipping questions.",
-    title: "Date Seed Coffee FAQ: Caffeine, Brewing, Shipping | BAL",
+    primary: "BAL Coffee orders and shipping",
+    intent:
+      "Support page for orders, shipping, and tracking, plus short answers on caffeine and brewing.",
+    title: "BAL Coffee FAQ: Orders, Shipping, Caffeine & Brewing",
     description:
-      "Answers about BAL's roasted date seed coffee: caffeine, how it differs from decaf, brewing, shipping and orders.",
+      "Questions about ordering, shipping and tracking BAL Coffee, plus quick answers on caffeine and brewing date seed coffee.",
+    h1: "BAL Coffee FAQ",
   },
   about: {
     primary: "BAL Coffee founder",
@@ -196,19 +215,6 @@ export function websiteJsonLd(url: string) {
     name: "BAL Coffee",
     url,
     publisher: { "@id": `${url}/#organization` },
-  };
-}
-
-export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.name,
-      item: item.url,
-    })),
   };
 }
 

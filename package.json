@@ -11,7 +11,7 @@
     "check:graphql": "gql.tada check",
     "hooks:install": "git config core.hooksPath .githooks",
     "test": "pnpm prettier:check && pnpm check:boundary && pnpm check:graphql && pnpm test:unit",
-    "test:unit": "node --experimental-strip-types --test lib/ga.test.ts",
+    "test:unit": "node --experimental-strip-types --test lib/*.test.ts",
     "e2e": "playwright test",
     "e2e:ga": "playwright test -c playwright.ga.config.ts",
     "e2e:report": "playwright show-report",

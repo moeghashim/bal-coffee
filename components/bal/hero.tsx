@@ -208,8 +208,14 @@ export function Hero() {
               color: "var(--ink-2)",
             }}
           >
-            <a href="/faq" style={{ color: "var(--terra-deep)" }}>
-              Is date seed coffee caffeine-free?
+            <a href="/date-seed-coffee" style={{ color: "var(--terra-deep)" }}>
+              What is date seed coffee?
+            </a>
+            <span style={{ margin: "0 10px", color: "var(--ink-soft)" }}>
+              ·
+            </span>
+            <a href="/faq#caffeine" style={{ color: "var(--terra-deep)" }}>
+              Is it caffeine-free?
             </a>
             <span style={{ margin: "0 10px", color: "var(--ink-soft)" }}>
               ·

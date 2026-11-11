@@ -29,13 +29,25 @@ test("the Shopify handle arabica resolves to the Eastern Brew URL", async ({
 test("products page lists the live catalog", async ({ page }) => {
   const response = await page.goto("/products");
   expect(response?.ok()).toBeTruthy();
+  await expect(page).toHaveTitle(
+    "Shop Date Seed Coffee: Espresso, Drip & Turkish | BAL",
+  );
   await expect(
     page.getByRole("heading", { name: "Shop date seed coffee", level: 1 }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "what date seed coffee is" }),
+  ).toHaveAttribute("href", "/date-seed-coffee");
   for (const name of productNames) {
     await expect(page.getByText(name, { exact: false }).first()).toBeVisible();
   }
 });
+
+const productTitles = {
+  datespresso: "DateSpresso | Date Seed Espresso Alternative | BAL Coffee",
+  groundate: "GrounDate | Drip & French Press Date Seed Coffee | BAL",
+  "eastern-brew": "Eastern Brew | Turkish-Style Date Seed Coffee | BAL Coffee",
+} as const;
 
 for (const slug of productSlugs) {
   test(`PDP /products/${slug} renders name, price and add-to-cart`, async ({
@@ -43,6 +55,7 @@ for (const slug of productSlugs) {
   }) => {
     const response = await page.goto(`/products/${slug}`);
     expect(response?.ok()).toBeTruthy();
+    await expect(page).toHaveTitle(productTitles[slug]);
     // Name in the H1
     await expect(page.locator("h1")).toBeVisible();
     // A formatted price is present somewhere on the page

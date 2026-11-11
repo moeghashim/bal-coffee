@@ -2,12 +2,28 @@ import { ReactNode } from "react";
 import { PageShell } from "components/bal/page-shell";
 import { pageMetadata, pageSeo } from "lib/seo";
 
+const learnMore = (
+  <>
+    {" "}
+    Learn more about{" "}
+    <a href="/date-seed-coffee" style={{ color: "var(--terra-deep)" }}>
+      date seed coffee
+    </a>
+    .
+  </>
+);
+
 const questions: { id: string; question: string; answer: ReactNode }[] = [
   {
     id: "what",
     question: "What is BAL Coffee?",
-    answer:
-      "BAL is roasted date seed coffee. The bags are made from date seeds, not coffee beans, and they are roasted in small batches.",
+    answer: (
+      <>
+        BAL is roasted date seed coffee. The bags are made from date seeds, not
+        coffee beans, and they are roasted in small batches.
+        {learnMore}
+      </>
+    ),
   },
   {
     id: "caffeine",
@@ -41,7 +57,7 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
         <a href="/products/eastern-brew" style={{ color: "var(--terra-deep)" }}>
           Eastern Brew
         </a>
-        .
+        .{learnMore}
       </>
     ),
   },
@@ -115,7 +131,7 @@ export default function FaqPage() {
   return (
     <PageShell
       eyebrow="Help"
-      title="Date seed coffee FAQ"
+      title={pageSeo.faq.h1}
       intro="Short answers from what we actually sell today. If yours isn't here, email us."
     >
       <div style={{ display: "grid", gap: 28 }}>
