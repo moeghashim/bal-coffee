@@ -10,6 +10,7 @@ const STATIC_LASTMOD = "2026-10-31";
 const staticRoutes = [
   "",
   "/products",
+  "/date-seed-coffee",
   "/about",
   "/faq",
   "/shipping",
@@ -29,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${baseUrl}${path}`,
-    lastModified: STATIC_LASTMOD,
+    lastModified: path === "/date-seed-coffee" ? "2026-11-11" : STATIC_LASTMOD,
   }));
 
   const productEntries: MetadataRoute.Sitemap = products.map((product) => ({

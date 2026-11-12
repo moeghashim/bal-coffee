@@ -8,21 +8,25 @@ type ProductCardProps = {
   product: Product;
   horizontal?: boolean;
   showBrewLink?: boolean;
+  summary?: string;
 };
 
 export function ProductCard({
   product,
   horizontal = false,
   showBrewLink = false,
+  summary,
 }: ProductCardProps) {
   const localProduct = getProduct(product.slug);
   const displayName = localProduct?.name || product.name;
-  const displayBlurb = localProduct?.blurb || product.blurb;
+  const displayBlurb = summary || localProduct?.blurb || product.blurb;
   const brewLabel = showBrewLink ? brewLinkLabel(product.slug) : undefined;
+  const blurbLines = summary ? 4 : horizontal ? 3 : 2;
+  const blurbHeight = summary ? 76 : horizontal ? 48 : 42;
+  const summaryExtra = summary ? 34 : 0;
   const multiple = (product.variants?.length ?? 0) > 1;
   const hasLongName = displayName.length > 34;
   const titleHeight = horizontal ? 60 : 58;
-  const blurbHeight = horizontal ? 48 : 42;
 
   return (
     <article
@@ -76,8 +80,8 @@ export function ProductCard({
         style={{
           display: "flex",
           flexDirection: "column",
-          height: horizontal ? "100%" : brewLabel ? 228 : 196,
-          minHeight: horizontal ? 0 : brewLabel ? 228 : 196,
+          height: horizontal ? "100%" : (brewLabel ? 228 : 196) + summaryExtra,
+          minHeight: horizontal ? 0 : (brewLabel ? 228 : 196) + summaryExtra,
           overflow: "hidden",
           padding: horizontal ? "22px 22px 18px" : "14px 18px 16px",
         }}
@@ -126,7 +130,7 @@ export function ProductCard({
                 display: "-webkit-box",
                 overflow: "hidden",
                 WebkitBoxOrient: "vertical",
-                WebkitLineClamp: horizontal ? 3 : 2,
+                WebkitLineClamp: blurbLines,
                 fontSize: horizontal ? 12 : 15,
                 lineHeight: 1.2,
                 color: "var(--ink-2)",
