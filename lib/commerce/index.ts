@@ -11,4 +11,5 @@ export {
   getStorefrontProductByHandle,
   getStorefrontProductsByHandles,
 } from "./products";
+export { createEventCheckoutCart } from "./event-cart";
 export { formatPrice } from "./money";

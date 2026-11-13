@@ -87,7 +87,10 @@ function mapVariant(variant: ShopifyVariant): ProductVariant | undefined {
 
 const BAG_ORDER = ["datespresso", "groundate", "arabica"];
 
-function toCatalogProduct(shopifyProduct: ShopifyProduct): Product {
+function toCatalogProduct(
+  shopifyProduct: ShopifyProduct,
+  forceDrink = false,
+): Product {
   const editorial = getProductByShopifyHandle(shopifyProduct.handle);
   const images: ShopifyImage[] = getShopifyImages(shopifyProduct);
   const variants = shopifyProduct.variants.nodes
@@ -108,7 +111,7 @@ function toCatalogProduct(shopifyProduct: ShopifyProduct): Product {
     normalizeDescription(shopifyProduct.description) ||
     editorial?.description ||
     "";
-  const drink = isCafeDrink(shopifyProduct);
+  const drink = forceDrink || isCafeDrink(shopifyProduct);
   const category = editorial ? editorial.category : drink ? "drink" : "other";
   const minMoney =
     min !== undefined
@@ -194,7 +197,7 @@ async function loadShopifyProducts() {
 
 const getCatalog = cache(async () => {
   const nodes = await loadShopifyProducts();
-  return orderCatalog(nodes.map(toCatalogProduct));
+  return orderCatalog(nodes.map((node) => toCatalogProduct(node)));
 });
 
 function isPublicCatalogProduct(product: Product) {
@@ -223,6 +226,44 @@ export async function getProductWithShopify(slug: string) {
     (product) => product.slug === slug || product.shopifyHandle === slug,
   );
 }
+
+// Historical POS drink handles. Included only when the Storefront API can
+// read them (published to the headless channel). They stay off the public
+// catalog via category "drink".
+const EVENT_DRINK_HANDLES = [
+  "caramel-glow",
+  "pistachio",
+  "pistachio-caramel",
+  "brown-sugar",
+  "honey-iced-lattee",
+  "honey-iced-latte",
+  "hot-latte",
+];
+
+export const getEventDrinks = cache(async () => {
+  const catalog = await getCatalog();
+  const drinks = new Map<string, Product>();
+  for (const product of catalog) {
+    if (product.category === "drink") {
+      drinks.set(product.shopifyHandle, product);
+    }
+  }
+
+  if (drinks.size === 0 && catalog.length > 0) {
+    try {
+      const extra = await getStorefrontProductsByHandles(EVENT_DRINK_HANDLES);
+      for (const handle of EVENT_DRINK_HANDLES) {
+        const node = extra.get(handle);
+        if (!node || getProductByShopifyHandle(node.handle)) continue;
+        drinks.set(node.handle, toCatalogProduct(node, true));
+      }
+    } catch {
+      // A missing handle is not a menu failure.
+    }
+  }
+
+  return [...drinks.values()].sort((a, b) => a.name.localeCompare(b.name));
+});
 
 export async function getRelatedProductsWithShopify(slug: string) {
   const products = await getProducts();
