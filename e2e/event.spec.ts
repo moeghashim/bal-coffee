@@ -7,6 +7,14 @@ test("event menu is noindex and not linked from the shop", async ({
   const response = await page.goto("/event");
   expect(response?.ok()).toBeTruthy();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "BAL Coffee",
+  );
+  await expect(
+    page.getByText(
+      "Coffee-style drinks made from roasted date seeds instead of coffee beans. Naturally caffeine-free, roasted in Houston.",
+    ),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2 })).toHaveText(
     "Order a drink",
   );
   const robots = await page

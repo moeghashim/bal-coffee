@@ -215,6 +215,7 @@ export function EventMenu({ drinks }: { drinks: EventMenuDrink[] }) {
         <p className="bal-event-fine">
           You’ll pay on Shopify’s secure checkout. Tax is calculated there.
         </p>
+        <p className="bal-event-fine">You can add a tip at checkout.</p>
       </div>
     </form>
   );
