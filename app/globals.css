@@ -766,6 +766,14 @@ input {
   color: var(--ink);
 }
 
+.bal-event-order-heading {
+  margin-top: 28px;
+  font-size: clamp(26px, 5vw, 32px);
+  line-height: 1.1;
+  font-weight: 500;
+  color: var(--ink);
+}
+
 .bal-event-lede,
 .bal-event-empty,
 .bal-event-fine,

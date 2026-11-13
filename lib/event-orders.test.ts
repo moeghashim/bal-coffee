@@ -184,6 +184,8 @@ test("event pages make no health, organic, or free-shipping claims", () => {
     /\borganic\b|free shipping|best seller|prebiotic|digestion|\bgut\b|pregnan|blood sugar|antioxidant|\bvegan\b|weight loss|cholesterol/i,
   );
   assert.match(copy, /Text me when my order is ready/);
+  assert.match(copy, /Naturally caffeine-free, roasted in Houston/);
+  assert.match(copy, /You can add a tip at checkout/);
   assert.match(
     readFileSync(new URL("../components/bal/nav.tsx", import.meta.url), "utf8"),
     /\/products/,
