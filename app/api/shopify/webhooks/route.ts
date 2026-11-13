@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import crypto from "node:crypto";
 import { revalidatePath } from "next/cache";
+import { parseShopifyPaidOrder } from "lib/event/orders";
+import { getEventStore } from "lib/event/store";
 
 const HANDLED_TOPICS = new Set([
   "products/create",
@@ -48,6 +50,37 @@ export async function POST(req: NextRequest) {
   if (topic === "products/create" || topic === "products/update") {
     revalidatePath("/", "layout");
     revalidatePath("/products", "layout");
+  }
+
+  // orders/paid only. orders/create also fires for unpaid checkouts, so it
+  // would put abandoned carts on the event board. Cart attributes written at
+  // checkout (order_source=event) are what mark an order as an event order.
+  if (topic === "orders/paid") {
+    let payload: unknown;
+    try {
+      payload = JSON.parse(rawBody);
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
+    const draft = parseShopifyPaidOrder(payload);
+    if (!draft) {
+      return NextResponse.json({ ok: true, topic, shop: shopDomain });
+    }
+    try {
+      await getEventStore().savePaid(draft);
+    } catch (error) {
+      console.error("event order ingest failed", draft.id, error);
+      return NextResponse.json(
+        { error: "Event order was not stored" },
+        { status: 500 },
+      );
+    }
+    return NextResponse.json({
+      ok: true,
+      topic,
+      shop: shopDomain,
+      eventOrder: draft.number,
+    });
   }
 
   return NextResponse.json({ ok: true, topic, shop: shopDomain });
