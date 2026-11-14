@@ -997,6 +997,12 @@ input {
   flex: none;
 }
 
+.bal-event-consent a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .bal-event-add {
   margin-top: 14px;
   scroll-margin-bottom: 112px;

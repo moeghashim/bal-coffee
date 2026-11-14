@@ -31,8 +31,13 @@ const DEFAULT_CHOICES: DrinkChoices = {
   sweetness: DEFAULT_SWEETNESS,
 };
 
-const SMS_CONSENT =
-  "Text me when my order is ready. Msg & data rates may apply. Reply STOP to opt out.";
+const SMS_CONSENT = (
+  <>
+    Text me when my order is ready. Msg & data rates may apply. Reply STOP to
+    opt out. <a href="/terms">Terms</a> and{" "}
+    <a href="/privacy">Privacy Policy</a>.
+  </>
+);
 const MAX_PER_LINE = 12;
 const MAX_TOTAL = 24;
 

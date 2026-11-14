@@ -69,6 +69,30 @@ export default async function PrivacyPage() {
           </p>
         </>
       ) : null}
+      <h2
+        className="serif"
+        style={{ fontSize: 22, marginTop: 32, color: "var(--ink)" }}
+      >
+        SMS / mobile information
+      </h2>
+      <p style={{ marginTop: 12 }}>
+        We collect your mobile number only to send the order-ready text you
+        asked for.
+      </p>
+      <p style={{ marginTop: 12 }}>
+        Mobile information and SMS opt-in data and consent will not be shared
+        with or sold to third parties or affiliates for marketing or promotional
+        purposes.
+      </p>
+      <p style={{ marginTop: 12 }}>
+        It is shared only with our messaging provider (Twilio) to deliver the
+        message.
+      </p>
+      <p style={{ marginTop: 12 }}>To opt out, reply STOP.</p>
+      <p style={{ marginTop: 12 }}>
+        We keep your mobile number and SMS opt-in only as long as needed to run
+        the event and fulfill the order.
+      </p>
       <p style={{ marginTop: 28 }}>
         Questions about privacy? Email{" "}
         <a
