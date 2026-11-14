@@ -40,7 +40,7 @@ export function lineAttributes(choice: {
   ice?: DrinkIce;
   sweetness: DrinkSweetness;
 }) {
-  const attributes = [
+  const attributes: { key: string; value: string }[] = [
     { key: "Temperature", value: choice.temperature },
     { key: "Sweetness", value: choice.sweetness },
   ];
