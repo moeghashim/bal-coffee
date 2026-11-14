@@ -51,7 +51,7 @@ test("SMS program terms and privacy are published", async ({ page }) => {
     page.getByText("Consent is not a condition of purchase."),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "privacy policy" }),
+    page.getByRole("link", { name: "privacy policy.", exact: true }),
   ).toHaveAttribute("href", "/privacy");
 
   await page.goto("/privacy");
