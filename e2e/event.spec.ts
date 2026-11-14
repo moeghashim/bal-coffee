@@ -107,6 +107,13 @@ test("event menu is noindex and not linked from the shop", async ({
     await order.getByRole("button", { name: "Remove one Brown Sugar" }).click();
     await expect(order.getByText(/1 × Brown Sugar —/)).toBeVisible();
     await expect(card.getByText("1 in your order")).toBeVisible();
+    await expect(order.getByRole("link", { name: "Terms" })).toHaveAttribute(
+      "href",
+      "/terms",
+    );
+    await expect(
+      order.getByRole("link", { name: "Privacy Policy" }),
+    ).toHaveAttribute("href", "/privacy");
   }
 
   const robots = await page

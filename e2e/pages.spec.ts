@@ -20,6 +20,67 @@ for (const [path, heading] of pages) {
   });
 }
 
+test("SMS program terms and privacy are published", async ({ page }) => {
+  await page.goto("/terms");
+  await expect(
+    page.getByRole("heading", {
+      level: 2,
+      name: "Text message (SMS) order notifications",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "BAL Coffee order notifications sends one text when your in-person event order is ready for pickup. We send it only if you tick the opt-in box on the order form. The text is transactional, never marketing.",
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Message frequency: one message per order."),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Message and data rates may apply."),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Reply STOP to opt out and HELP for help."),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "Carriers are not liable for delayed or undelivered messages.",
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Consent is not a condition of purchase."),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "privacy policy" }),
+  ).toHaveAttribute("href", "/privacy");
+
+  await page.goto("/privacy");
+  await expect(
+    page.getByRole("heading", { level: 2, name: "SMS / mobile information" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "We collect your mobile number only to send the order-ready text you asked for.",
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "Mobile information and SMS opt-in data and consent will not be shared with or sold to third parties or affiliates for marketing or promotional purposes.",
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "It is shared only with our messaging provider (Twilio) to deliver the message.",
+    ),
+  ).toBeVisible();
+  await expect(page.getByText("To opt out, reply STOP.")).toBeVisible();
+  await expect(
+    page.getByText(
+      "We keep your mobile number and SMS opt-in only as long as needed to run the event and fulfill the order.",
+    ),
+  ).toBeVisible();
+});
+
 test("footer points at real pages and hides unknown socials", async ({
   page,
 }) => {

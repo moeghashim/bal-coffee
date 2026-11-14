@@ -50,6 +50,39 @@ export default async function TermsPage() {
           </p>
         </>
       )}
+      <h2
+        className="serif"
+        style={{ fontSize: 22, marginTop: 32, color: "var(--ink)" }}
+      >
+        Text message (SMS) order notifications
+      </h2>
+      <p style={{ marginTop: 12 }}>
+        BAL Coffee order notifications sends one text when your in-person event
+        order is ready for pickup. We send it only if you tick the opt-in box on
+        the order form. The text is transactional, never marketing.
+      </p>
+      <p style={{ marginTop: 12 }}>Message frequency: one message per order.</p>
+      <p style={{ marginTop: 12 }}>Message and data rates may apply.</p>
+      <p style={{ marginTop: 12 }}>Reply STOP to opt out and HELP for help.</p>
+      <p style={{ marginTop: 12 }}>
+        For support, email{" "}
+        <a
+          href="mailto:judy@balcoffee.com"
+          style={{ color: "var(--terra-deep)" }}
+        >
+          judy@balcoffee.com.
+        </a>
+      </p>
+      <p style={{ marginTop: 12 }}>
+        Carriers are not liable for delayed or undelivered messages.
+      </p>
+      <p style={{ marginTop: 12 }}>Consent is not a condition of purchase.</p>
+      <p style={{ marginTop: 12 }}>
+        See our{" "}
+        <a href="/privacy" style={{ color: "var(--terra-deep)" }}>
+          privacy policy.
+        </a>
+      </p>
       <p style={{ marginTop: 28 }}>
         Questions about these terms? Email{" "}
         <a
