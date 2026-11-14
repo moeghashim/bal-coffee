@@ -327,7 +327,11 @@ export function EventMenu({ drinks }: { drinks: EventMenuDrink[] }) {
         })}
       </div>
 
-      <section className="bal-event-order" aria-label="Your order">
+      <section
+        id="your-order"
+        className="bal-event-order"
+        aria-label="Your order"
+      >
         <div className="bal-event-order-head">
           <h2 className="serif">Your order</h2>
           <p>
@@ -445,6 +449,23 @@ export function EventMenu({ drinks }: { drinks: EventMenuDrink[] }) {
         </p>
         <p className="bal-event-fine">You can add a tip at checkout.</p>
       </section>
+      <div className="bal-event-dock">
+        <p>
+          {count > 0
+            ? `Your order · ${count} ${count === 1 ? "drink" : "drinks"} · ${formatCents(cents, currency)}`
+            : "Your order · Nothing added yet"}
+        </p>
+        <button
+          type="button"
+          onClick={() =>
+            document
+              .getElementById("your-order")
+              ?.scrollIntoView({ behavior: "smooth", block: "start" })
+          }
+        >
+          Review
+        </button>
+      </div>
     </form>
   );
 }
