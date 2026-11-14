@@ -2,12 +2,16 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { isAllowedCheckoutUrl } from "./event/checkout-url.ts";
+import { EVENT_DRINK_COPY, presentEventDrink } from "./event/copy.ts";
 import {
+  formatEventCartLine,
+  formatEventDrinkLine,
   mergePaidOrder,
   parseShopifyPaidOrder,
   readySmsBody,
   type EventOrderDraft,
 } from "./event/orders.ts";
+import { lineAttributes } from "./event/temperature.ts";
 import { formatUsPhone, normalizeFirstName, toUsE164 } from "./event/phone.ts";
 import { MemoryEventStore } from "./event/store-memory.ts";
 
@@ -74,6 +78,7 @@ test("paid webhook keeps event orders and drops the rest", () => {
   assert.equal(paid?.consent, true);
   assert.equal(paid?.number, "1042");
   assert.equal(paid?.drinks[0]?.variant, "Oat");
+  assert.equal(paid?.drinks[0]?.temperature, undefined);
 
   assert.equal(
     parseShopifyPaidOrder({
@@ -151,6 +156,143 @@ test("making does not override ready, and no-consent ready does not text", async
   );
 });
 
+test("event drink copy and customizations stay on the order", () => {
+  const honey = presentEventDrink({
+    name: "Honey Iced lattee",
+    shopifyHandle: "honey-iced-lattee",
+    description: "Shopify description",
+  });
+  assert.equal(honey.name, "Honey Iced Latte");
+  assert.equal(
+    honey.description,
+    EVENT_DRINK_COPY["honey-iced-lattee"].description,
+  );
+  assert.equal(honey.imageSrc, "/event/honey-iced-lattee.jpg");
+
+  const unknown = presentEventDrink({
+    name: "Hot Latte",
+    shopifyHandle: "hot-latte",
+    description: "  From the counter.  ",
+  });
+  assert.equal(unknown.name, "Hot Latte");
+  assert.equal(unknown.description, "From the counter.");
+  assert.equal(unknown.imageSrc, undefined);
+  assert.doesNotMatch(
+    readFileSync(new URL("./event/menu.ts", import.meta.url), "utf8"),
+    /product\.images|imageUrl/,
+  );
+  assert.equal(
+    presentEventDrink({
+      name: "Pistachio",
+      shopifyHandle: "pistachio",
+      description: "unused",
+    }).name,
+    "Pistachio Caramel",
+  );
+
+  assert.equal(
+    formatEventCartLine({
+      quantity: 1,
+      title: "Brown Sugar",
+      milk: "Oat milk",
+      temperature: "Iced",
+      ice: "Less ice",
+      sweetness: "Regular",
+    }),
+    "1 × Brown Sugar — Oat milk · Iced · Less ice",
+  );
+  assert.equal(
+    formatEventDrinkLine({
+      title: "Brown Sugar",
+      variant: "Oat milk",
+      temperature: "Iced",
+      ice: "Regular ice",
+      sweetness: "Regular",
+      quantity: 1,
+    }),
+    "1 × Brown Sugar · Oat milk · Iced",
+  );
+  assert.equal(
+    formatEventDrinkLine({
+      title: "Brown Sugar",
+      variant: "Oat milk",
+      temperature: "Iced",
+      ice: "Less ice",
+      sweetness: "More sweet",
+      quantity: 1,
+    }),
+    "1 × Brown Sugar · Oat milk · Iced · Less ice · More sweet",
+  );
+  assert.equal(
+    formatEventDrinkLine({
+      title: "Pistachio Caramel",
+      variant: "Oat milk",
+      temperature: "Hot",
+      sweetness: "Less sweet",
+      quantity: 2,
+    }),
+    "2 × Pistachio Caramel · Oat milk · Hot · Less sweet",
+  );
+
+  const paid = parseShopifyPaidOrder({
+    id: 1003,
+    name: "#1044",
+    financial_status: "paid",
+    note_attributes: [{ name: "order_source", value: "event" }],
+    line_items: [
+      {
+        title: "Brown Sugar",
+        quantity: 1,
+        variant_title: "Oat milk",
+        properties: [
+          { name: "Temperature", value: "Iced" },
+          { name: "Ice", value: "Less ice" },
+          { name: "Sweetness", value: "More sweet" },
+        ],
+      },
+      {
+        title: "Pistachio Caramel",
+        quantity: 1,
+        variant_title: "Oat milk",
+        properties: [
+          { name: "Temperature", value: "Hot" },
+          { name: "Ice", value: "Less ice" },
+          { name: "Sweetness", value: "Regular" },
+        ],
+      },
+    ],
+  });
+  assert.equal(
+    paid ? formatEventDrinkLine(paid.drinks[0]) : "",
+    "1 × Brown Sugar · Oat milk · Iced · Less ice · More sweet",
+  );
+  assert.equal(paid?.drinks[1]?.ice, undefined);
+  assert.equal(paid?.drinks[1]?.sweetness, "Regular");
+  assert.equal(
+    paid ? formatEventDrinkLine(paid.drinks[1]) : "",
+    "1 × Pistachio Caramel · Oat milk · Hot",
+  );
+
+  assert.deepEqual(
+    lineAttributes({
+      temperature: "Iced",
+      ice: "Less ice",
+      sweetness: "More sweet",
+    }),
+    [
+      { key: "Temperature", value: "Iced" },
+      { key: "Ice", value: "Less ice" },
+      { key: "Sweetness", value: "More sweet" },
+    ],
+  );
+  assert.deepEqual(
+    lineAttributes({ temperature: "Hot", sweetness: "Regular" }).map(
+      (attribute) => attribute.key,
+    ),
+    ["Temperature", "Sweetness"],
+  );
+});
+
 test("checkout urls stay on Shopify hosts", () => {
   assert.equal(
     isAllowedCheckoutUrl(
@@ -175,17 +317,22 @@ test("event pages make no health, organic, or free-shipping claims", () => {
     "components/event/order-status.tsx",
     "components/event/board.tsx",
     "components/event/event-frame.tsx",
+    "lib/event/copy.ts",
   ];
   const copy = files
     .map((file) => readFileSync(new URL(`../${file}`, import.meta.url), "utf8"))
     .join("\n");
+  const honey =
+    "A DateSpresso shot with organic honey and organic milk. Served iced, or hot if you prefer.";
+  assert.equal(copy.includes(honey), true);
   assert.doesNotMatch(
-    copy,
+    copy.replaceAll(honey, ""),
     /\borganic\b|free shipping|best seller|prebiotic|digestion|\bgut\b|pregnan|blood sugar|antioxidant|\bvegan\b|weight loss|cholesterol/i,
   );
   assert.match(copy, /Text me when my order is ready/);
   assert.match(copy, /Naturally caffeine-free, roasted in Houston/);
   assert.match(copy, /You can add a tip at checkout/);
+  assert.match(copy, /We recommend iced\. Hot is available too\./);
   assert.match(
     readFileSync(new URL("../components/bal/nav.tsx", import.meta.url), "utf8"),
     /\/products/,

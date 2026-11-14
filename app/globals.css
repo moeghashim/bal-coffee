@@ -797,18 +797,25 @@ input {
   text-decoration: underline;
 }
 
+.bal-event-temp-cue {
+  margin-top: 8px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+
 .bal-event-drink {
   display: grid;
-  grid-template-columns: 72px 1fr;
+  grid-template-columns: 112px 1fr;
   gap: 14px;
   padding: 16px 0;
   border-bottom: 1px solid var(--line-soft);
 }
 
-.bal-event-drink img,
+.bal-event-drink-photo,
 .bal-event-drink-fallback {
-  width: 72px;
-  height: 72px;
+  width: 112px;
+  height: 112px;
   border-radius: 8px;
   background: var(--cream-2);
   object-fit: cover;
@@ -825,6 +832,81 @@ input {
   font-size: 24px;
   font-weight: 500;
   color: var(--ink);
+}
+
+.bal-event-drink-copy {
+  margin-top: 6px;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.bal-event-temp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.bal-event-temp + .bal-event-temp {
+  margin-top: 8px;
+}
+
+.bal-event-temp legend {
+  flex-basis: 100%;
+  margin-bottom: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.bal-event-temp label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--cream-3);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.2;
+  cursor: pointer;
+  scroll-margin-top: 16px;
+  scroll-margin-bottom: 112px;
+}
+
+.bal-event-temp label:has(input:checked) {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--cream-3);
+}
+
+.bal-event-temp label:has(input:disabled) {
+  opacity: 0.45;
+}
+
+.bal-event-temp label:has(input:focus-visible) {
+  outline: 2px solid var(--terra);
+  outline-offset: 2px;
+}
+
+.bal-event-temp input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .bal-event-drink ul {
@@ -866,12 +948,12 @@ input {
 
 .bal-event-qty button,
 .bal-event-qty span {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   color: var(--ink);
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .bal-event-qty button:disabled {
@@ -915,13 +997,120 @@ input {
   flex: none;
 }
 
-.bal-event-paybar {
+.bal-event-add {
+  margin-top: 14px;
+  scroll-margin-bottom: 112px;
+}
+
+.bal-event-badge,
+.bal-event-added {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.bal-event-added {
+  color: var(--olive-deep);
+}
+
+.bal-event {
+  padding-bottom: 108px;
+}
+
+.bal-event-order {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 22px;
-  padding-top: 14px;
+  margin-top: 28px;
+  padding-top: 16px;
+  scroll-margin-top: 16px;
+  scroll-margin-bottom: 96px;
+  background: var(--cream);
   border-top: 1px solid var(--line);
+}
+
+.bal-event-dock {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 72px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: var(--ink);
+  color: var(--cream-3);
+}
+
+.bal-event-dock p {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.bal-event-dock button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.bal-event-order-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bal-event-order-head h2 {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.bal-event-order-head p,
+.bal-event-order-lines p {
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.bal-event-order-lines {
+  margin-top: 4px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.bal-event-order-lines li {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.bal-event-line-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bal-event-remove {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 15px;
 }
 
 .bal-event-button,

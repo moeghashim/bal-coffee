@@ -20,6 +20,7 @@ const EVENT_CART_MUTATION = gql(`
 export type EventCartLine = {
   merchandiseId: string;
   quantity: number;
+  attributes?: EventCartAttribute[];
 };
 
 export type EventCartAttribute = {

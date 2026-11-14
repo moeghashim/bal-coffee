@@ -5,6 +5,18 @@ import { createEventCheckoutCart } from "lib/commerce";
 import { isAllowedCheckoutUrl } from "lib/event/checkout-url";
 import { toEventMenuDrink, type EventMenuDrink } from "lib/event/menu";
 import { normalizeFirstName, toUsE164 } from "lib/event/phone";
+import {
+  DEFAULT_ICE,
+  DEFAULT_SWEETNESS,
+  DEFAULT_TEMPERATURE,
+  lineAttributes,
+  parseIce,
+  parseSweetness,
+  parseTemperature,
+  type DrinkIce,
+  type DrinkSweetness,
+  type DrinkTemperature,
+} from "lib/event/temperature";
 
 export const dynamic = "force-dynamic";
 
@@ -97,7 +109,16 @@ function normalizeLines(value: unknown) {
   if (!Array.isArray(value) || value.length === 0) {
     return { ok: false as const, error: "Pick at least one drink." };
   }
-  const totals = new Map<string, number>();
+  const totals = new Map<
+    string,
+    {
+      merchandiseId: string;
+      quantity: number;
+      temperature: DrinkTemperature;
+      ice?: DrinkIce;
+      sweetness: DrinkSweetness;
+    }
+  >();
   for (const entry of value) {
     if (!entry || typeof entry !== "object") {
       return { ok: false as const, error: "Pick at least one drink." };
@@ -106,8 +127,41 @@ function normalizeLines(value: unknown) {
     const merchandiseId =
       typeof record.merchandiseId === "string" ? record.merchandiseId : "";
     const quantity = Number(record.quantity);
+    const temperature =
+      record.temperature === undefined
+        ? DEFAULT_TEMPERATURE
+        : parseTemperature(record.temperature);
+    const sweetness =
+      record.sweetness === undefined
+        ? DEFAULT_SWEETNESS
+        : parseSweetness(record.sweetness);
     if (!VARIANT_ID.test(merchandiseId)) {
       return { ok: false as const, error: "Pick a drink from the menu." };
+    }
+    if (!temperature) {
+      return {
+        ok: false as const,
+        error: "Choose iced or hot for each drink.",
+      };
+    }
+    if (!sweetness) {
+      return {
+        ok: false as const,
+        error: "Choose a sweetness for each drink.",
+      };
+    }
+    let ice: DrinkIce | undefined;
+    if (temperature === "Iced") {
+      ice =
+        record.ice === undefined
+          ? DEFAULT_ICE
+          : (parseIce(record.ice) ?? undefined);
+      if (!ice) {
+        return {
+          ok: false as const,
+          error: "Choose an ice level for each iced drink.",
+        };
+      }
     }
     if (
       !Number.isInteger(quantity) ||
@@ -119,12 +173,27 @@ function normalizeLines(value: unknown) {
         error: `Quantity must be between 1 and ${MAX_PER_LINE}.`,
       };
     }
-    totals.set(merchandiseId, (totals.get(merchandiseId) ?? 0) + quantity);
+    const key = [merchandiseId, temperature, ice ?? "", sweetness].join("\0");
+    const current = totals.get(key);
+    totals.set(key, {
+      merchandiseId,
+      quantity: (current?.quantity ?? 0) + quantity,
+      temperature,
+      ice,
+      sweetness,
+    });
   }
-  const lines = [...totals.entries()].map(([merchandiseId, quantity]) => ({
-    merchandiseId,
-    quantity,
+  const lines = [...totals.values()].map((line) => ({
+    merchandiseId: line.merchandiseId,
+    quantity: line.quantity,
+    attributes: lineAttributes(line),
   }));
+  if (lines.some((line) => line.quantity > MAX_PER_LINE)) {
+    return {
+      ok: false as const,
+      error: `Quantity must be between 1 and ${MAX_PER_LINE}.`,
+    };
+  }
   const total = lines.reduce((sum, line) => sum + line.quantity, 0);
   if (total > MAX_TOTAL) {
     return { ok: false as const, error: `Limit is ${MAX_TOTAL} drinks.` };
