@@ -1,4 +1,5 @@
-import { productImageAlt, variantLabel, type Product } from "lib/products";
+import { presentEventDrink } from "lib/event/copy";
+import { variantLabel, type Product } from "lib/products";
 
 export type EventMenuVariant = {
   id: string;
@@ -12,8 +13,8 @@ export type EventMenuVariant = {
 export type EventMenuDrink = {
   handle: string;
   name: string;
-  imageUrl?: string;
-  imageAlt: string;
+  description: string;
+  imageSrc?: string;
   variants: EventMenuVariant[];
 };
 
@@ -50,12 +51,12 @@ export function toEventMenuDrink(product: Product): EventMenuDrink | null {
   }
 
   if (variants.length === 0) return null;
-  const image = product.images?.[0];
+  const presented = presentEventDrink(product);
   return {
     handle: product.shopifyHandle,
-    name: product.name,
-    imageUrl: image?.url,
-    imageAlt: productImageAlt(product, image),
+    name: presented.name,
+    description: presented.description,
+    imageSrc: presented.imageSrc,
     variants,
   };
 }

@@ -17,6 +17,98 @@ test("event menu is noindex and not linked from the shop", async ({
   await expect(
     page.getByRole("heading", { level: 2, name: "Order a drink" }),
   ).toBeVisible();
+  await expect(
+    page.getByText("We recommend iced. Hot is available too."),
+  ).toBeVisible();
+
+  const drinks = [
+    {
+      name: "Brown Sugar",
+      handle: "brown-sugar",
+      description:
+        "A DateSpresso shot with brown sugar syrup and your choice of milk. Served iced, or hot if you prefer.",
+    },
+    {
+      name: "Caramel Glow",
+      handle: "caramel-glow",
+      description:
+        "A DateSpresso shot with salted caramel and milk, finished with a caramel drizzle. Served iced, or hot if you prefer.",
+    },
+    {
+      name: "Honey Iced Latte",
+      handle: "honey-iced-lattee",
+      description:
+        "A DateSpresso shot with organic honey and organic milk. Served iced, or hot if you prefer.",
+    },
+    {
+      name: "Pistachio Caramel",
+      handle: "pistachio",
+      description:
+        "A DateSpresso shot with pistachio syrup, pistachio cream and milk, finished with a caramel drizzle. Served iced, or hot if you prefer.",
+    },
+  ];
+  let seen = 0;
+  for (const drink of drinks) {
+    const heading = page.getByRole("heading", {
+      level: 2,
+      name: drink.name,
+      exact: true,
+    });
+    if ((await heading.count()) === 0) continue;
+    seen += 1;
+    const card = page.locator("article.bal-event-drink").filter({
+      has: heading,
+    });
+    await expect(card.getByText(drink.description)).toBeVisible();
+    const image = card.getByRole("img", { name: drink.name, exact: true });
+    await expect(image).toBeVisible();
+    await expect(image).toHaveAttribute("src", new RegExp(drink.handle));
+    await expect(
+      card.getByRole("radio", { name: "Iced (recommended)" }),
+    ).toBeChecked();
+    await expect(
+      card.getByRole("radio", { name: "Regular ice" }),
+    ).toBeChecked();
+    await expect(
+      card.getByRole("radio", { name: "Regular", exact: true }),
+    ).toBeChecked();
+    await card.getByRole("radio", { name: "Hot", exact: true }).check();
+    await expect(card.getByRole("radio", { name: "Less ice" })).toHaveCount(0);
+    await card.getByRole("radio", { name: "Iced (recommended)" }).check();
+    await expect(card.getByRole("radio", { name: "Less ice" })).toBeVisible();
+  }
+  if (seen > 0) {
+    expect(seen).toBe(drinks.length);
+    const heading = page.getByRole("heading", {
+      level: 2,
+      name: "Brown Sugar",
+      exact: true,
+    });
+    const card = page.locator("article.bal-event-drink").filter({
+      has: heading,
+    });
+    const milk = card.getByRole("group", { name: "Milk" }).getByRole("radio");
+    await milk.first().click();
+    await milk.first().click();
+    await expect(card.getByText(/\d+ in your order/)).toHaveCount(0);
+    const order = page.getByRole("region", { name: "Your order" });
+    await expect(order.getByText(/× Brown Sugar/)).toHaveCount(0);
+
+    await card.getByRole("button", { name: /Add to order · / }).click();
+    await expect(card.getByText("Added ✓")).toBeVisible();
+    await expect(card.getByText("1 in your order")).toBeVisible();
+    await expect(order.getByText(/1 × Brown Sugar —/)).toBeVisible();
+    await expect(order.getByText(/· Iced/)).toBeVisible();
+
+    await order.getByRole("button", { name: "Add one Brown Sugar" }).click();
+    await expect(order.getByText(/2 × Brown Sugar —/)).toBeVisible();
+    await expect(card.getByText("2 in your order")).toBeVisible();
+
+    await order.getByRole("button", { name: "Remove one Brown Sugar" }).click();
+    await expect(order.getByText(/1 × Brown Sugar —/)).toBeVisible();
+    await expect(card.getByText("1 in your order")).toBeVisible();
+  }
+
   const robots = await page
     .locator('meta[name="robots"]')
     .evaluateAll((nodes) =>
@@ -25,8 +117,11 @@ test("event menu is noindex and not linked from the shop", async ({
   expect(robots.some((content) => /noindex/i.test(content))).toBeTruthy();
   expect(robots.some((content) => /nofollow/i.test(content))).toBeTruthy();
   const html = await page.content();
-  expect(html).not.toMatch(/free shipping/i);
-  expect(html).not.toMatch(/\borganic\b/i);
+  const honey =
+    "A DateSpresso shot with organic honey and organic milk. Served iced, or hot if you prefer.";
+  const withoutHoney = html.replaceAll(honey, "");
+  expect(withoutHoney).not.toMatch(/free shipping/i);
+  expect(withoutHoney).not.toMatch(/\borganic\b/i);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/event");

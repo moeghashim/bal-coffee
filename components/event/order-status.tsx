@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { isAllowedCheckoutUrl } from "lib/event/checkout-url";
-import type { PublicEventOrder } from "lib/event/orders";
+import { formatEventDrinkLine, type PublicEventOrder } from "lib/event/orders";
 import { checkoutStorageKey } from "lib/event/phone";
 
 const STATUS_LABEL = {
@@ -76,9 +76,10 @@ export function OrderStatus({ eventRef }: { eventRef: string }) {
           </p>
           <ul className="bal-event-lines">
             {order.drinks.map((drink, index) => (
-              <li key={`${drink.title}-${index}`}>
-                {drink.quantity} × {drink.title}
-                {drink.variant ? ` — ${drink.variant}` : ""}
+              <li
+                key={`${drink.title}-${drink.variant ?? ""}-${drink.temperature ?? ""}-${index}`}
+              >
+                {formatEventDrinkLine(drink)}
               </li>
             ))}
           </ul>

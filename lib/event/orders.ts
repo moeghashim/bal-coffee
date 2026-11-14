@@ -1,10 +1,51 @@
 import { toUsE164 } from "./phone";
+import {
+  parseIce,
+  parseSweetness,
+  parseTemperature,
+  type DrinkIce,
+  type DrinkSweetness,
+  type DrinkTemperature,
+} from "./temperature";
 
 export type EventDrinkLine = {
   title: string;
   variant?: string;
+  temperature?: DrinkTemperature;
+  ice?: DrinkIce;
+  sweetness?: DrinkSweetness;
   quantity: number;
 };
+
+export function formatEventCartLine(line: {
+  quantity: number;
+  title: string;
+  milk?: string;
+  temperature?: string;
+  ice?: string;
+  sweetness?: string;
+}) {
+  const options = [line.milk, line.temperature].filter((part): part is string =>
+    Boolean(part),
+  );
+  if (line.ice && line.ice !== "Regular ice") options.push(line.ice);
+  if (line.sweetness && line.sweetness !== "Regular") {
+    options.push(line.sweetness);
+  }
+  const detail = options.join(" · ");
+  return `${line.quantity} × ${line.title}${detail ? ` — ${detail}` : ""}`;
+}
+
+export function formatEventDrinkLine(drink: EventDrinkLine) {
+  const parts = [drink.title];
+  if (drink.variant) parts.push(drink.variant);
+  if (drink.temperature) parts.push(drink.temperature);
+  if (drink.ice && drink.ice !== "Regular ice") parts.push(drink.ice);
+  if (drink.sweetness && drink.sweetness !== "Regular") {
+    parts.push(drink.sweetness);
+  }
+  return `${drink.quantity} × ${parts.join(" · ")}`;
+}
 
 export type EventOrderDraft = {
   id: string;
@@ -170,6 +211,28 @@ function attributeMap(order: Record<string, unknown>) {
   return map;
 }
 
+function lineProperty(record: Record<string, unknown>, name: string) {
+  for (const list of [
+    record.properties,
+    record.custom_attributes,
+    record.customAttributes,
+  ]) {
+    if (!Array.isArray(list)) continue;
+    for (const entry of list) {
+      if (!entry || typeof entry !== "object") continue;
+      const property = entry as Record<string, unknown>;
+      const key = property.name ?? property.key;
+      if (typeof key !== "string" || key.trim().toLowerCase() !== name) {
+        continue;
+      }
+      if (typeof property.value === "string" && property.value.trim()) {
+        return property.value;
+      }
+    }
+  }
+  return undefined;
+}
+
 function lineItems(value: unknown): EventDrinkLine[] {
   if (!Array.isArray(value)) return [];
   const lines: EventDrinkLine[] = [];
@@ -178,11 +241,19 @@ function lineItems(value: unknown): EventDrinkLine[] {
     const record = entry as Record<string, unknown>;
     const title = stringValue(record.title) || stringValue(record.name);
     if (!title) continue;
-    const variant = stringValue(record.variant_title);
+    const variant =
+      stringValue(record.variant_title) || stringValue(record.variantTitle);
+    const temperature = parseTemperature(lineProperty(record, "temperature"));
+    const sweetness = parseSweetness(lineProperty(record, "sweetness"));
+    const ice =
+      temperature === "Hot" ? undefined : parseIce(lineProperty(record, "ice"));
     const quantity = Math.max(1, Math.round(Number(record.quantity) || 1));
     lines.push({
       title,
       ...(variant && variant !== "Default Title" ? { variant } : {}),
+      ...(temperature ? { temperature } : {}),
+      ...(ice ? { ice } : {}),
+      ...(sweetness ? { sweetness } : {}),
       quantity,
     });
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { formatEventDrinkLine, type EventDrinkLine } from "lib/event/orders";
 import { formatUsPhone } from "lib/event/phone";
 
 type BoardOrder = {
@@ -9,7 +10,7 @@ type BoardOrder = {
   name: string;
   phone: string;
   consent: boolean;
-  drinks: { title: string; variant?: string; quantity: number }[];
+  drinks: EventDrinkLine[];
   status: "new" | "making" | "ready";
   smsSent: boolean;
   smsError: string | null;
@@ -183,9 +184,10 @@ export function EventBoard() {
                   <li>No line items</li>
                 ) : (
                   order.drinks.map((drink, index) => (
-                    <li key={`${drink.title}-${index}`}>
-                      {drink.quantity} × {drink.title}
-                      {drink.variant ? ` — ${drink.variant}` : ""}
+                    <li
+                      key={`${drink.title}-${drink.variant ?? ""}-${drink.temperature ?? ""}-${index}`}
+                    >
+                      {formatEventDrinkLine(drink)}
                     </li>
                   ))
                 )}

@@ -28,6 +28,9 @@ export default async function EventPage() {
       lede="Coffee-style drinks made from roasted date seeds instead of coffee beans. Naturally caffeine-free, roasted in Houston."
     >
       <h2 className="serif bal-event-order-heading">Order a drink</h2>
+      <p className="bal-event-temp-cue">
+        We recommend iced. Hot is available too.
+      </p>
       <p className="bal-event-lede">
         Pick what you want, pay online, and we’ll text you when it’s ready for
         pickup.
