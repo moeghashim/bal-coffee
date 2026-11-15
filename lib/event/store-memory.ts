@@ -46,7 +46,7 @@ export class MemoryEventStore implements EventStore {
 
   async list() {
     return [...this.orders.values()].sort((a, b) =>
-      a.createdAt.localeCompare(b.createdAt),
+      b.createdAt.localeCompare(a.createdAt),
     );
   }
 
