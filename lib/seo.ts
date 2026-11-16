@@ -3,8 +3,10 @@ import { shopifyImageUrl } from "lib/images";
 import type { Product } from "lib/products";
 
 export {
+  articleJsonLd,
   breadcrumbJsonLd,
   faqPageJsonLd,
+  howToJsonLd,
   itemListJsonLd,
   webPageJsonLd,
 } from "./structured-data";
@@ -37,6 +39,33 @@ export const pageSeo = {
     description:
       "Date seed coffee is brewed from roasted date seeds, also called date pits. Naturally caffeine-free and acid-free, with no coffee beans. Find your brew.",
     h1: "Date seed coffee: a caffeine-free cup roasted from date seeds",
+  },
+  dateSeedCoffeeVsCoffee: {
+    primary: "date seed coffee vs coffee",
+    intent:
+      "Compare date seed coffee with regular coffee and decaf, then send readers back to the explainer and the bags.",
+    title: "Date Seed Coffee vs Coffee: Caffeine, Taste & Brewing | BAL",
+    description:
+      "How date seed coffee compares with regular coffee and decaf: what it's made from, caffeine, taste and brewing. Naturally caffeine-free, no coffee beans.",
+    h1: "Date seed coffee vs regular coffee: what's actually different",
+  },
+  howToMakeDateSeedCoffee: {
+    primary: "how to make date seed coffee",
+    intent:
+      "Brewing steps for each grind. Amounts that are not printed on the bag stay as adjust to taste.",
+    title: "How to Make Date Seed Coffee: Espresso, Drip & Cezve | BAL",
+    description:
+      "How to make date seed coffee in an espresso machine, drip machine, French press, pour-over or cezve, with the grind and amount for each. Caffeine-free.",
+    h1: "How to make date seed coffee, step by step",
+  },
+  caffeineFreeLatte: {
+    primary: "caffeine-free latte",
+    intent:
+      "Hot and iced latte steps with DateSpresso. The product page stays the buy URL.",
+    title: "Caffeine-Free Latte at Home: Hot or Iced | BAL Coffee",
+    description:
+      "Make a caffeine-free latte at home, hot or iced, with DateSpresso: espresso-style date seed coffee with no coffee beans and no caffeine. Steps inside.",
+    h1: "How to make a caffeine-free latte at home",
   },
   products: {
     primary: "buy date seed coffee",
@@ -148,11 +177,13 @@ export function pageMetadata({
   description,
   path,
   index = true,
+  openGraphType = "website",
 }: {
   title: string;
   description: string;
   path: string;
   index?: boolean;
+  openGraphType?: "website" | "article";
 }): Metadata {
   return {
     title: { absolute: title },
@@ -165,7 +196,7 @@ export function pageMetadata({
       url: path,
       siteName: "BAL Coffee",
       locale: "en_US",
-      type: "website",
+      type: openGraphType,
     },
     twitter: {
       card: "summary_large_image",

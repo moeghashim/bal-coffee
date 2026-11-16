@@ -710,6 +710,9 @@ input {
     text-transform: uppercase;
     color: var(--ink-soft);
   }
+  .bal-brew-table td:not([data-label])::before {
+    display: none;
+  }
 }
 
 .bal-policy a {
