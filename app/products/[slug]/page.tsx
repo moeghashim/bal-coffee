@@ -10,6 +10,10 @@ import {
   ProductMedia,
 } from "components/bal/product-media";
 import {
+  ProductRatingSummary,
+  ProductReviews,
+} from "components/bal/product-reviews";
+import {
   getProducts,
   getProductWithShopify,
   getRelatedProductsWithShopify,
@@ -18,6 +22,8 @@ import { getShopAnalytics } from "lib/commerce/analytics-shop";
 import { GaViewItem } from "components/bal/ga-events";
 import { ProductViewedTracker } from "components/bal/product-viewed-tracker";
 import { gaMeasurementId } from "lib/ga";
+import { getProductReviews } from "lib/judgeme-api";
+import { withProductReviewJsonLd } from "lib/judgeme";
 import {
   breadcrumbJsonLd,
   coffeeSeo,
@@ -212,10 +218,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
     permanentRedirect(`/products/${product.slug}`);
   }
 
+  const reviewSummaryPromise = getProductReviews({
+    productId: product.productId,
+    shopifyHandle: product.shopifyHandle,
+    slug: product.slug,
+  });
   const related = (await getRelatedProductsWithShopify(product.slug)).filter(
     (item) => item.category !== "drink",
   );
   const shopAnalytics = await getShopAnalytics();
+  const reviewSummary = await reviewSummaryPromise;
   const seo = coffeeSeo(product.slug);
   const productImages =
     product.images && product.images.length > 0
@@ -227,7 +239,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <>
-      <JsonLd data={productJsonLd(product, productUrl, seo?.description)} />
+      <JsonLd
+        data={withProductReviewJsonLd(
+          productJsonLd(product, productUrl, seo?.description),
+          reviewSummary,
+        )}
+      />
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", url: baseUrl },
@@ -370,6 +387,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 >
                   {heading}
                 </h1>
+                <ProductRatingSummary summary={reviewSummary} />
                 <p
                   className="serif"
                   style={{ marginTop: 18, fontSize: 28, color: "var(--ink)" }}
@@ -663,6 +681,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
           </div>
         </section>
+
+        <ProductReviews summary={reviewSummary} />
 
         <StoryBand />
 
