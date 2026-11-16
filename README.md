@@ -34,6 +34,14 @@ SITE_NAME="Bal Coffee"
 SHOPIFY_STORE_DOMAIN="bal-coffee.myshopify.com"
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=""
 SHOPIFY_STOREFRONT_API_VERSION="2025-10"
+
+# Judge.me product reviews. Both are server-only. Leave the token blank
+# until it is set; product pages then show no reviews and no rating markup.
+# Private token: Judge.me admin → Settings → Integrations → Developers / API.
+JUDGEME_API_TOKEN=""
+# Optional myshopify.com domain. Falls back to PUBLIC_STORE_DOMAIN, then
+# SHOPIFY_STORE_DOMAIN.
+JUDGEME_SHOP_DOMAIN=""
 ```
 
 ## Scripts

@@ -5,11 +5,9 @@ export type PublishedReview = {
 };
 
 /**
- * TODO(judge.me): Render "What our customers say" only when real, published
- * reviews exist. Pass those reviews in from Judge.me (see reviews_plan.md).
- * Until then this returns null: no placeholder stars, no sample quotes, and
- * no AggregateRating. When reviews exist, ratings belong on each product
- * page, not on this landing page.
+ * Landing-page quotes. Product pages load published Judge.me reviews on
+ * their own. This section stays empty until a caller passes real published
+ * reviews: no placeholder stars, no sample quotes, and no AggregateRating.
  */
 export function CustomerReviews({ reviews }: { reviews: PublishedReview[] }) {
   if (reviews.length === 0) return null;
