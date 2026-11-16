@@ -197,6 +197,12 @@ function StoryBand() {
             >
               What is date seed coffee? →
             </a>
+            <a
+              href="/how-to-make-date-seed-coffee"
+              style={{ color: "var(--ink)", fontSize: 14 }}
+            >
+              Brewing guide →
+            </a>
           </p>
         </div>
       </div>

@@ -28,8 +28,19 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
   {
     id: "caffeine",
     question: "Does date seed coffee have caffeine?",
-    answer:
-      "The coffees are made from date seeds and are naturally caffeine-free. They are not decaffeinated coffee beans.",
+    answer: (
+      <>
+        The coffees are made from date seeds and are naturally caffeine-free.
+        They are not decaffeinated coffee beans. See{" "}
+        <a
+          href="/date-seed-coffee-vs-coffee"
+          style={{ color: "var(--terra-deep)" }}
+        >
+          date seed coffee vs regular coffee
+        </a>
+        .
+      </>
+    ),
   },
   {
     id: "decaf",
@@ -57,7 +68,11 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
         <a href="/products/eastern-brew" style={{ color: "var(--terra-deep)" }}>
           Eastern Brew
         </a>
-        .{learnMore}
+        .{learnMore} For a milk drink, see how to make a{" "}
+        <a href="/caffeine-free-latte" style={{ color: "var(--terra-deep)" }}>
+          caffeine-free latte
+        </a>
+        .
       </>
     ),
   },
@@ -79,6 +94,14 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
           Eastern Brew
         </a>{" "}
         is for a Turkish-style cup in a cezve. Each product page has the steps.
+        The{" "}
+        <a
+          href="/how-to-make-date-seed-coffee"
+          style={{ color: "var(--terra-deep)" }}
+        >
+          brewing guide
+        </a>{" "}
+        walks through each method.
       </>
     ),
   },
