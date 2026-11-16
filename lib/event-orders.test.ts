@@ -351,3 +351,24 @@ test("event pages make no health, organic, or free-shipping claims", () => {
     /\/event/,
   );
 });
+
+test("board lists newest orders first", async () => {
+  const store = new MemoryEventStore();
+  await store.savePaid({
+    ...draft,
+    id: "old",
+    number: "1",
+    createdAt: "2026-11-15T17:00:00.000Z",
+  });
+  await store.savePaid({
+    ...draft,
+    id: "new",
+    number: "2",
+    createdAt: "2026-11-15T17:05:00.000Z",
+  });
+  const listed = await store.list();
+  assert.deepEqual(
+    listed.map((order) => order.number),
+    ["2", "1"],
+  );
+});

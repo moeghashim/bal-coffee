@@ -75,7 +75,7 @@ class UpstashEventStore implements EventStore {
     return values
       .map((value) => asOrder(value))
       .filter((order): order is EventOrder => Boolean(order))
-      .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 
   async getById(id: string) {
