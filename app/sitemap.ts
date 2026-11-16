@@ -1,24 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getCoffeeProducts } from "lib/catalog";
+import { sitemapEntries } from "lib/sitemap-entries";
 import { baseUrl } from "lib/utils";
-
-// Copy on these routes was revised on this date. Product URLs use Shopify
-// `updatedAt` when the Storefront API returns it. Café drinks, /journal, and
-// the in-person /event pages stay out of the sitemap.
-const STATIC_LASTMOD = "2026-10-31";
-
-const staticRoutes = [
-  "",
-  "/products",
-  "/date-seed-coffee",
-  "/about",
-  "/faq",
-  "/shipping",
-  "/returns",
-  "/contact",
-  "/privacy",
-  "/terms",
-];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let products: { slug: string; updatedAt?: string }[] = [];
@@ -28,15 +11,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     products = [];
   }
 
-  const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
-    url: `${baseUrl}${path}`,
-    lastModified: path === "/date-seed-coffee" ? "2026-11-11" : STATIC_LASTMOD,
-  }));
-
-  const productEntries: MetadataRoute.Sitemap = products.map((product) => ({
-    url: `${baseUrl}/products/${product.slug}`,
-    ...(product.updatedAt ? { lastModified: product.updatedAt } : {}),
-  }));
-
-  return [...staticEntries, ...productEntries];
+  return sitemapEntries(baseUrl, products);
 }

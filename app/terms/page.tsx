@@ -4,6 +4,7 @@ import { getShopifyPolicy } from "lib/policies";
 export const metadata = {
   title: "Terms of Service",
   description: "Terms governing your use of balcoffee.com and BAL purchases.",
+  alternates: { canonical: "/terms" },
 };
 
 export default async function TermsPage() {

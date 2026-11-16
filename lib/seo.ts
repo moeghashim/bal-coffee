@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { shopifyImageUrl } from "lib/images";
-import type { Product } from "lib/products";
+import { organizationCommerceFields } from "lib/merchant-listing";
 
 export {
   breadcrumbJsonLd,
@@ -8,10 +7,8 @@ export {
   itemListJsonLd,
   webPageJsonLd,
 } from "./structured-data";
-
-function priceString(amount: number) {
-  return amount.toFixed(2);
-}
+export { plainText } from "./plain-text";
+export { productJsonLd } from "./product-json-ld";
 
 /**
  * One primary intent per URL so the pages do not compete for the same query.
@@ -134,15 +131,6 @@ export function brewLinkLabel(slug: string) {
   return coffeeSeo(slug)?.brewLink;
 }
 
-/** Collapse markup and runs of whitespace. Schema and meta stay plain text. */
-export function plainText(value: string) {
-  return value
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 export function pageMetadata({
   title,
   description,
@@ -205,6 +193,7 @@ export function organizationJsonLd(url: string) {
       contactType: "customer support",
       email: "judy@balcoffee.com",
     },
+    ...organizationCommerceFields(url),
   };
 }
 
@@ -258,64 +247,4 @@ export function contactPageJsonLd(url: string) {
     url: `${url}/contact`,
     about: { "@id": `${url}/#organization` },
   };
-}
-
-export function productJsonLd(
-  product: Product,
-  url: string,
-  description?: string,
-) {
-  const images = (product.images ?? [])
-    .map((image) => shopifyImageUrl(image.url, 1200))
-    .filter((imageUrl) => imageUrl.length > 0);
-  const variants = (product.variants ?? []).filter((variant) =>
-    Number.isFinite(variant.priceAmount),
-  );
-  const amounts = variants.map((variant) => variant.priceAmount);
-  const currency = variants[0]?.currencyCode || product.currencyCode || "USD";
-  const availability = product.availableForSale
-    ? "https://schema.org/InStock"
-    : "https://schema.org/OutOfStock";
-  const low = amounts.length > 0 ? Math.min(...amounts) : undefined;
-  const high = amounts.length > 0 ? Math.max(...amounts) : undefined;
-  const schemaDescription = plainText(
-    description || product.blurb || product.name,
-  );
-
-  const data: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    description: schemaDescription,
-    brand: {
-      "@type": "Brand",
-      name: product.vendor || "BAL Coffee",
-    },
-  };
-
-  if (images.length > 0) data.image = images;
-  // Real Shopify SKUs only. Never invent a GTIN, MPN, or SKU.
-  if (product.sku) data.sku = product.sku;
-
-  if (low !== undefined && high !== undefined && low !== high) {
-    data.offers = {
-      "@type": "AggregateOffer",
-      lowPrice: priceString(low),
-      highPrice: priceString(high),
-      priceCurrency: currency,
-      offerCount: variants.length,
-      availability,
-      url,
-    };
-  } else if (low !== undefined) {
-    data.offers = {
-      "@type": "Offer",
-      price: priceString(low),
-      priceCurrency: currency,
-      availability,
-      url,
-    };
-  }
-
-  return data;
 }

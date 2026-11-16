@@ -571,7 +571,8 @@ input {
     padding-bottom: 4px;
   }
   .bal-product-main-visual {
-    aspect-ratio: 1 / 0.86 !important;
+    aspect-ratio: 16 / 9 !important;
+    max-height: 220px;
   }
   .bal-product-thumbs {
     gap: 8px !important;

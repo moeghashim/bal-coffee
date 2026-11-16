@@ -51,6 +51,9 @@ const PRODUCT_QUERY = gql(`
           title
           availableForSale
           sku
+          barcode
+          weight
+          weightUnit
           price {
             amount
             currencyCode
@@ -116,6 +119,9 @@ const CATALOG_QUERY = gql(`
             title
             availableForSale
             sku
+            barcode
+            weight
+            weightUnit
             price {
               amount
               currencyCode

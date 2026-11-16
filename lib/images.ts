@@ -1,4 +1,4 @@
-import type { ShopifyImage } from "lib/shopify";
+import type { ShopifyImage } from "./shopify";
 
 // Shopify's CDN resizes on the fly via a `width` query param. The stored files
 // are the original camera exports (about 4000×6000). Always request a display

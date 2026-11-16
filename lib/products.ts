@@ -11,6 +11,9 @@ export type ProductVariant = {
   title: string;
   availableForSale: boolean;
   sku?: string;
+  barcode?: string;
+  weight?: number;
+  weightUnit?: string;
   priceLabel: string;
   priceAmount: number;
   currencyCode: string;
@@ -49,6 +52,13 @@ export type Product = {
   vendor?: string;
   variantTitle?: string;
   sku?: string;
+  barcode?: string;
+  weight?: number;
+  weightUnit?: string;
+  /** Shopify Size option, spaced ("12 oz"). Absent when Shopify has no size. */
+  size?: string;
+  /** Brew-format phrase copied from the Shopify description. */
+  format?: string;
   updatedAt?: string;
   variants?: ProductVariant[];
   priceVaries?: boolean;

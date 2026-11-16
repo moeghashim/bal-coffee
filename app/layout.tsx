@@ -3,6 +3,7 @@ import { Fraunces, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { JsonLd } from "components/bal/json-ld";
 import { organizationJsonLd, pageSeo, websiteJsonLd } from "lib/seo";
+import { siteVerification } from "lib/site-verification";
 import { baseUrl } from "lib/utils";
 import { CartProvider } from "lib/commerce/cart-client";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
@@ -27,6 +28,8 @@ const interTight = Inter_Tight({
   weight: ["400", "500", "600"],
 });
 
+const verification = siteVerification(process.env.BING_SITE_VERIFICATION);
+
 export const metadata = {
   metadataBase: new URL(baseUrl),
   title: {
@@ -48,6 +51,7 @@ export const metadata = {
   },
   robots: { follow: true, index: true },
   alternates: { canonical: "./" },
+  ...(verification ? { verification } : {}),
 };
 
 export default async function RootLayout({

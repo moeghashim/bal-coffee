@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { LinkedCopy } from "components/bal/linked-copy";
 import { PageShell } from "components/bal/page-shell";
 import { pageMetadata, pageSeo } from "lib/seo";
 
@@ -143,7 +144,13 @@ export default function FaqPage() {
             >
               {item.question}
             </h2>
-            <p style={{ marginTop: 8 }}>{item.answer}</p>
+            <p style={{ marginTop: 8 }}>
+              {typeof item.answer === "string" ? (
+                <LinkedCopy text={item.answer} />
+              ) : (
+                item.answer
+              )}
+            </p>
           </section>
         ))}
       </div>
