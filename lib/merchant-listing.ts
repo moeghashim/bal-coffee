@@ -2,11 +2,14 @@
  * Merchant-listing JSON-LD, built only from facts the site already states.
  *
  * /shipping: rates are calculated at checkout, there is no flat rate, and
- * there is no delivery-time promise. Destination is the United States.
- * /returns: email to start, no return window, no restocking fee, and no
- * schema.org return method. Do not invent shippingRate, deliveryTime,
- * returnPolicyCategory, merchantReturnDays, returnFees, or priceValidUntil.
+ * delivery takes 2–3 business days in the US. Handling time is not stated.
+ * /returns: all sales are final. BAL does not accept returns. Do not invent
+ * shippingRate, handlingTime, merchantReturnDays, returnFees, returnMethod,
+ * or priceValidUntil.
  */
+
+export const RETURN_NOT_PERMITTED =
+  "https://schema.org/MerchantReturnNotPermitted";
 
 export const BRAND_NAME = "BAL";
 export const CONDITION_LABEL = "New";
@@ -36,6 +39,15 @@ export function offerShippingDetails() {
       "@type": "DefinedRegion" as const,
       addressCountry: "US",
     },
+    deliveryTime: {
+      "@type": "ShippingDeliveryTime" as const,
+      transitTime: {
+        "@type": "QuantitativeValue" as const,
+        minValue: 2,
+        maxValue: 3,
+        unitCode: "DAY",
+      },
+    },
   };
 }
 
@@ -44,6 +56,7 @@ export function merchantReturnPolicy(siteUrl: string) {
   return {
     "@type": "MerchantReturnPolicy" as const,
     applicableCountry: "US",
+    returnPolicyCategory: RETURN_NOT_PERMITTED,
     merchantReturnLink: `${origin}/returns`,
   };
 }

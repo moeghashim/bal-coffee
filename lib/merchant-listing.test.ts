@@ -13,6 +13,7 @@ import {
   merchantReturnPolicy,
   offerShippingDetails,
   organizationCommerceFields,
+  RETURN_NOT_PERMITTED,
   schemaPrice,
   sizeLabel,
 } from "./merchant-listing.ts";
@@ -64,11 +65,8 @@ function coffee(overrides: Partial<Product> = {}): Product {
 
 const INVENTED = [
   "shippingRate",
-  "deliveryTime",
-  "transitTime",
   "handlingTime",
   "priceValidUntil",
-  "returnPolicyCategory",
   "merchantReturnDays",
   "returnFees",
   "returnMethod",
@@ -76,12 +74,11 @@ const INVENTED = [
   "FreeReturn",
   "MerchantReturnFiniteReturnWindow",
   "MerchantReturnUnlimitedWindow",
-  "MerchantReturnNotPermitted",
   "aggregateRating",
   "organic",
 ];
 
-test("shipping details are US-only and do not invent a rate or a delivery time", () => {
+test("shipping details are US transit of 2–3 days and do not invent a rate or handling time", () => {
   const shipping = offerShippingDetails();
   assert.deepEqual(shipping, {
     "@type": "OfferShippingDetails",
@@ -89,21 +86,32 @@ test("shipping details are US-only and do not invent a rate or a delivery time",
       "@type": "DefinedRegion",
       addressCountry: "US",
     },
+    deliveryTime: {
+      "@type": "ShippingDeliveryTime",
+      transitTime: {
+        "@type": "QuantitativeValue",
+        minValue: 2,
+        maxValue: 3,
+        unitCode: "DAY",
+      },
+    },
   });
   assert.equal("shippingRate" in shipping, false);
-  assert.equal("deliveryTime" in shipping, false);
+  assert.equal("handlingTime" in (shipping.deliveryTime as object), false);
 });
 
-test("return policy only includes the country and the returns page", () => {
+test("return policy is not permitted in the US and has no fee or method", () => {
   const policy = merchantReturnPolicy(SITE);
   assert.deepEqual(policy, {
     "@type": "MerchantReturnPolicy",
     applicableCountry: "US",
+    returnPolicyCategory: RETURN_NOT_PERMITTED,
     merchantReturnLink: "https://www.balcoffee.com/returns",
   });
-  assert.equal(JSON.stringify(policy).includes("returnPolicyCategory"), false);
+  assert.equal(policy.returnPolicyCategory, RETURN_NOT_PERMITTED);
   assert.equal(JSON.stringify(policy).includes("merchantReturnDays"), false);
   assert.equal(JSON.stringify(policy).includes("returnFees"), false);
+  assert.equal(JSON.stringify(policy).includes("returnMethod"), false);
 });
 
 test("organization shipping and returns match the offer policy", () => {
@@ -265,6 +273,14 @@ test("sitemap entries always have lastModified and skip noindex paths", () => {
     entries.find((entry) => entry.url.endsWith("/date-seed-coffee"))
       ?.lastModified,
     "2026-11-12",
+  );
+  assert.equal(
+    entries.find((entry) => entry.url.endsWith("/returns"))?.lastModified,
+    "2026-11-16",
+  );
+  assert.equal(
+    entries.find((entry) => entry.url.endsWith("/shipping"))?.lastModified,
+    "2026-11-16",
   );
   for (const path of NOINDEX_PATHS) {
     assert.equal(

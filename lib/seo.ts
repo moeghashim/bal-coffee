@@ -92,18 +92,19 @@ export const pageSeo = {
   },
   shipping: {
     primary: "shipping cost at checkout",
-    intent: "Explain that rates are calculated at checkout for US orders.",
+    intent:
+      "Explain that rates are calculated at checkout and US delivery takes 2–3 business days.",
     title: "Shipping & Delivery | BAL Coffee",
     description:
-      "How BAL Coffee ships date seed coffee across the US. Rates are calculated at checkout. Tracking is sent by email.",
+      "How BAL Coffee ships date seed coffee across the US. Rates are calculated at checkout. Delivery takes 2–3 business days. Tracking is sent by email.",
   },
   returns: {
-    primary: "returns and exchanges",
+    primary: "all sales are final",
     intent:
-      "Tell a customer how to write in about a return or a damaged order.",
+      "State that BAL does not accept returns, and how to write about a damaged or wrong item.",
     title: "Returns & Exchanges | BAL Coffee",
     description:
-      "How to contact BAL Coffee about a return, exchange or a damaged order. Email your order number and we will reply with next steps.",
+      "All sales are final. BAL Coffee does not accept returns. If an item arrives damaged or isn't what you ordered, contact us and include a photo if you have one.",
   },
   contact: {
     primary: "contact BAL Coffee",
