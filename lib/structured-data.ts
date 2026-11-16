@@ -5,9 +5,14 @@
 
 export function webPageJsonLd(
   url: string,
-  page: { name: string; description: string },
+  page: {
+    name: string;
+    description: string;
+    path?: string;
+    about?: string;
+  },
 ) {
-  const pageUrl = `${url}/date-seed-coffee`;
+  const pageUrl = `${url}${page.path ?? "/date-seed-coffee"}`;
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -17,9 +22,59 @@ export function webPageJsonLd(
     description: page.description,
     about: {
       "@type": "Thing",
-      name: "Date seed coffee",
+      name: page.about ?? "Date seed coffee",
     },
     publisher: { "@id": `${url}/#organization` },
+  };
+}
+
+export function articleJsonLd(
+  url: string,
+  page: { name: string; description: string; path: string },
+) {
+  const pageUrl = `${url}${page.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: page.name,
+    description: page.description,
+    mainEntityOfPage: pageUrl,
+    url: pageUrl,
+    author: {
+      "@type": "Organization",
+      name: "BAL Coffee",
+      url,
+    },
+    publisher: { "@id": `${url}/#organization` },
+  };
+}
+
+export function howToJsonLd(
+  url: string,
+  page: { name: string; description: string; path: string },
+  sections: readonly {
+    name: string;
+    steps: readonly { name: string; text: string }[];
+  }[],
+) {
+  const pageUrl = `${url}${page.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: page.name,
+    description: page.description,
+    url: pageUrl,
+    step: sections.map((section, sectionIndex) => ({
+      "@type": "HowToSection",
+      position: sectionIndex + 1,
+      name: section.name,
+      itemListElement: section.steps.map((step, stepIndex) => ({
+        "@type": "HowToStep",
+        position: stepIndex + 1,
+        name: step.name,
+        text: step.text,
+      })),
+    })),
   };
 }
 
