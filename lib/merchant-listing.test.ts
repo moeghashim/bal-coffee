@@ -272,8 +272,19 @@ test("sitemap entries always have lastModified and skip noindex paths", () => {
   assert.equal(
     entries.find((entry) => entry.url.endsWith("/date-seed-coffee"))
       ?.lastModified,
-    "2026-11-12",
+    "2026-11-16",
   );
+  for (const path of [
+    "/date-seed-coffee-vs-coffee",
+    "/how-to-make-date-seed-coffee",
+    "/caffeine-free-latte",
+  ]) {
+    assert.equal(
+      entries.find((entry) => entry.url.endsWith(path))?.lastModified,
+      "2026-11-16",
+      path,
+    );
+  }
   assert.equal(
     entries.find((entry) => entry.url.endsWith("/returns"))?.lastModified,
     "2026-11-16",

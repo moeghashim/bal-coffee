@@ -309,6 +309,13 @@ export default async function DateSeedCoffeePage() {
             ))}
           </ul>
           <p style={{ marginTop: 16 }}>{tasteClose}</p>
+          <p style={{ marginTop: 16 }}>
+            For a milk drink, see how to make a{" "}
+            <a href="/caffeine-free-latte" style={linkStyle}>
+              caffeine-free latte
+            </a>
+            .
+          </p>
         </Prose>
 
         <Prose title="How BAL makes date seed coffee">
@@ -327,6 +334,13 @@ export default async function DateSeedCoffeePage() {
 
         <Prose title="A naturally caffeine-free coffee alternative">
           <Paragraphs text={caffeine} />
+          <p style={{ marginTop: 16 }}>
+            See how{" "}
+            <a href="/date-seed-coffee-vs-coffee" style={linkStyle}>
+              date seed coffee compares with regular coffee
+            </a>
+            .
+          </p>
         </Prose>
 
         <Prose id="choose-your-brew" title="Choose your brew" wide band>
@@ -372,6 +386,13 @@ export default async function DateSeedCoffeePage() {
           headingId="brew-heading"
         >
           <p>{brewIntro}</p>
+          <p style={{ marginTop: 16 }}>
+            Step-by-step instructions for each method are in the{" "}
+            <a href="/how-to-make-date-seed-coffee" style={linkStyle}>
+              brewing guide
+            </a>
+            .
+          </p>
           <div style={{ marginTop: 18, overflowX: "auto" }}>
             <table
               className="bal-brew-table"
