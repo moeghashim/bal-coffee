@@ -30,8 +30,8 @@ export default function ShippingPage() {
       </h2>
       <p style={{ marginTop: 12 }}>
         BAL is an online-only company based in Houston, Texas. We ship date seed
-        coffee to addresses across the United States. We don&apos;t publish a
-        delivery-time promise here. Checkout confirms the methods available for
+        coffee to addresses across the United States. Delivery takes 2–3
+        business days within the US. Checkout confirms the methods available for
         your address.
       </p>
       <h2

@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { CustomerReviews } from "components/bal/customer-reviews";
+import { LinkedCopy } from "components/bal/linked-copy";
 import { Footer } from "components/bal/footer";
 import { Grain } from "components/bal/grain";
 import { JsonLd } from "components/bal/json-ld";
@@ -466,7 +467,7 @@ export default async function DateSeedCoffeePage() {
                   {item.id === "faq-where" ? (
                     <ShopAnswer text={item.answer} />
                   ) : (
-                    item.answer
+                    <LinkedCopy text={item.answer} />
                   )}
                 </p>
               </section>

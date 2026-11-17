@@ -5,6 +5,7 @@ import { getShopifyPolicy } from "lib/policies";
 export const metadata = {
   title: "Privacy Policy",
   description: "How BAL Coffee collects, uses, and protects your information.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default async function PrivacyPage() {

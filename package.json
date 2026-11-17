@@ -27,7 +27,13 @@
     "next": "16.2.10",
     "react": "19.2.7",
     "react-dom": "19.2.7",
+    "sharp": "^0.35.5",
     "sonner": "^2.0.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",

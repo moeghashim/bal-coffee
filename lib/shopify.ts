@@ -25,6 +25,9 @@ export type ShopifyVariant = {
   title: string;
   availableForSale: boolean;
   sku?: string | null;
+  barcode?: string | null;
+  weight?: number | null;
+  weightUnit?: string | null;
   price: ShopifyMoney;
   selectedOptions?: ShopifySelectedOption[];
   image?: ShopifyImage | null;

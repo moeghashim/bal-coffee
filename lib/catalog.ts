@@ -11,6 +11,7 @@ import {
   type Product,
   type ProductVariant,
 } from "lib/products";
+import { formatPhrase, sizeFromOptions } from "lib/merchant-listing";
 import type { ShopifyImage, ShopifyProduct, ShopifyVariant } from "lib/shopify";
 
 /**
@@ -77,6 +78,12 @@ function mapVariant(variant: ShopifyVariant): ProductVariant | undefined {
     title: variant.title,
     availableForSale: variant.availableForSale,
     sku: variant.sku?.trim() || undefined,
+    barcode: variant.barcode?.trim() || undefined,
+    weight:
+      typeof variant.weight === "number" && variant.weight > 0
+        ? variant.weight
+        : undefined,
+    weightUnit: variant.weightUnit ?? undefined,
     priceLabel: formatPrice(variant.price),
     priceAmount: Number(variant.price.amount),
     currencyCode: variant.price.currencyCode,
@@ -149,13 +156,19 @@ function toCatalogProduct(
     priceAmount:
       min ?? Number(shopifyProduct.priceRange.minVariantPrice.amount),
     currencyCode: currency,
-    availableForSale: shopifyProduct.availableForSale,
+    availableForSale:
+      selected?.availableForSale ?? shopifyProduct.availableForSale,
     updatedAt: shopifyProduct.updatedAt ?? undefined,
     merchandiseId: selected?.id,
     variantTitle: selected?.title,
     productId: shopifyProduct.id,
     vendor: shopifyProduct.vendor ?? editorial?.vendor,
     sku: selected?.sku,
+    barcode: selected?.barcode,
+    weight: selected?.weight,
+    weightUnit: selected?.weightUnit,
+    size: sizeFromOptions(selected?.selectedOptions),
+    format: formatPhrase(description),
     images,
     missingImage: images.length === 0,
     variants,

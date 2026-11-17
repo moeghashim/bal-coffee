@@ -4,6 +4,7 @@ export const metadata = {
   title: "Journal",
   description: "Stories, brewing notes, and field reports from BAL Coffee.",
   robots: { index: false, follow: true },
+  alternates: { canonical: "/journal" },
 };
 
 export default function JournalPage() {

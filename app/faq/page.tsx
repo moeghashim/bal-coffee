@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { LinkedCopy } from "components/bal/linked-copy";
 import { PageShell } from "components/bal/page-shell";
 import { pageMetadata, pageSeo } from "lib/seo";
 
@@ -116,7 +117,8 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
     question: "How much is shipping?",
     answer: (
       <>
-        Shipping costs are calculated at checkout, before you pay. See{" "}
+        Shipping costs are calculated at checkout, before you pay. Delivery
+        takes 2–3 business days within the US. See{" "}
         <a href="/shipping" style={{ color: "var(--terra-deep)" }}>
           shipping and delivery
         </a>{" "}
@@ -166,14 +168,21 @@ export default function FaqPage() {
             >
               {item.question}
             </h2>
-            <p style={{ marginTop: 8 }}>{item.answer}</p>
+            <p style={{ marginTop: 8 }}>
+              {typeof item.answer === "string" ? (
+                <LinkedCopy text={item.answer} />
+              ) : (
+                item.answer
+              )}
+            </p>
           </section>
         ))}
       </div>
       <p style={{ marginTop: 28 }}>
-        Orders and returns:{" "}
+        All sales are final. If an item arrives damaged or isn&apos;t what you
+        ordered, see{" "}
         <a href="/returns" style={{ color: "var(--terra-deep)" }}>
-          returns and exchanges
+          returns
         </a>
         . Still stuck? Email{" "}
         <a

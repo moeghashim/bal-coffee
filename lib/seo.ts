@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { shopifyImageUrl } from "lib/images";
-import type { Product } from "lib/products";
+import { organizationCommerceFields } from "lib/merchant-listing";
 
 export {
   articleJsonLd,
@@ -10,10 +9,8 @@ export {
   itemListJsonLd,
   webPageJsonLd,
 } from "./structured-data";
-
-function priceString(amount: number) {
-  return amount.toFixed(2);
-}
+export { plainText } from "./plain-text";
+export { productJsonLd } from "./product-json-ld";
 
 /**
  * One primary intent per URL so the pages do not compete for the same query.
@@ -124,18 +121,19 @@ export const pageSeo = {
   },
   shipping: {
     primary: "shipping cost at checkout",
-    intent: "Explain that rates are calculated at checkout for US orders.",
+    intent:
+      "Explain that rates are calculated at checkout and US delivery takes 2–3 business days.",
     title: "Shipping & Delivery | BAL Coffee",
     description:
-      "How BAL Coffee ships date seed coffee across the US. Rates are calculated at checkout. Tracking is sent by email.",
+      "How BAL Coffee ships date seed coffee across the US. Rates are calculated at checkout. Delivery takes 2–3 business days. Tracking is sent by email.",
   },
   returns: {
-    primary: "returns and exchanges",
+    primary: "all sales are final",
     intent:
-      "Tell a customer how to write in about a return or a damaged order.",
+      "State that BAL does not accept returns, and how to write about a damaged or wrong item.",
     title: "Returns & Exchanges | BAL Coffee",
     description:
-      "How to contact BAL Coffee about a return, exchange or a damaged order. Email your order number and we will reply with next steps.",
+      "All sales are final. BAL Coffee does not accept returns. If an item arrives damaged or isn't what you ordered, contact us and include a photo if you have one.",
   },
   contact: {
     primary: "contact BAL Coffee",
@@ -161,15 +159,6 @@ export function coffeeSeo(slug: string) {
 
 export function brewLinkLabel(slug: string) {
   return coffeeSeo(slug)?.brewLink;
-}
-
-/** Collapse markup and runs of whitespace. Schema and meta stay plain text. */
-export function plainText(value: string) {
-  return value
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
 }
 
 export function pageMetadata({
@@ -236,6 +225,7 @@ export function organizationJsonLd(url: string) {
       contactType: "customer support",
       email: "judy@balcoffee.com",
     },
+    ...organizationCommerceFields(url),
   };
 }
 
@@ -289,64 +279,4 @@ export function contactPageJsonLd(url: string) {
     url: `${url}/contact`,
     about: { "@id": `${url}/#organization` },
   };
-}
-
-export function productJsonLd(
-  product: Product,
-  url: string,
-  description?: string,
-) {
-  const images = (product.images ?? [])
-    .map((image) => shopifyImageUrl(image.url, 1200))
-    .filter((imageUrl) => imageUrl.length > 0);
-  const variants = (product.variants ?? []).filter((variant) =>
-    Number.isFinite(variant.priceAmount),
-  );
-  const amounts = variants.map((variant) => variant.priceAmount);
-  const currency = variants[0]?.currencyCode || product.currencyCode || "USD";
-  const availability = product.availableForSale
-    ? "https://schema.org/InStock"
-    : "https://schema.org/OutOfStock";
-  const low = amounts.length > 0 ? Math.min(...amounts) : undefined;
-  const high = amounts.length > 0 ? Math.max(...amounts) : undefined;
-  const schemaDescription = plainText(
-    description || product.blurb || product.name,
-  );
-
-  const data: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    description: schemaDescription,
-    brand: {
-      "@type": "Brand",
-      name: product.vendor || "BAL Coffee",
-    },
-  };
-
-  if (images.length > 0) data.image = images;
-  // Real Shopify SKUs only. Never invent a GTIN, MPN, or SKU.
-  if (product.sku) data.sku = product.sku;
-
-  if (low !== undefined && high !== undefined && low !== high) {
-    data.offers = {
-      "@type": "AggregateOffer",
-      lowPrice: priceString(low),
-      highPrice: priceString(high),
-      priceCurrency: currency,
-      offerCount: variants.length,
-      availability,
-      url,
-    };
-  } else if (low !== undefined) {
-    data.offers = {
-      "@type": "Offer",
-      price: priceString(low),
-      priceCurrency: currency,
-      availability,
-      url,
-    };
-  }
-
-  return data;
 }

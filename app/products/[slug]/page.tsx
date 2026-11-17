@@ -5,10 +5,8 @@ import { Grain } from "components/bal/grain";
 import { JsonLd } from "components/bal/json-ld";
 import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
-import {
-  ProductImagePreload,
-  ProductMedia,
-} from "components/bal/product-media";
+import { ProductMedia } from "components/bal/product-media";
+import { ProductFacts } from "components/bal/product-facts";
 import {
   ProductRatingSummary,
   ProductReviews,
@@ -254,11 +252,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", url: baseUrl },
-          { name: "Shop", url: `${baseUrl}/products` },
+          { name: "Products", url: `${baseUrl}/products` },
           { name: product.name, url: productUrl },
         ])}
       />
-      <ProductImagePreload image={product.images?.[0]} />
       {shopAnalytics && product.productId && product.merchandiseId ? (
         <ProductViewedTracker
           shop={shopAnalytics}
@@ -289,10 +286,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
             className="bal-product-detail-container"
             style={{ maxWidth: 1180, margin: "0 auto" }}
           >
-            <nav style={{ fontSize: 12, color: "var(--ink-soft)" }}>
+            <nav
+              aria-label="Breadcrumb"
+              style={{ fontSize: 12, color: "var(--ink-soft)" }}
+            >
               <a href="/">Home</a>
               <span style={{ margin: "0 12px" }}>/</span>
-              <a href="/products">Shop</a>
+              <a href="/products">Products</a>
               <span style={{ margin: "0 12px" }}>/</span>
               <span>{product.name}</span>
             </nav>
@@ -400,6 +400,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 >
                   {product.price}
                 </p>
+                <ProductFacts product={product} />
                 <p
                   style={{
                     marginTop: 18,
@@ -432,21 +433,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   >
                     Caffeine-free
                   </a>
-                  {["Roasted date seeds", "12 oz bag"].map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        padding: "5px 12px",
-                        borderRadius: 999,
-                        border: "1px solid rgba(115,116,59,0.35)",
-                        background: "#e9dec3",
-                        color: "#5f6030",
-                        fontSize: 12,
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  <span
+                    style={{
+                      padding: "5px 12px",
+                      borderRadius: 999,
+                      border: "1px solid rgba(115,116,59,0.35)",
+                      background: "#e9dec3",
+                      color: "#5f6030",
+                      fontSize: 12,
+                    }}
+                  >
+                    Roasted date seeds
+                  </span>
                 </div>
 
                 <div
@@ -496,11 +494,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         color: "var(--ink-soft)",
                       }}
                     >
-                      Shipping is calculated at checkout.{" "}
-                      <a href="/shipping" style={{ color: "var(--ink)" }}>
-                        Shipping details
-                      </a>
-                      .{" "}
                       <a href="/faq#decaf" style={{ color: "var(--ink)" }}>
                         How it differs from decaf
                       </a>

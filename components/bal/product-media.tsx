@@ -1,9 +1,6 @@
+import Image from "next/image";
 import { ProductVisual } from "components/bal/product-visual";
-import {
-  shopifyImageSrcSet,
-  shopifyImageUrl,
-  shopifyLayoutSize,
-} from "lib/images";
+import { shopifyImageUrl, shopifyLayoutSize } from "lib/images";
 import { productImageAlt, type Product } from "lib/products";
 import type { ShopifyImage } from "lib/shopify";
 
@@ -17,32 +14,10 @@ type ProductMediaProps = {
   targetWidth?: number;
 };
 
-// Display-size hints. Non-compact = PDP main image + products hero, which sit in
-// a padded column (~90vw on mobile, not full-bleed); compact = cards,
-// thumbnails, cart lines.
-const NON_COMPACT_SIZES = "(max-width: 768px) 90vw, 600px";
-const COMPACT_SIZES = "(max-width: 768px) 50vw, 360px";
-
-/**
- * Preload link for an above-the-fold product image, matching the `<img>` the
- * `priority` ProductMedia renders (same srcset + sizes) so the browser fetches
- * the LCP image immediately — before it discovers the <img> in the DOM — with no
- * double-download. React 19 hoists this <link> into <head>. Render it once per
- * page for the LCP image only.
- */
-export function ProductImagePreload({ image }: { image?: ShopifyImage }) {
-  if (!image?.url) return null;
-  return (
-    <link
-      rel="preload"
-      as="image"
-      href={shopifyImageUrl(image.url, 1200)}
-      imageSrcSet={shopifyImageSrcSet(image.url)}
-      imageSizes={NON_COMPACT_SIZES}
-      fetchPriority="high"
-    />
-  );
-}
+// The PDP photo and the product cards sit in a padded column. Compact covers
+// thumbnails, cart lines, and horizontal cards.
+const NON_COMPACT_SIZES = "(max-width: 768px) calc(100vw - 32px), 560px";
+const COMPACT_SIZES = "(max-width: 768px) 46vw, 280px";
 
 export function ProductMedia({
   product,
@@ -67,28 +42,29 @@ export function ProductMedia({
     return <ProductVisual product={product} compact={compact} />;
   }
 
-  const url = productImage.url;
   const requestedWidth = targetWidth ?? (compact ? 480 : 1200);
   const layout = shopifyLayoutSize(productImage, requestedWidth);
   const imageSizes = sizes ?? (compact ? COMPACT_SIZES : NON_COMPACT_SIZES);
+  // Ask Shopify for a display-sized master. next/image then serves AVIF/WebP
+  // at the `sizes` width instead of the original camera file.
+  const src = shopifyImageUrl(productImage.url, Math.max(requestedWidth, 750));
 
   return (
-    <img
-      src={shopifyImageUrl(url, requestedWidth)}
-      srcSet={shopifyImageSrcSet(url)}
-      sizes={imageSizes}
+    <Image
+      src={src}
       alt={productImageAlt(product, productImage)}
-      width={layout.width}
-      height={layout.height}
-      loading={priority ? "eager" : "lazy"}
-      fetchPriority={priority ? "high" : undefined}
-      decoding="async"
+      width={fill ? undefined : layout.width}
+      height={fill ? undefined : layout.height}
+      fill={fill}
+      sizes={imageSizes}
+      priority={priority}
+      fetchPriority={priority ? "high" : "low"}
       style={{
         display: "block",
         position: fill ? "absolute" : undefined,
         inset: fill ? 0 : undefined,
-        width: "100%",
-        height: "100%",
+        width: fill ? undefined : "100%",
+        height: fill ? undefined : "100%",
         objectFit: "cover",
         objectPosition: "center",
       }}

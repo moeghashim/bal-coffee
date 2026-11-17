@@ -1,8 +1,9 @@
 import { ReactNode, Suspense } from "react";
-import { Fraunces, Inter_Tight } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { JsonLd } from "components/bal/json-ld";
 import { organizationJsonLd, pageSeo, websiteJsonLd } from "lib/seo";
+import { siteVerification } from "lib/site-verification";
 import { baseUrl } from "lib/utils";
 import { CartProvider } from "lib/commerce/cart-client";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
@@ -10,22 +11,42 @@ import { AnalyticsTracker } from "components/bal/analytics-tracker";
 import { CartAnalyticsBridge } from "components/bal/cart-analytics-bridge";
 import { GaScripts } from "components/bal/ga-scripts";
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
+// Latin subsets of Fraunces and Inter Tight, vendored so the build does not
+// depend on the Google Fonts CSS response. See app/fonts/*-OFL.txt.
+const fraunces = localFont({
+  src: [
+    {
+      path: "./fonts/fraunces-latin.woff2",
+      weight: "400 600",
+      style: "normal",
+    },
+    {
+      path: "./fonts/fraunces-latin-italic.woff2",
+      weight: "400 600",
+      style: "italic",
+    },
+  ],
   display: "swap",
   preload: false,
   variable: "--font-fraunces-loaded",
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+  adjustFontFallback: "Times New Roman",
 });
 
-const interTight = Inter_Tight({
-  subsets: ["latin"],
+const interTight = localFont({
+  src: [
+    {
+      path: "./fonts/inter-tight-latin.woff2",
+      weight: "400 600",
+      style: "normal",
+    },
+  ],
   display: "swap",
   preload: false,
   variable: "--font-inter-loaded",
-  weight: ["400", "500", "600"],
+  adjustFontFallback: "Arial",
 });
+
+const verification = siteVerification(process.env.BING_SITE_VERIFICATION);
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -48,6 +69,7 @@ export const metadata = {
   },
   robots: { follow: true, index: true },
   alternates: { canonical: "./" },
+  ...(verification ? { verification } : {}),
 };
 
 export default async function RootLayout({

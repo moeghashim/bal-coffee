@@ -313,7 +313,7 @@ test("page files render the same copy the schema is built from", () => {
     assert.equal(lattePage.includes(faq.question), false);
   }
 
-  const sitemap = read("../app/sitemap.ts");
+  const sitemap = read("../lib/sitemap-entries.ts");
   const guide = read("../app/date-seed-coffee/page.tsx");
   const faqPage = read("../app/faq/page.tsx");
   const productPage = read("../app/products/[slug]/page.tsx");

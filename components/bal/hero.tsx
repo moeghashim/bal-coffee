@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 function BotanicalAccent() {
   return (
     <svg
@@ -68,21 +70,15 @@ function HeroImage() {
         background: "var(--cream-2)",
       }}
     >
-      <img
+      <Image
         src="/product-ritual.svg"
         alt="Illustration of a BAL Coffee bag beside a filled mug and date seeds"
-        width={1200}
-        height={960}
-        sizes="(max-width: 1024px) 100vw, 55vw"
+        fill
+        sizes="(max-width: 1024px) calc(100vw - 48px), 55vw"
+        priority
         fetchPriority="high"
-        loading="eager"
-        decoding="async"
-        style={{
-          display: "block",
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-        }}
+        unoptimized
+        style={{ objectFit: "cover" }}
       />
     </div>
   );

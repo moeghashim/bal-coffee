@@ -3,10 +3,7 @@ import { Footer } from "components/bal/footer";
 import { Grain } from "components/bal/grain";
 import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
-import {
-  ProductImagePreload,
-  ProductMedia,
-} from "components/bal/product-media";
+import { ProductMedia } from "components/bal/product-media";
 import { JsonLd } from "components/bal/json-ld";
 import { getCoffeeProducts, getProducts } from "lib/catalog";
 import {
@@ -153,7 +150,6 @@ export default async function ProductsPage() {
           { name: "Shop", url: `${baseUrl}/products` },
         ])}
       />
-      <ProductImagePreload image={heroProduct?.images?.[0]} />
       <Nav />
       <main>
         <section
