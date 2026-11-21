@@ -186,7 +186,13 @@ test("date seed coffee landing page is indexable", async ({
       .getByRole("link", { name: "Eastern Brew, for a Turkish-style cup" })
       .first(),
   ).toHaveAttribute("href", "/products/eastern-brew");
-  await expect(page.getByText("18 to 20 grams for two shots")).toBeVisible();
+  await expect(
+    page.getByText("dual-wall filter or a stronger setting"),
+  ).toBeVisible();
+  await expect(
+    page.getByText("1:4 ratio (1 part GrounDate grounds to 4 parts water)"),
+  ).toBeVisible();
+  await expect(page.getByText("one heaping teaspoon")).toBeVisible();
   await expect(page.getByText(/what our customers say/i)).toHaveCount(0);
   await expect(page.getByText(/\borganic\b/i)).toHaveCount(0);
   await expect(page.getByText(/best seller/i)).toHaveCount(0);

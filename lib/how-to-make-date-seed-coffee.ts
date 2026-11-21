@@ -2,10 +2,17 @@
  * Visible copy for /how-to-make-date-seed-coffee. The page, HowTo JSON-LD,
  * and FAQPage JSON-LD all read this module.
  *
- * Unconfirmed amounts are not given a number:
- * - GrounDate per cup: follow the directions on the bag, then adjust to taste.
- * - Eastern Brew dose: adjust to taste. No gram or milliliter amount.
- * - French press steep time: left out. The step says steep, press and pour.
+ * Official brew copy from Moe (21 Nov 2026). Unconfirmed amounts stay out:
+ * - GrounDate hot brew has no dose. Use it like regular ground coffee in a
+ *   traditional coffee machine or pour-over. No unsourced water temperature
+ *   or French press steep time.
+ * - GrounDate cold brew: 1:4 (treated as 1 part grounds to 4 parts water by
+ *   volume) and steep 12-24 hours.
+ * - DateSpresso has no gram dose. A dual-wall filter or a stronger setting
+ *   than for fresh ground espresso is recommended. It pairs well with oat milk.
+ * - Eastern Brew: one small 2 oz cup of water and one heaping teaspoon per
+ *   serving, boiled 1-2 minutes, in a cezve, dallah, or any small pot.
+ * - No latte milk ratio.
  */
 
 import type { MethodSection, RichText } from "./rich-text";
@@ -19,14 +26,14 @@ export const crumbs = [
 ] as const;
 
 export const intro =
-  "To make date seed coffee, brew roasted, ground date seeds the same way you brew coffee, using the grind made for your method. Use an espresso grind (DateSpresso) in an espresso machine, a drip grind (GrounDate) in a drip machine, French press or pour-over, and a fine grind (Eastern Brew) in a cezve. Start with the amounts below, then adjust to taste. Date seed coffee brews a little lighter in color than coffee, so judge it by taste.";
+  "To make date seed coffee, brew roasted, ground date seeds the same way you brew coffee, using the grind made for your method. Use an espresso grind (DateSpresso) in an espresso machine, a drip grind (GrounDate) in a traditional coffee machine, pour-over or as cold brew, and a fine grind (Eastern Brew) in a cezve or dallah. Date seed coffee brews a little lighter in color than coffee, so judge it by taste.";
 
 export const heroActions = [
   { href: "/products", label: "Find your bag", variant: "solid" },
 ] as const;
 
 export const grindIntro =
-  "Grind matters more than anything else. Espresso machines need a grind that holds up under pressure, drip and French press need a medium grind, and a cezve needs a very fine one. BAL roasts 100% date seeds in small batches and mills each bag for one method, so you don't have to grind anything.";
+  "Grind matters more than anything else. Espresso machines need a grind that holds up under pressure, drip and French press need a medium grind, and a cezve or dallah needs a very fine one. BAL roasts 100% date seeds in small batches and mills each bag for one method, so you don't have to grind anything.";
 
 export const brewerHeaders = ["Your brewer", "Bag", "Start with"] as const;
 
@@ -35,20 +42,22 @@ export const brewerRows = [
     brewer: "Espresso machine",
     href: "/products/datespresso",
     bag: "DateSpresso",
-    start: "18 to 20 grams for two shots, dual-wall filter",
+    start:
+      "Any espresso machine; a dual-wall filter or a stronger setting than for fresh ground espresso",
   },
   {
-    brewer: "Drip machine, French press, pour-over, reusable filter",
+    brewer: "Traditional coffee machine, French press, pour-over, or cold brew",
     href: "/products/groundate",
     bag: "GrounDate",
-    start: "Follow the directions on the bag, and use water just off the boil",
+    start:
+      "Use like regular ground coffee in a machine or pour-over. For cold brew, 1:4 grounds to water, steep 12-24 hours",
   },
   {
-    brewer: "Cezve (Turkish coffee pot) or small saucepan",
+    brewer: "Cezve, dallah, or any small pot",
     href: "/products/eastern-brew",
     bag: "Eastern Brew",
     start:
-      "Add the grounds to water and adjust to taste. Heat gently, stir, pour slowly",
+      "One small 2 oz cup of water and one heaping teaspoon per serving; boil 1-2 minutes",
   },
 ] as const;
 
@@ -58,16 +67,16 @@ export const methodSections: readonly MethodSection[] = [
     title: "How to make date seed coffee in an espresso machine (DateSpresso)",
     steps: [
       {
-        lead: "Dose",
-        rest: "Use 18 to 20 grams of DateSpresso for two shots.",
+        lead: "Use",
+        rest: "Your DateSpresso can be used in any espresso machine.",
       },
       {
-        lead: "Filter",
-        rest: "For best results, use a dual-wall (pressurized) filter basket.",
+        lead: "Filter or setting",
+        rest: "We recommend using a dual-wall (pressurized) filter basket or a stronger setting than you would for fresh ground espresso.",
       },
       {
-        lead: "Pull and adjust",
-        rest: "Pull your shots as usual, then adjust the amount for your machine and taste.",
+        lead: "Enjoy",
+        rest: "DateSpresso pairs well with oat milk. Enjoy!",
       },
     ],
     note: [
@@ -85,16 +94,7 @@ export const methodSections: readonly MethodSection[] = [
     title: "How to make date seed coffee in a drip machine (GrounDate)",
     steps: [
       {
-        lead: "Scoop",
-        rest: "Add GrounDate to the filter, and follow the directions on the bag.",
-      },
-      {
-        lead: "Brew",
-        rest: "Run the machine as you would for coffee.",
-      },
-      {
-        lead: "Taste and adjust",
-        rest: "If the cup is too light for you, use more grounds next time.",
+        text: "Use your BAL Coffee grounds in any traditional coffee machine, the same way you'd use regular ground coffee. Enjoy!",
       },
     ],
   },
@@ -103,16 +103,7 @@ export const methodSections: readonly MethodSection[] = [
     title: "How to make date seed coffee in a French press (GrounDate)",
     steps: [
       {
-        lead: "Scoop",
-        rest: "Add GrounDate to the press, and follow the directions on the bag.",
-      },
-      {
-        lead: "Pour",
-        rest: "Use hot water just off the boil.",
-      },
-      {
-        lead: "Press and sip",
-        rest: "Steep, press and pour. Enjoy smooth, roasted depth.",
+        text: "Use GrounDate in a French press the same way you'd use regular ground coffee. Press and pour. Enjoy!",
       },
     ],
   },
@@ -121,7 +112,21 @@ export const methodSections: readonly MethodSection[] = [
     title: "Pour-over or reusable filter (GrounDate)",
     steps: [
       {
-        text: "Follow the directions on the bag in your cone or reusable coffee filter, and pour hot water just off the boil slowly over the grounds. Adjust the amount to taste.",
+        text: "Use your BAL Coffee grounds in a pour-over, the same way you'd use regular ground coffee. Enjoy!",
+      },
+    ],
+  },
+  {
+    id: "cold-brew",
+    title: "How to make GrounDate cold brew",
+    steps: [
+      {
+        lead: "Ratio",
+        rest: "Use a 1:4 ratio (1 part GrounDate grounds to 4 parts water).",
+      },
+      {
+        lead: "Steep",
+        rest: "Steep 12-24 hours, then strain and enjoy.",
       },
     ],
     cta: { href: "/products/groundate", label: "Shop GrounDate" },
@@ -132,20 +137,20 @@ export const methodSections: readonly MethodSection[] = [
       "How to make Turkish-style date seed coffee in a cezve (Eastern Brew)",
     steps: [
       {
-        lead: "Scoop",
-        rest: "Add Eastern Brew's fine grounds and water to a cezve (Turkish coffee pot) or a small saucepan.",
-      },
-      {
         lead: "Heat",
-        rest: "Warm it gently and stir well.",
+        rest: "Heat one small 2 oz cup of water per serving in a cezve or dallah (or any small pot).",
       },
       {
-        lead: "Serve",
-        rest: "Pour slowly so the grounds settle in the pot, and enjoy.",
+        lead: "Add",
+        rest: "Just before it comes to a boil, add one heaping teaspoon of BAL Coffee Eastern Brew per serving and stir.",
+      },
+      {
+        lead: "Boil and serve",
+        rest: "Allow to boil for 1-2 minutes, then serve immediately. Enjoy!",
       },
     ],
     note: [
-      "Use as much as you like for the strength you want. The bag is ground fine for exactly this cup. Cardamom, cinnamon or your favorite sweetener all go well with it.",
+      "The bag is ground fine for exactly this cup. Cardamom, cinnamon or your favorite sweetener all go well with it.",
     ],
     cta: {
       href: "/products/eastern-brew",
@@ -170,7 +175,7 @@ export const strengthTips = [
   },
   {
     lead: "For more strength, add more grounds",
-    rest: "rather than brewing longer.",
+    rest: "rather than brewing longer. For GrounDate cold brew, stay within 12-24 hours.",
   },
   {
     lead: "To sweeten it,",
@@ -218,19 +223,25 @@ export const faqs = [
     id: "faq-how-much",
     question: "How much date seed coffee do I use per cup?",
     answer:
-      "For espresso, use 18 to 20 grams of DateSpresso for two shots. For drip, French press or pour-over, follow the directions on the bag for GrounDate. For a cezve, add Eastern Brew to taste. Then adjust.",
+      "For DateSpresso, use it in any espresso machine; a dual-wall filter or a stronger setting than you would for fresh ground espresso is recommended. For GrounDate in a coffee machine or pour-over, use it like regular ground coffee. For GrounDate cold brew, use a 1:4 ratio (1 part grounds to 4 parts water) and steep 12-24 hours. For Eastern Brew, heat one small 2 oz cup of water per serving and add one heaping teaspoon, then boil 1-2 minutes.",
   },
   {
     id: "faq-espresso",
     question: "Can you put date seed coffee in an espresso machine?",
     answer:
-      "Yes. Use an espresso grind like DateSpresso, 18 to 20 grams for two shots, and a dual-wall filter gives the best results.",
+      "Yes. Your DateSpresso can be used in any espresso machine. We recommend a dual-wall filter or a stronger setting than you would for fresh ground espresso.",
   },
   {
     id: "faq-french-press",
     question: "Can you make date seed coffee in a French press?",
     answer:
-      "Yes. Use a drip and French press grind like GrounDate, add hot water just off the boil, then press and pour.",
+      "Yes. Use GrounDate in a French press the same way you'd use regular ground coffee.",
+  },
+  {
+    id: "faq-cold-brew",
+    question: "Can you make date seed coffee as cold brew?",
+    answer:
+      "Yes. With GrounDate, use a 1:4 ratio (1 part grounds to 4 parts water) and steep 12-24 hours.",
   },
   {
     id: "faq-lighter",

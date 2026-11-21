@@ -67,7 +67,7 @@ export const compareRows = [
   ],
   [
     "Brewing",
-    "Espresso machine, drip, French press, pour-over or cezve, depending on the grind",
+    "Espresso machine, drip, French press, pour-over, cold brew or cezve, depending on the grind",
     "Every method",
   ],
   [
@@ -146,12 +146,12 @@ export const grindMatches = [
     bag: "DateSpresso",
   },
   {
-    method: "Drip machine, French press or pour-over",
+    method: "Drip machine, French press, pour-over or cold brew",
     href: "/products/groundate",
     bag: "GrounDate",
   },
   {
-    method: "Cezve (Turkish coffee pot)",
+    method: "Cezve or dallah (Turkish coffee pot)",
     href: "/products/eastern-brew",
     bag: "Eastern Brew",
   },
@@ -218,7 +218,7 @@ export const faqs = [
     id: "faq-coffee-maker",
     question: "Can I use date seed coffee in my coffee maker?",
     answer:
-      "Yes, as long as the grind matches the machine. Use GrounDate in a drip machine, French press or pour-over, DateSpresso in an espresso machine, and Eastern Brew in a cezve.",
+      "Yes, as long as the grind matches the machine. Use GrounDate in a drip machine, French press, pour-over or as cold brew, DateSpresso in an espresso machine, and Eastern Brew in a cezve or dallah.",
   },
 ] as const;
 

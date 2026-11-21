@@ -3,8 +3,9 @@
  * this module so the markup cannot drift from the text.
  *
  * Allowed claims: 100% date seeds, naturally caffeine-free, acid-free, roasted
- * in small batches. Eastern Brew has no confirmed dose, so that row describes
- * the method only.
+ * in small batches. Brew amounts follow Moe's official instructions only.
+ * GrounDate hot brew has no dose. GrounDate cold brew is 1:4 grounds to water
+ * (treated as volume) steeped 12-24 hours. DateSpresso has no gram dose.
  */
 
 export const coffeeSlugs = [
@@ -19,7 +20,7 @@ export const cardSummaries: Record<CoffeeSlug, string> = {
   datespresso:
     "Rich and bold, with espresso-style depth. Made for espresso machines, lattes and iced drinks.",
   groundate:
-    "Smooth and balanced for everyday cups. Works in a drip machine, French press or pour-over.",
+    "Smooth and balanced for everyday cups. Works in a drip machine, French press, pour-over or as cold brew.",
   "eastern-brew": "A fine grind for a cezve, warm and roasted.",
 };
 
@@ -106,19 +107,19 @@ export const brewRows: {
     method: "Espresso machine",
     slug: "datespresso",
     brief:
-      "Use 18 to 20 grams for two shots. A dual-wall filter gives the best results. Adjust the amount for your machine and taste.",
+      "Your DateSpresso can be used in any espresso machine. We recommend a dual-wall filter or a stronger setting than you would for fresh ground espresso. DateSpresso pairs well with oat milk.",
   },
   {
-    method: "Drip, French press, pour-over",
+    method: "Drip, French press, pour-over or cold brew",
     slug: "groundate",
     brief:
-      "Add 1 to 2 teaspoons per cup to your brewer and use hot water just off the boil. Adjust to taste.",
+      "Use your BAL Coffee grounds in any traditional coffee machine or pour-over. For cold brew, use a 1:4 ratio (1 part GrounDate grounds to 4 parts water) and steep 12-24 hours.",
   },
   {
-    method: "Cezve (Turkish-style)",
+    method: "Cezve or dallah (Turkish-style)",
     slug: "eastern-brew",
     brief:
-      "Add the fine grounds and water to your cezve, warm gently, then pour slowly so the grounds settle.",
+      "Heat one small 2 oz cup of water per serving in a cezve or dallah (or any small pot). Just before it comes to a boil, add one heaping teaspoon of BAL Coffee Eastern Brew per serving and stir. Allow to boil for 1-2 minutes, then serve immediately.",
   },
 ];
 
@@ -154,7 +155,7 @@ export const faqs: { id: string; question: string; answer: string }[] = [
     id: "faq-make",
     question: "How do you make date seed coffee?",
     answer:
-      "The simplest way is to brew a roasted, ground bag the same way you'd brew coffee. Use DateSpresso in an espresso machine, GrounDate in a drip machine, French press or pour-over, and Eastern Brew in a cezve. Making it from scratch means cleaning, drying, roasting and grinding the seeds yourself, which takes time to get right.",
+      "The simplest way is to brew a roasted, ground bag the same way you'd brew coffee. Use DateSpresso in an espresso machine, GrounDate in a drip machine, French press, pour-over or as cold brew, and Eastern Brew in a cezve or dallah. Making it from scratch means cleaning, drying, roasting and grinding the seeds yourself, which takes time to get right.",
   },
   {
     id: "faq-sweet",

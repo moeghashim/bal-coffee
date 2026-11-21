@@ -600,7 +600,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     letterSpacing: 0,
                   }}
                 >
-                  {seo?.brewHeading ?? "How to brew"}
+                  {seo?.brewHeading ?? "How to make"}
                 </h2>
                 <div
                   style={{
