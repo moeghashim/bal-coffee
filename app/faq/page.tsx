@@ -90,12 +90,12 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
         <a href="/products/groundate" style={{ color: "var(--terra-deep)" }}>
           GrounDate
         </a>{" "}
-        is for drip, French press, and pour-over.{" "}
+        is for drip, French press, pour-over, and cold brew.{" "}
         <a href="/products/eastern-brew" style={{ color: "var(--terra-deep)" }}>
           Eastern Brew
         </a>{" "}
-        is for a Turkish-style cup in a cezve. Each product page has the steps.
-        The{" "}
+        is for a Turkish-style cup in a cezve or dallah. Each product page has
+        the steps. The{" "}
         <a
           href="/how-to-make-date-seed-coffee"
           style={{ color: "var(--terra-deep)" }}

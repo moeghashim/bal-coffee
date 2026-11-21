@@ -113,11 +113,17 @@ export const products: Product[] = [
     ingredients: "Roasted date seeds.",
     nutrition: [],
     brewSteps: [
-      { title: "Dose", body: "Use 18 to 20 grams for two shots." },
-      { title: "Filter", body: "For best results, use a dual wall filter." },
       {
-        title: "Adjust",
-        body: "Adjust the amount based on your machine and taste preference.",
+        title: "Use",
+        body: "Your DateSpresso can be used in any espresso machine.",
+      },
+      {
+        title: "Filter or setting",
+        body: "We recommend using a dual-wall filter or a stronger setting than you would for fresh ground espresso.",
+      },
+      {
+        title: "Enjoy",
+        body: "DateSpresso pairs well with oat milk. Enjoy!",
       },
     ],
     kind: "bag-dark",
@@ -141,7 +147,7 @@ export const products: Product[] = [
       "12oz resealable bag",
     ],
     benefits: [
-      "For drip, French press, and pour-over",
+      "For drip, French press, pour-over, and cold brew",
       "Made from roasted date seeds",
       "No coffee beans",
       "Roasted for everyday brewing",
@@ -149,9 +155,14 @@ export const products: Product[] = [
     ingredients: "Roasted date seeds.",
     nutrition: [],
     brewSteps: [
-      { title: "Scoop", body: "Add 1-2 tsp to your brewer." },
-      { title: "Pour", body: "Use hot water just off boil." },
-      { title: "Sip", body: "Enjoy smooth roasted depth." },
+      {
+        title: "Hot brew",
+        body: "Use your BAL Coffee grounds in any traditional coffee machine or pour-over. Enjoy!",
+      },
+      {
+        title: "Cold brew",
+        body: "Use a 1:4 ratio (1 part GrounDate grounds to 4 parts water) and steep 12-24 hours.",
+      },
     ],
     kind: "bag-light",
     accent: "#efe3c8",
@@ -182,9 +193,18 @@ export const products: Product[] = [
     ingredients: "Roasted date seeds.",
     nutrition: [],
     brewSteps: [
-      { title: "Scoop", body: "Add fine grounds to cezve." },
-      { title: "Heat", body: "Warm gently with water." },
-      { title: "Serve", body: "Pour slowly and enjoy." },
+      {
+        title: "Heat",
+        body: "Heat one small 2 oz cup of water per serving in a cezve or dallah (or any small pot).",
+      },
+      {
+        title: "Add",
+        body: "Just before it comes to a boil, add one heaping teaspoon of BAL Coffee Eastern Brew per serving and stir.",
+      },
+      {
+        title: "Boil and serve",
+        body: "Allow to boil for 1-2 minutes, then serve immediately. Enjoy!",
+      },
     ],
     kind: "bag-green",
     accent: "#34411f",

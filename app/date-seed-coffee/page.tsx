@@ -381,7 +381,7 @@ export default async function DateSeedCoffeePage() {
         </Prose>
 
         <Prose
-          title="How to brew date seed coffee"
+          title="How to make date seed coffee"
           wide
           headingId="brew-heading"
         >

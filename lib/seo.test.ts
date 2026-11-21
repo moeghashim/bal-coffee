@@ -90,9 +90,13 @@ test("landing page copy stays inside the allowed claims", () => {
   assert.equal(forbidden.test(copy), false);
   assert.equal(facts.includes("Acid-free"), true);
   assert.equal(facts.includes("100% date seeds"), true);
-  assert.match(brewRows[0].brief, /18 to 20 grams/);
+  assert.doesNotMatch(brewRows[0].brief, /18 to 20 grams/);
   assert.match(brewRows[0].brief, /dual-wall/);
-  assert.doesNotMatch(brewRows[2].brief, /\d/);
+  assert.match(brewRows[1].brief, /1:4/);
+  assert.match(brewRows[1].brief, /12-24 hours/);
+  assert.doesNotMatch(brewRows[1].brief, /1 to 2 teaspoons|just off the boil/);
+  assert.match(brewRows[2].brief, /heaping teaspoon/);
+  assert.match(brewRows[2].brief, /2 oz/);
   assert.equal(brewRows[2].slug, "eastern-brew");
 });
 

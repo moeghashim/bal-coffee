@@ -22,7 +22,7 @@ import {
 const url = "https://www.balcoffee.com";
 
 const forbidden =
-  /\borganic\b|free shipping|best seller|prebiotic|digestion|\bdigest\b|\bgut\b|pregnan|blood sugar|antioxidant|\bvegan\b|weight loss|cholesterol|reflux|\breviews?\b|\[CONFIRM\]|teaspoon|\btsp\b|6 oz|\$\d/i;
+  /\borganic\b|free shipping|best seller|prebiotic|digestion|\bdigest\b|\bgut\b|pregnan|blood sugar|antioxidant|\bvegan\b|weight loss|cholesterol|reflux|\breviews?\b|\[CONFIRM\]|1-2 tsp|1 to 2 teaspoons?|18 to 20 grams|6 oz|\$\d/i;
 
 const titles = [
   ["Date Seed Coffee vs Coffee: Caffeine, Taste & Brewing | BAL", 59],
@@ -122,40 +122,61 @@ test("new page copy avoids banned claims and unconfirmed amounts", () => {
       false,
       `${label} ${serialized.match(forbidden)?.[0]}`,
     );
-    assert.equal(serialized.includes("1 to 2"), false, label);
-    assert.equal(/steep for|minutes?/i.test(serialized), false, label);
+    assert.equal(serialized.includes("18 to 20 grams"), false, label);
+    assert.equal(serialized.includes("1 to 2 teaspoons"), false, label);
+    assert.equal(serialized.includes("1-2 tsp"), false, label);
   }
 });
 
-test("GrounDate, Eastern Brew, French press, and latte ratios stay unnumbered", () => {
+test("official brew amounts appear only where Moe confirmed them", () => {
   const groundRow = howTo.brewerRows[1];
   const easternRow = howTo.brewerRows[2];
   assert.equal(groundRow?.bag, "GrounDate");
-  assert.match(groundRow?.start ?? "", /follow the directions on the bag/i);
-  assert.doesNotMatch(groundRow?.start ?? "", /\d|teaspoon/i);
+  assert.match(groundRow?.start ?? "", /regular ground coffee/i);
+  assert.match(groundRow?.start ?? "", /1:4/);
+  assert.match(groundRow?.start ?? "", /12-24 hours/);
+  assert.doesNotMatch(
+    groundRow?.start ?? "",
+    /1-2 tsp|1 to 2 teaspoon|just off the boil/i,
+  );
   assert.equal(easternRow?.bag, "Eastern Brew");
-  assert.match(easternRow?.start ?? "", /adjust to taste/i);
-  assert.doesNotMatch(easternRow?.start ?? "", /\d/);
+  assert.match(easternRow?.start ?? "", /heaping teaspoon/i);
+  assert.match(easternRow?.start ?? "", /2 oz/);
+  assert.match(easternRow?.start ?? "", /1-2 minutes/);
 
-  for (const id of ["drip", "french-press", "pour-over", "cezve"]) {
+  for (const id of ["drip", "french-press", "pour-over"]) {
     const section = howTo.methodSections.find((item) => item.id === id);
     assert.ok(section, id);
-    assert.doesNotMatch(JSON.stringify(section), /\d|teaspoon|minute/i, id);
+    assert.doesNotMatch(
+      JSON.stringify(section),
+      /teaspoon|1-2 tsp|18 to 20|just off the boil|minutes?/i,
+      id,
+    );
   }
 
   const french = howTo.methodSections.find(
     (item) => item.id === "french-press",
   );
-  assert.match(
-    stepVisibleText(french!.steps[2]!),
-    /^Press and sip\. Steep, press and pour\. Enjoy smooth, roasted depth\.$/,
-  );
+  assert.match(stepVisibleText(french!.steps[0]!), /regular ground coffee/i);
+  assert.doesNotMatch(stepVisibleText(french!.steps[0]!), /steep \d|minutes?/i);
+
+  const cold = howTo.methodSections.find((item) => item.id === "cold-brew");
+  assert.ok(cold);
+  assert.match(JSON.stringify(cold), /1:4/);
+  assert.match(JSON.stringify(cold), /12-24 hours/);
+
+  const cezve = howTo.methodSections.find((item) => item.id === "cezve");
+  assert.ok(cezve);
+  assert.match(JSON.stringify(cezve), /2 oz/);
+  assert.match(JSON.stringify(cezve), /heaping teaspoon/);
+  assert.match(JSON.stringify(cezve), /1-2 minutes/);
 
   const dose = howTo.faqs[0];
-  assert.match(dose?.answer ?? "", /18 to 20 grams/);
-  assert.match(dose?.answer ?? "", /follow the directions on the bag/i);
-  assert.match(dose?.answer ?? "", /add Eastern Brew to taste/i);
-  assert.doesNotMatch(dose?.answer ?? "", /teaspoon|1 to 2/);
+  assert.doesNotMatch(dose?.answer ?? "", /18 to 20 grams/);
+  assert.match(dose?.answer ?? "", /regular ground coffee/i);
+  assert.match(dose?.answer ?? "", /1:4/);
+  assert.match(dose?.answer ?? "", /heaping teaspoon/);
+  assert.match(dose?.answer ?? "", /1-2 minutes/);
 
   const hotMilk = latte.methodSections.find((item) => item.id === "hot")
     ?.steps[1];
@@ -166,7 +187,11 @@ test("GrounDate, Eastern Brew, French press, and latte ratios stay unnumbered", 
   assert.match(stepVisibleText(icedMilk), /adjust the amount to taste/i);
   assert.doesNotMatch(stepVisibleText(hotMilk), /\d|\boz\b/i);
   assert.doesNotMatch(stepVisibleText(icedMilk), /\d|\boz\b/i);
-  assert.match(JSON.stringify(howTo.methodSections[0]), /18 to 20 grams/);
+  assert.doesNotMatch(
+    JSON.stringify(howTo.methodSections[0]),
+    /18 to 20 grams/,
+  );
+  assert.match(JSON.stringify(howTo.methodSections[0]), /dual-wall/);
 });
 
 test("FAQ JSON-LD matches the visible FAQ copy", () => {
@@ -174,7 +199,7 @@ test("FAQ JSON-LD matches the visible FAQ copy", () => {
   assertFaqMatches(howTo.faqs);
   assertFaqMatches(latte.faqs);
   assert.equal(vs.faqs.length, 5);
-  assert.equal(howTo.faqs.length, 5);
+  assert.equal(howTo.faqs.length, 6);
   assert.equal(latte.faqs.length, 5);
 });
 
@@ -227,11 +252,12 @@ test("HowTo JSON-LD matches the visible brew and latte steps", () => {
       "/products/datespresso",
       undefined,
       undefined,
+      undefined,
       "/products/groundate",
       "/products/eastern-brew",
     ],
   );
-  assert.equal(howTo.methodSections[4]?.cta?.secondary, true);
+  assert.equal(howTo.methodSections[5]?.cta?.secondary, true);
   assert.deepEqual(
     vs.tasteBags.map((bag) => bag.href),
     ["/products/datespresso", "/products/groundate", "/products/eastern-brew"],

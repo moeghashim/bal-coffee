@@ -78,7 +78,7 @@ export const pageSeo = {
     description:
       "DateSpresso is roasted date seed coffee for espresso machines, lattes and iced drinks. Naturally caffeine-free, 100% date seeds, 12 oz bag.",
     h1: "DateSpresso: roasted date seed coffee for espresso",
-    brewHeading: "How to brew espresso-style",
+    brewHeading: "How to make DateSpresso",
     brewLink: "DateSpresso, for espresso",
   },
   groundate: {
@@ -89,7 +89,7 @@ export const pageSeo = {
     description:
       "GrounDate by BAL Coffee: roasted date seed coffee for drip, French press, and pour-over. Naturally caffeine-free, 100% date seeds, 12 oz bag.",
     h1: "GrounDate: roasted date seed coffee for drip and French press",
-    brewHeading: "How to brew drip, French press, or pour-over",
+    brewHeading: "How to make GrounDate",
     brewLink: "GrounDate, for drip and French press",
   },
   "eastern-brew": {
@@ -99,7 +99,7 @@ export const pageSeo = {
     description:
       "Eastern Brew is roasted date seed coffee for Turkish-style brewing in a cezve. Naturally caffeine-free, 100% date seeds, 12 oz bag.",
     h1: "Eastern Brew: roasted date seed coffee for Turkish-style brewing",
-    brewHeading: "How to brew in a cezve",
+    brewHeading: "How to make Eastern Brew",
     brewLink: "Eastern Brew, for a Turkish-style cup",
   },
   faq: {

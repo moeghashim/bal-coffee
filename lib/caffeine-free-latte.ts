@@ -3,8 +3,9 @@
  * FAQPage JSON-LD all read this module.
  *
  * The house milk ratio is not confirmed. Hot and iced steps say to adjust
- * the amount to taste. No ounce measure is published. Eastern Brew is not
- * pushed on this page.
+ * the amount to taste. No ounce measure is published. DateSpresso has no
+ * gram dose; a dual-wall filter or a stronger setting is recommended, and
+ * it pairs well with oat milk. Eastern Brew is not pushed on this page.
  */
 
 import type { MethodSection, RichText } from "./rich-text";
@@ -18,7 +19,7 @@ export const crumbs = [
 ] as const;
 
 export const intro =
-  "A caffeine-free latte is espresso-style shots and steamed or cold milk, made with something other than coffee beans. With BAL's DateSpresso, you pull two shots of roasted date seed coffee (18 to 20 grams, ideally in a dual-wall filter) and add milk. It's naturally caffeine-free, so it isn't a decaf latte, which still starts with coffee beans. It works hot or iced, with oat milk or whole milk.";
+  "A caffeine-free latte is espresso-style shots and steamed or cold milk, made with something other than coffee beans. With BAL's DateSpresso, use it in any espresso machine (we recommend a dual-wall filter or a stronger setting than you would for fresh ground espresso) and add milk. DateSpresso pairs well with oat milk. It's naturally caffeine-free, so it isn't a decaf latte, which still starts with coffee beans. It works hot or iced.";
 
 export const heroActions = [
   {
@@ -39,7 +40,7 @@ export const needs = [
   },
   {
     lead: "Milk.",
-    rest: "Oat milk and whole milk both work well.",
+    rest: "DateSpresso pairs well with oat milk. Whole milk also works well.",
   },
   {
     lead: "Optional flavor:",
@@ -53,8 +54,8 @@ export const methodSections: readonly MethodSection[] = [
     title: "Hot caffeine-free latte",
     steps: [
       {
-        lead: "Pull two shots",
-        rest: "Use 18 to 20 grams of DateSpresso in a dual-wall filter, and adjust the amount for your machine and taste.",
+        lead: "Pull the shots",
+        rest: "Use DateSpresso in any espresso machine. We recommend a dual-wall filter or a stronger setting than you would for fresh ground espresso.",
       },
       {
         lead: "Steam or froth the milk",
@@ -75,7 +76,7 @@ export const methodSections: readonly MethodSection[] = [
     title: "Caffeine-free iced latte",
     steps: [
       {
-        lead: "Pull two shots",
+        lead: "Pull the shots",
         rest: "of DateSpresso as above.",
       },
       {
@@ -180,18 +181,18 @@ export const faqs = [
     id: "faq-date-seed-latte",
     question: "Can you make a latte with date seed coffee?",
     answer:
-      "Yes. Pull two shots of DateSpresso (18 to 20 grams, ideally in a dual-wall filter) and add steamed or cold milk.",
+      "Yes. Use DateSpresso in any espresso machine (we recommend a dual-wall filter or a stronger setting than you would for fresh ground espresso) and add steamed or cold milk. DateSpresso pairs well with oat milk.",
   },
   {
     id: "faq-iced",
     question: "Can I make a caffeine-free iced latte?",
     answer:
-      "Yes. Pour cold milk over ice, then add two shots of DateSpresso and stir.",
+      "Yes. Pour cold milk over ice, then add DateSpresso shots and stir.",
   },
   {
     id: "faq-milk",
     question: "What milk works best?",
-    answer: "Oat milk and whole milk both pair well with DateSpresso.",
+    answer: "DateSpresso pairs well with oat milk. Whole milk also works well.",
   },
   {
     id: "faq-machine",
