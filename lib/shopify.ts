@@ -44,6 +44,7 @@ export type ShopifyProduct = {
   title: string;
   vendor?: string | null;
   description: string;
+  descriptionHtml?: string | null;
   productType?: string | null;
   tags?: string[];
   availableForSale: boolean;

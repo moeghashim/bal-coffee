@@ -52,7 +52,7 @@ export const pageSeo = {
       "Brewing steps for each grind. Amounts that are not printed on the bag stay as adjust to taste.",
     title: "How to Make Date Seed Coffee: Espresso, Drip & Cezve | BAL",
     description:
-      "How to make date seed coffee in an espresso machine, drip machine, French press, pour-over or cezve, with the grind and amount for each. Caffeine-free.",
+      "How to make date seed coffee in an espresso machine, coffee machine, pour-over, cold brew or cezve, with the right BAL grind and steps for each. Caffeine-free.",
     h1: "How to make date seed coffee, step by step",
   },
   caffeineFreeLatte: {
@@ -161,19 +161,27 @@ export function brewLinkLabel(slug: string) {
   return coffeeSeo(slug)?.brewLink;
 }
 
+const DEFAULT_SHARE_IMAGE = {
+  url: "/opengraph-image",
+  alt: "BAL Coffee roasted date seed coffee",
+};
+
 export function pageMetadata({
   title,
   description,
   path,
   index = true,
   openGraphType = "website",
+  image,
 }: {
   title: string;
   description: string;
   path: string;
   index?: boolean;
   openGraphType?: "website" | "article";
+  image?: { url: string; alt: string };
 }): Metadata {
+  const shareImage = image ?? DEFAULT_SHARE_IMAGE;
   return {
     title: { absolute: title },
     description,
@@ -186,11 +194,13 @@ export function pageMetadata({
       siteName: "BAL Coffee",
       locale: "en_US",
       type: openGraphType,
+      images: [{ url: shareImage.url, alt: shareImage.alt }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [shareImage.url],
     },
   };
 }

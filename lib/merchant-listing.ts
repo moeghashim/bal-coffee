@@ -11,7 +11,7 @@
 export const RETURN_NOT_PERMITTED =
   "https://schema.org/MerchantReturnNotPermitted";
 
-export const BRAND_NAME = "BAL";
+export const BRAND_NAME = "BAL Coffee";
 export const CONDITION_LABEL = "New";
 export const ITEM_CONDITION = "https://schema.org/NewCondition";
 export const IN_STOCK = "https://schema.org/InStock";

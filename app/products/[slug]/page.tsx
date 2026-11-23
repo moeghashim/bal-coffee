@@ -54,12 +54,67 @@ export async function generateMetadata({
 
   const seo = coffeeSeo(product.slug);
   const description = seo?.description || product.blurb || product.name;
+  const shareImage = product.images?.[0];
 
   return pageMetadata({
     title: seo?.title || `${product.name} | BAL Coffee`,
     description,
     path: `/products/${product.slug}`,
+    image: shareImage?.url
+      ? {
+          url: shareImage.url,
+          alt: `${product.name}, roasted date seed coffee`,
+        }
+      : undefined,
   });
+}
+
+function isLoveHeading(line: string) {
+  return line.replace(/[\u2018\u2019]/g, "'").endsWith("Why You'll Love It:");
+}
+
+function ProductDescription({ lines }: { lines: string[] }) {
+  if (lines.length === 0) return null;
+  const headingIndex = lines.findIndex(isLoveHeading);
+  const prose = headingIndex === -1 ? lines : lines.slice(0, headingIndex);
+  const heading = headingIndex === -1 ? undefined : lines[headingIndex];
+  const items = headingIndex === -1 ? [] : lines.slice(headingIndex + 1);
+
+  return (
+    <div
+      style={{
+        marginTop: 18,
+        maxWidth: 500,
+        fontSize: 15,
+        lineHeight: 1.45,
+        color: "var(--ink-2)",
+      }}
+    >
+      {prose.map((line, index) => (
+        <p
+          key={`line-${index}`}
+          style={index === 0 ? undefined : { marginTop: 8 }}
+        >
+          {line}
+        </p>
+      ))}
+      {heading ? (
+        <p style={{ marginTop: prose.length > 0 ? 8 : 0 }}>{heading}</p>
+      ) : null}
+      {items.length > 0 ? (
+        <ul style={{ marginTop: 8, paddingLeft: 18, listStyle: "disc" }}>
+          {items.map((item, index) => (
+            <li
+              key={`love-${index}`}
+              style={index === 0 ? undefined : { marginTop: 4 }}
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
 }
 
 function CheckIcon() {
@@ -239,6 +294,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
       : [undefined, undefined, undefined, undefined];
   const heading = seo?.h1 ?? product.name;
   const hasLongName = heading.length > 42;
+  const descriptionLines =
+    product.descriptionLines && product.descriptionLines.length > 0
+      ? product.descriptionLines
+      : product.description
+        ? [product.description]
+        : [];
   const productUrl = `${baseUrl}/products/${product.slug}`;
 
   return (
@@ -400,18 +461,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 >
                   {product.price}
                 </p>
+                {product.capsule ? (
+                  <p
+                    style={{
+                      marginTop: 14,
+                      maxWidth: 520,
+                      fontSize: 15,
+                      lineHeight: 1.5,
+                      color: "var(--ink-2)",
+                    }}
+                  >
+                    {product.capsule}
+                  </p>
+                ) : null}
                 <ProductFacts product={product} />
-                <p
-                  style={{
-                    marginTop: 18,
-                    maxWidth: 500,
-                    fontSize: 15,
-                    lineHeight: 1.45,
-                    color: "var(--ink-2)",
-                  }}
-                >
-                  {product.description}
-                </p>
+                <ProductDescription lines={descriptionLines} />
                 <div
                   style={{
                     marginTop: 18,
@@ -635,6 +699,25 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     </div>
                   ))}
                 </div>
+                {product.slug === "datespresso" ? (
+                  <p
+                    style={{
+                      marginTop: 14,
+                      fontSize: 13,
+                      lineHeight: 1.45,
+                      color: "var(--ink-2)",
+                    }}
+                  >
+                    Making a latte? See{" "}
+                    <a
+                      href="/caffeine-free-latte"
+                      style={{ color: "var(--ink)" }}
+                    >
+                      how to make a caffeine-free latte
+                    </a>
+                    , hot or iced.
+                  </p>
+                ) : null}
               </section>
 
               <section

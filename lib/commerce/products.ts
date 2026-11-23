@@ -15,6 +15,7 @@ const PRODUCT_QUERY = gql(`
       title
       vendor
       description
+      descriptionHtml
       productType
       tags
       availableForSale
@@ -83,6 +84,7 @@ const CATALOG_QUERY = gql(`
         title
         vendor
         description
+        descriptionHtml
         productType
         tags
         availableForSale

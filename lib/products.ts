@@ -31,6 +31,8 @@ export type Product = {
   blurb: string;
   price: string;
   description: string;
+  capsule?: string;
+  descriptionLines?: string[];
   notes: string[];
   details: string[];
   benefits: string[];
@@ -98,6 +100,8 @@ export const products: Product[] = [
     price: "$27",
     description:
       "Bold and indulgent with espresso-style depth. Crafted from roasted date seeds, DateSpresso is a rich, smooth cup that is naturally caffeine-free.",
+    capsule:
+      "DateSpresso is roasted date seed coffee ground for espresso machines. It is 100% date seeds, naturally caffeine-free and roasted in small batches, with no coffee beans and no additives or preservatives. Use it in any espresso machine, ideally with a dual-wall filter, for lattes and iced drinks.",
     notes: ["Rich", "Bold", "Indulgent"],
     details: [
       "Naturally caffeine-free",
@@ -140,6 +144,8 @@ export const products: Product[] = [
     price: "$27",
     description:
       "A smooth, balanced date-seed brew made for everyday rituals. GrounDate has a mellow roasted profile that works beautifully as a classic hot cup.",
+    capsule:
+      "GrounDate is roasted date seed coffee ground for traditional coffee machines and pour-over, and it works as cold brew too. It is 100% date seeds, naturally caffeine-free and acid-free, with no coffee beans and no additives or preservatives. For cold brew, use 1 part grounds to 4 parts water by volume and steep 12–24 hours.",
     notes: ["Smooth", "Balanced", "Mellow"],
     details: [
       "Naturally caffeine-free",
@@ -178,6 +184,8 @@ export const products: Product[] = [
     price: "$27",
     description:
       "A finely ground date-seed coffee made for a traditional Turkish-style cup. It brews bold and smooth, without caffeine.",
+    capsule:
+      "Eastern Brew is roasted date seed coffee ground fine for a Turkish-style cup in a cezve or dallah. It is 100% date seeds, naturally caffeine-free and acid-free, with no coffee beans and no additives or preservatives. Use one heaping teaspoon per 2 oz cup of water and boil for 1–2 minutes.",
     notes: ["Warm", "Roasted", "Fine grind"],
     details: [
       "Naturally caffeine-free",

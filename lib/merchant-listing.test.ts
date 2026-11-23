@@ -130,7 +130,7 @@ test("product JSON-LD uses live price, stock, size, and weight without invented 
   const offers = data.offers as Record<string, unknown>;
 
   assert.equal(data["@type"], "Product");
-  assert.equal((data.brand as { name: string }).name, "BAL");
+  assert.equal((data.brand as { name: string }).name, "BAL Coffee");
   assert.equal(data.sku, undefined);
   assert.equal(data.gtin14, "00198168355725");
   assert.equal(data.gtin13, undefined);
