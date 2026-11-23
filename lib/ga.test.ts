@@ -5,7 +5,9 @@ import {
   cartLinesToGaItems,
   ecommerceParams,
   gaMeasurementId,
+  GTAG_LOAD_TIMEOUT_MS,
   gtagBootstrapSource,
+  gtagDeferredLoaderSource,
   shouldShowAnalyticsNote,
   textMentionsAnalyticsOrCookies,
   toGaItem,
@@ -274,4 +276,133 @@ test("analytics note is added only when the policy never mentions it", () => {
     ),
     false,
   );
+});
+
+type FakeScript = { id: string; async: boolean; src: string };
+
+function installLoaderWindow(existingScriptId?: string) {
+  const scripts: FakeScript[] = existingScriptId
+    ? [
+        {
+          id: existingScriptId,
+          async: true,
+          src: "https://example.com/existing.js",
+        },
+      ]
+    : [];
+  const listeners: Record<string, Array<() => void>> = {};
+  const timers: Array<{ fn: () => void; ms: number }> = [];
+  const head = {
+    appendChild(el: FakeScript) {
+      scripts.push(el);
+      return el;
+    },
+  };
+  const win = {
+    __balGaLoaderScheduled: undefined as true | undefined,
+    setTimeout(fn: () => void, ms: number) {
+      timers.push({ fn, ms });
+      return timers.length;
+    },
+    addEventListener(type: string, fn: () => void) {
+      (listeners[type] ??= []).push(fn);
+    },
+    document: {
+      getElementById(id: string) {
+        return scripts.find((script) => script.id === id) ?? null;
+      },
+      createElement(tag: string) {
+        if (tag !== "script") throw new Error(`unexpected tag ${tag}`);
+        return { id: "", async: false, src: "" } as FakeScript;
+      },
+      head,
+      documentElement: head,
+    },
+  };
+  return { win, scripts, listeners, timers };
+}
+
+function runLoader(
+  win: ReturnType<typeof installLoaderWindow>["win"],
+  id = MEASUREMENT_ID,
+) {
+  vm.runInNewContext(gtagDeferredLoaderSource(id), {
+    window: win,
+    document: win.document,
+  });
+}
+
+test("deferred loader does not fetch gtag.js until interaction or timeout", () => {
+  const { win, scripts, listeners, timers } = installLoaderWindow();
+  runLoader(win);
+  assert.equal(scripts.length, 0);
+  assert.equal(timers.length, 1);
+  assert.equal(timers[0]?.ms, GTAG_LOAD_TIMEOUT_MS);
+  assert.equal(GTAG_LOAD_TIMEOUT_MS, 3000);
+  for (const type of ["pointerdown", "keydown", "touchstart", "scroll"]) {
+    assert.equal(listeners[type]?.length, 1);
+  }
+});
+
+test("deferred loader injects gtag.js once on first interaction", () => {
+  const { win, scripts, listeners, timers } = installLoaderWindow();
+  runLoader(win);
+  listeners.pointerdown?.[0]?.();
+  assert.equal(scripts.length, 1);
+  assert.equal(scripts[0]?.id, "_next-ga");
+  assert.equal(scripts[0]?.async, true);
+  assert.equal(
+    scripts[0]?.src,
+    `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`,
+  );
+  listeners.keydown?.[0]?.();
+  timers[0]?.fn();
+  assert.equal(scripts.length, 1);
+});
+
+test("deferred loader injects gtag.js once when the timeout fires", () => {
+  const { win, scripts, timers } = installLoaderWindow();
+  runLoader(win);
+  timers[0]?.fn();
+  timers[0]?.fn();
+  assert.equal(scripts.length, 1);
+  assert.equal(scripts[0]?.id, "_next-ga");
+});
+
+test("deferred loader is a no-op when gtag.js is already in the document", () => {
+  const { win, scripts, timers } = installLoaderWindow("_next-ga");
+  runLoader(win);
+  timers[0]?.fn();
+  assert.equal(scripts.length, 1);
+  assert.equal(scripts[0]?.src, "https://example.com/existing.js");
+});
+
+test("deferred loader can be included twice without a second fetch", () => {
+  const { win, scripts, timers } = installLoaderWindow();
+  runLoader(win);
+  runLoader(win);
+  assert.equal(timers.length, 1);
+  timers[0]?.fn();
+  assert.equal(scripts.length, 1);
+});
+
+test("deferred loader rejects an invalid measurement id", () => {
+  assert.throws(() => gtagDeferredLoaderSource("GTM-ABC123"));
+});
+
+test("events still queue after bootstrap when the library has not loaded", () => {
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = MEASUREMENT_ID;
+  const { win } = installLoaderWindow();
+  const dataLayer: unknown[] = [];
+  Object.assign(win, { dataLayer });
+  (globalThis as { window?: unknown }).window = win;
+  vm.runInNewContext(gtagBootstrapSource(MEASUREMENT_ID), { window: win });
+  runLoader(win);
+  assert.equal(trackEcommerce("add_to_cart", [item]), true);
+  const queued = queuedEvents();
+  assert.deepEqual(
+    queued.map((event) => event.command),
+    ["js", "config", "event"],
+  );
+  assert.equal(queued[2]?.name, "add_to_cart");
 });
