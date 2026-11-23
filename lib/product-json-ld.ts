@@ -16,6 +16,37 @@ function priceString(amount: number) {
   return amount.toFixed(2);
 }
 
+function hasEndPunctuation(line: string) {
+  return /[.!?:]$/.test(line);
+}
+
+/** Join lines with ". " unless the line already ends with . ! ? or :. */
+export function joinDescriptionLines(lines: string[]) {
+  let joined = "";
+  for (const line of lines) {
+    if (!joined) {
+      joined = line;
+      continue;
+    }
+    joined = hasEndPunctuation(joined)
+      ? `${joined} ${line}`
+      : `${joined}. ${line}`;
+  }
+  return joined;
+}
+
+function schemaDescription(product: Product, fallback?: string) {
+  const lines = product.descriptionLines?.filter((line) => line.trim()) ?? [];
+  const body =
+    lines.length > 0
+      ? joinDescriptionLines(lines)
+      : product.description || fallback || product.blurb || product.name;
+  const withCapsule = product.capsule?.trim()
+    ? joinDescriptionLines([product.capsule.trim(), body].filter(Boolean))
+    : body;
+  return plainText(withCapsule);
+}
+
 function absoluteImage(url: string) {
   const sized = shopifyImageUrl(url, 1200);
   if (sized.startsWith("//")) return `https:${sized}`;
@@ -46,9 +77,7 @@ export function productJsonLd(
   const availability = availabilityUrl(product.availableForSale);
   const low = amounts.length > 0 ? Math.min(...amounts) : product.priceAmount;
   const high = amounts.length > 0 ? Math.max(...amounts) : product.priceAmount;
-  const schemaDescription = plainText(
-    product.description || description || product.blurb || product.name,
-  );
+  const schemaText = schemaDescription(product, description);
   const siteUrl = new URL(url).origin;
   const commerce = offerCommerce(siteUrl);
   const weight = weightLabel(product.weight, product.weightUnit);
@@ -59,7 +88,7 @@ export function productJsonLd(
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    description: schemaDescription,
+    description: schemaText,
     brand: {
       "@type": "Brand",
       name: BRAND_NAME,

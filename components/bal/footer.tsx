@@ -10,6 +10,15 @@ const linkColumns: {
     title: "Shop",
     links: [
       { label: "What is date seed coffee?", href: "/date-seed-coffee" },
+      {
+        label: "How to make date seed coffee",
+        href: "/how-to-make-date-seed-coffee",
+      },
+      {
+        label: "Date seed coffee vs coffee",
+        href: "/date-seed-coffee-vs-coffee",
+      },
+      { label: "Caffeine-free latte", href: "/caffeine-free-latte" },
       { label: "All Products", href: "/products" },
       { label: "Eastern Brew", href: "/products/eastern-brew" },
       { label: "GrounDate", href: "/products/groundate" },

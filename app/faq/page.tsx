@@ -1,7 +1,14 @@
 import { ReactNode } from "react";
+import { JsonLd } from "components/bal/json-ld";
 import { LinkedCopy } from "components/bal/linked-copy";
 import { PageShell } from "components/bal/page-shell";
-import { pageMetadata, pageSeo } from "lib/seo";
+import {
+  breadcrumbJsonLd,
+  faqPageJsonLd,
+  pageMetadata,
+  pageSeo,
+} from "lib/seo";
+import { baseUrl } from "lib/utils";
 
 const learnMore = (
   <>
@@ -146,6 +153,12 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
   },
 ];
 
+const faqSchemaQuestions = questions.flatMap((item) =>
+  typeof item.answer === "string"
+    ? [{ question: item.question, answer: item.answer }]
+    : [],
+);
+
 export const metadata = pageMetadata({
   title: pageSeo.faq.title,
   description: pageSeo.faq.description,
@@ -154,45 +167,54 @@ export const metadata = pageMetadata({
 
 export default function FaqPage() {
   return (
-    <PageShell
-      eyebrow="Help"
-      title={pageSeo.faq.h1}
-      intro="Short answers from what we actually sell today. If yours isn't here, email us."
-    >
-      <div style={{ display: "grid", gap: 28 }}>
-        {questions.map((item) => (
-          <section key={item.id} id={item.id}>
-            <h2
-              className="serif"
-              style={{ fontSize: 22, color: "var(--ink)", fontWeight: 500 }}
-            >
-              {item.question}
-            </h2>
-            <p style={{ marginTop: 8 }}>
-              {typeof item.answer === "string" ? (
-                <LinkedCopy text={item.answer} />
-              ) : (
-                item.answer
-              )}
-            </p>
-          </section>
-        ))}
-      </div>
-      <p style={{ marginTop: 28 }}>
-        All sales are final. If an item arrives damaged or isn&apos;t what you
-        ordered, see{" "}
-        <a href="/returns" style={{ color: "var(--terra-deep)" }}>
-          returns
-        </a>
-        . Still stuck? Email{" "}
-        <a
-          href="mailto:judy@balcoffee.com"
-          style={{ color: "var(--terra-deep)" }}
-        >
-          judy@balcoffee.com
-        </a>
-        .
-      </p>
-    </PageShell>
+    <>
+      <JsonLd data={faqPageJsonLd(faqSchemaQuestions)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", url: baseUrl },
+          { name: "FAQ", url: `${baseUrl}/faq` },
+        ])}
+      />
+      <PageShell
+        eyebrow="Help"
+        title={pageSeo.faq.h1}
+        intro="Short answers from what we actually sell today. If yours isn't here, email us."
+      >
+        <div style={{ display: "grid", gap: 28 }}>
+          {questions.map((item) => (
+            <section key={item.id} id={item.id}>
+              <h2
+                className="serif"
+                style={{ fontSize: 22, color: "var(--ink)", fontWeight: 500 }}
+              >
+                {item.question}
+              </h2>
+              <p style={{ marginTop: 8 }}>
+                {typeof item.answer === "string" ? (
+                  <LinkedCopy text={item.answer} />
+                ) : (
+                  item.answer
+                )}
+              </p>
+            </section>
+          ))}
+        </div>
+        <p style={{ marginTop: 28 }}>
+          All sales are final. If an item arrives damaged or isn&apos;t what you
+          ordered, see{" "}
+          <a href="/returns" style={{ color: "var(--terra-deep)" }}>
+            returns
+          </a>
+          . Still stuck? Email{" "}
+          <a
+            href="mailto:judy@balcoffee.com"
+            style={{ color: "var(--terra-deep)" }}
+          >
+            judy@balcoffee.com
+          </a>
+          .
+        </p>
+      </PageShell>
+    </>
   );
 }

@@ -12,6 +12,7 @@ import {
   type ProductVariant,
 } from "lib/products";
 import { formatPhrase, sizeFromOptions } from "lib/merchant-listing";
+import { htmlToLines } from "lib/plain-text";
 import type { ShopifyImage, ShopifyProduct, ShopifyVariant } from "lib/shopify";
 
 /**
@@ -26,6 +27,20 @@ import type { ShopifyImage, ShopifyProduct, ShopifyVariant } from "lib/shopify";
 
 function normalizeDescription(description: string) {
   return description.replace(/\s+/g, " ").trim();
+}
+
+function descriptionLinesFrom(
+  shopifyProduct: ShopifyProduct,
+  editorial: Product | undefined,
+) {
+  const fromHtml = htmlToLines(shopifyProduct.descriptionHtml ?? "");
+  if (fromHtml.length > 0) return fromHtml;
+  const plain = normalizeDescription(shopifyProduct.description);
+  if (plain) return [plain];
+  const editorialDescription = editorial?.description
+    ? normalizeDescription(editorial.description)
+    : "";
+  return editorialDescription ? [editorialDescription] : [];
 }
 
 function getShopifyImages(shopifyProduct: ShopifyProduct) {
@@ -118,6 +133,7 @@ function toCatalogProduct(
     normalizeDescription(shopifyProduct.description) ||
     editorial?.description ||
     "";
+  const descriptionLines = descriptionLinesFrom(shopifyProduct, editorial);
   const drink = forceDrink || isCafeDrink(shopifyProduct);
   const category = editorial ? editorial.category : drink ? "drink" : "other";
   const minMoney =
@@ -147,6 +163,7 @@ function toCatalogProduct(
     }),
     category,
     description,
+    descriptionLines,
     blurb: editorial?.blurb || blurbFrom(description, shopifyProduct.title),
     price: priceVaries
       ? `From ${formatPrice(minMoney)}`

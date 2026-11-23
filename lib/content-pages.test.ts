@@ -36,8 +36,8 @@ const descriptions = [
     152,
   ],
   [
-    "How to make date seed coffee in an espresso machine, drip machine, French press, pour-over or cezve, with the grind and amount for each. Caffeine-free.",
-    151,
+    "How to make date seed coffee in an espresso machine, coffee machine, pour-over, cold brew or cezve, with the right BAL grind and steps for each. Caffeine-free.",
+    159,
   ],
   [
     "Make a caffeine-free latte at home, hot or iced, with DateSpresso: espresso-style date seed coffee with no coffee beans and no caffeine. Steps inside.",
