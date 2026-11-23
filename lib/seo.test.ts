@@ -100,6 +100,14 @@ test("landing page copy stays inside the allowed claims", () => {
   assert.equal(brewRows[2].slug, "eastern-brew");
 });
 
+test("organization JSON-LD spreads the shared merchant return policy", () => {
+  assert.match(seoSource, /\.\.\.organizationCommerceFields\(url\)/);
+  assert.match(
+    seoSource,
+    /export function organizationJsonLd[\s\S]*"@type": "Organization"/,
+  );
+});
+
 test("approved titles are the strings shipped in lib/seo.ts", () => {
   for (const value of [
     pageSeo.home.title,

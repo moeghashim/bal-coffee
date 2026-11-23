@@ -10,6 +10,7 @@ import { productNameSegments } from "./internal-links.ts";
 import {
   formatPhrase,
   gtinFromBarcode,
+  MERCHANT_SHIPPING,
   merchantReturnPolicy,
   offerShippingDetails,
   organizationCommerceFields,
@@ -64,8 +65,6 @@ function coffee(overrides: Partial<Product> = {}): Product {
 }
 
 const INVENTED = [
-  "shippingRate",
-  "handlingTime",
   "priceValidUntil",
   "merchantReturnDays",
   "returnFees",
@@ -76,9 +75,10 @@ const INVENTED = [
   "MerchantReturnUnlimitedWindow",
   "aggregateRating",
   "organic",
+  "free shipping",
 ];
 
-test("shipping details are US transit of 2–3 days and do not invent a rate or handling time", () => {
+test("shipping details use the shared US rate, handling time, and transit time", () => {
   const shipping = offerShippingDetails();
   assert.deepEqual(shipping, {
     "@type": "OfferShippingDetails",
@@ -86,8 +86,19 @@ test("shipping details are US transit of 2–3 days and do not invent a rate or 
       "@type": "DefinedRegion",
       addressCountry: "US",
     },
+    shippingRate: {
+      "@type": "MonetaryAmount",
+      value: "8.00",
+      currency: "USD",
+    },
     deliveryTime: {
       "@type": "ShippingDeliveryTime",
+      handlingTime: {
+        "@type": "QuantitativeValue",
+        minValue: 0,
+        maxValue: 1,
+        unitCode: "DAY",
+      },
       transitTime: {
         "@type": "QuantitativeValue",
         minValue: 2,
@@ -96,8 +107,28 @@ test("shipping details are US transit of 2–3 days and do not invent a rate or 
       },
     },
   });
-  assert.equal("shippingRate" in shipping, false);
-  assert.equal("handlingTime" in (shipping.deliveryTime as object), false);
+  assert.equal(shipping.shippingRate.value, MERCHANT_SHIPPING.rate);
+  assert.equal(shipping.shippingRate.currency, MERCHANT_SHIPPING.currency);
+  assert.equal(
+    shipping.deliveryTime.handlingTime.minValue,
+    MERCHANT_SHIPPING.handlingDays.min,
+  );
+  assert.equal(
+    shipping.deliveryTime.handlingTime.maxValue,
+    MERCHANT_SHIPPING.handlingDays.max,
+  );
+  assert.equal(
+    shipping.deliveryTime.transitTime.minValue,
+    MERCHANT_SHIPPING.transitDays.min,
+  );
+  assert.equal(
+    shipping.deliveryTime.transitTime.maxValue,
+    MERCHANT_SHIPPING.transitDays.max,
+  );
+  assert.equal(
+    shipping.deliveryTime.transitTime.unitCode,
+    MERCHANT_SHIPPING.unitCode,
+  );
 });
 
 test("return policy is not permitted in the US and has no fee or method", () => {
@@ -185,7 +216,7 @@ test("out of stock, a blank SKU, and a bad barcode stay out of the markup", () =
   assert.equal(JSON.stringify(data).includes("priceValidUntil"), false);
 });
 
-test("a real SKU is kept and a price range does not gain a shipping rate", () => {
+test("a real SKU is kept and a price range uses the shared shipping details", () => {
   const data = productJsonLd(
     coffee({
       sku: "BAL-ESP-12",
@@ -217,8 +248,39 @@ test("a real SKU is kept and a price range does not gain a shipping rate", () =>
   assert.equal(offers["@type"], "AggregateOffer");
   assert.equal(offers.lowPrice, "26.99");
   assert.equal(offers.highPrice, "48.00");
-  assert.equal("shippingRate" in (offers.shippingDetails as object), false);
+  assert.deepEqual(offers.shippingDetails, offerShippingDetails());
+  assert.deepEqual(offers.hasMerchantReturnPolicy, merchantReturnPolicy(SITE));
   assert.equal(offers.itemCondition, "https://schema.org/NewCondition");
+});
+
+test("product script JSON-LD parses and carries merchant fields for each bag", () => {
+  const bags = [
+    ["datespresso", "datespresso", "DateSpresso"],
+    ["groundate", "groundate", "GrounDate"],
+    ["eastern-brew", "arabica", "Eastern Brew"],
+  ] as const;
+
+  for (const [slug, handle, name] of bags) {
+    const data = productJsonLd(
+      coffee({ name, slug, shopifyHandle: handle }),
+      `${SITE}/products/${slug}`,
+    );
+    const payload = JSON.stringify(data).replace(/</g, "\\u003c");
+    const parsed = JSON.parse(payload) as {
+      offers: {
+        shippingDetails: ReturnType<typeof offerShippingDetails>;
+        hasMerchantReturnPolicy: ReturnType<typeof merchantReturnPolicy>;
+      };
+    };
+    assert.equal(parsed.offers.shippingDetails.shippingRate.value, "8.00");
+    assert.equal(parsed.offers.shippingDetails.shippingRate.currency, "USD");
+    assert.deepEqual(
+      parsed.offers.hasMerchantReturnPolicy,
+      merchantReturnPolicy(SITE),
+    );
+    assert.equal(payload.includes("free shipping"), false, slug);
+    assert.equal(payload.includes("merchantReturnDays"), false, slug);
+  }
 });
 
 test("gtin, size, and format helpers refuse values Shopify did not provide", () => {
