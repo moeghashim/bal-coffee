@@ -10,9 +10,7 @@ import { productNameSegments } from "./internal-links.ts";
 import {
   formatPhrase,
   gtinFromBarcode,
-  MERCHANT_SHIPPING,
   merchantReturnPolicy,
-  offerShippingDetails,
   organizationCommerceFields,
   RETURN_NOT_PERMITTED,
   schemaPrice,
@@ -76,60 +74,10 @@ const INVENTED = [
   "aggregateRating",
   "organic",
   "free shipping",
+  "shippingDetails",
+  "shippingRate",
+  "OfferShippingDetails",
 ];
-
-test("shipping details use the shared US rate, handling time, and transit time", () => {
-  const shipping = offerShippingDetails();
-  assert.deepEqual(shipping, {
-    "@type": "OfferShippingDetails",
-    shippingDestination: {
-      "@type": "DefinedRegion",
-      addressCountry: "US",
-    },
-    shippingRate: {
-      "@type": "MonetaryAmount",
-      value: "8.00",
-      currency: "USD",
-    },
-    deliveryTime: {
-      "@type": "ShippingDeliveryTime",
-      handlingTime: {
-        "@type": "QuantitativeValue",
-        minValue: 0,
-        maxValue: 1,
-        unitCode: "DAY",
-      },
-      transitTime: {
-        "@type": "QuantitativeValue",
-        minValue: 2,
-        maxValue: 3,
-        unitCode: "DAY",
-      },
-    },
-  });
-  assert.equal(shipping.shippingRate.value, MERCHANT_SHIPPING.rate);
-  assert.equal(shipping.shippingRate.currency, MERCHANT_SHIPPING.currency);
-  assert.equal(
-    shipping.deliveryTime.handlingTime.minValue,
-    MERCHANT_SHIPPING.handlingDays.min,
-  );
-  assert.equal(
-    shipping.deliveryTime.handlingTime.maxValue,
-    MERCHANT_SHIPPING.handlingDays.max,
-  );
-  assert.equal(
-    shipping.deliveryTime.transitTime.minValue,
-    MERCHANT_SHIPPING.transitDays.min,
-  );
-  assert.equal(
-    shipping.deliveryTime.transitTime.maxValue,
-    MERCHANT_SHIPPING.transitDays.max,
-  );
-  assert.equal(
-    shipping.deliveryTime.transitTime.unitCode,
-    MERCHANT_SHIPPING.unitCode,
-  );
-});
 
 test("return policy is not permitted in the US and has no fee or method", () => {
   const policy = merchantReturnPolicy(SITE);
@@ -145,10 +93,12 @@ test("return policy is not permitted in the US and has no fee or method", () => 
   assert.equal(JSON.stringify(policy).includes("returnMethod"), false);
 });
 
-test("organization shipping and returns match the offer policy", () => {
+test("organization JSON-LD carries the return policy and no shipping rate", () => {
   const fields = organizationCommerceFields(`${SITE}/`);
-  assert.deepEqual(fields.shippingDetails, offerShippingDetails());
-  assert.deepEqual(fields.hasMerchantReturnPolicy, merchantReturnPolicy(SITE));
+  assert.deepEqual(fields, {
+    hasMerchantReturnPolicy: merchantReturnPolicy(SITE),
+  });
+  assert.equal("shippingDetails" in fields, false);
 });
 
 test("product JSON-LD uses live price, stock, size, and weight without invented fields", () => {
@@ -177,7 +127,7 @@ test("product JSON-LD uses live price, stock, size, and weight without invented 
   assert.equal(offers.availability, "https://schema.org/InStock");
   assert.equal(offers.itemCondition, "https://schema.org/NewCondition");
   assert.equal(offers.priceValidUntil, undefined);
-  assert.deepEqual(offers.shippingDetails, offerShippingDetails());
+  assert.equal(offers.shippingDetails, undefined);
   assert.deepEqual(offers.hasMerchantReturnPolicy, merchantReturnPolicy(SITE));
   assert.match(String(data.description), /espresso-style/);
   assert.equal(String(data.description).includes("SEO description"), false);
@@ -216,7 +166,7 @@ test("out of stock, a blank SKU, and a bad barcode stay out of the markup", () =
   assert.equal(JSON.stringify(data).includes("priceValidUntil"), false);
 });
 
-test("a real SKU is kept and a price range uses the shared shipping details", () => {
+test("a real SKU is kept and a price range does not gain a shipping rate", () => {
   const data = productJsonLd(
     coffee({
       sku: "BAL-ESP-12",
@@ -248,7 +198,7 @@ test("a real SKU is kept and a price range uses the shared shipping details", ()
   assert.equal(offers["@type"], "AggregateOffer");
   assert.equal(offers.lowPrice, "26.99");
   assert.equal(offers.highPrice, "48.00");
-  assert.deepEqual(offers.shippingDetails, offerShippingDetails());
+  assert.equal(offers.shippingDetails, undefined);
   assert.deepEqual(offers.hasMerchantReturnPolicy, merchantReturnPolicy(SITE));
   assert.equal(offers.itemCondition, "https://schema.org/NewCondition");
 });
@@ -268,12 +218,12 @@ test("product script JSON-LD parses and carries merchant fields for each bag", (
     const payload = JSON.stringify(data).replace(/</g, "\\u003c");
     const parsed = JSON.parse(payload) as {
       offers: {
-        shippingDetails: ReturnType<typeof offerShippingDetails>;
         hasMerchantReturnPolicy: ReturnType<typeof merchantReturnPolicy>;
       };
     };
-    assert.equal(parsed.offers.shippingDetails.shippingRate.value, "8.00");
-    assert.equal(parsed.offers.shippingDetails.shippingRate.currency, "USD");
+    assert.equal("shippingDetails" in parsed.offers, false, slug);
+    assert.equal(payload.includes("shippingRate"), false, slug);
+    assert.equal(payload.includes("8.00"), false, slug);
     assert.deepEqual(
       parsed.offers.hasMerchantReturnPolicy,
       merchantReturnPolicy(SITE),

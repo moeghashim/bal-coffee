@@ -5,7 +5,6 @@ import {
   gtinFromBarcode,
   ITEM_CONDITION,
   merchantReturnPolicy,
-  offerShippingDetails,
   schemaPrice,
   weightLabel,
 } from "./merchant-listing";
@@ -55,7 +54,6 @@ function absoluteImage(url: string) {
 
 function offerCommerce(siteUrl: string) {
   return {
-    shippingDetails: offerShippingDetails(),
     hasMerchantReturnPolicy: merchantReturnPolicy(siteUrl),
     itemCondition: ITEM_CONDITION,
   };

@@ -5,9 +5,10 @@
  * wrong items are handled by emailing judy@balcoffee.com. Do not add a return
  * window, fee, or method.
  *
- * /shipping says the cost is calculated at checkout and that US delivery
- * takes 2–3 business days. MERCHANT_SHIPPING is the one set of figures the
- * Offer publishes. Adjust the rate after Shopify's exact rules are confirmed.
+ * Shipping is carrier-calculated: live USPS Priority Mail from Houston, TX
+ * 77043. Google Merchant Center supplies the rate. Google's merchant listing
+ * docs require shippingRate on OfferShippingDetails, so this markup does not
+ * publish shippingDetails or a flat rate.
  * Do not invent merchantReturnDays, returnFees, returnMethod, or
  * priceValidUntil.
  */
@@ -15,18 +16,7 @@
 export const RETURN_NOT_PERMITTED =
   "https://schema.org/MerchantReturnNotPermitted";
 
-/**
- * US merchant-listing shipping. Rate, currency, and day ranges live here so
- * they can change in one place.
- */
-export const MERCHANT_SHIPPING = {
-  country: "US",
-  currency: "USD",
-  rate: "8.00",
-  handlingDays: { min: 0, max: 1 },
-  transitDays: { min: 2, max: 3 },
-  unitCode: "DAY",
-} as const;
+const RETURN_COUNTRY = "US";
 
 export const BRAND_NAME = "BAL Coffee";
 export const CONDITION_LABEL = "New";
@@ -49,40 +39,11 @@ const WEIGHT_UNITS: Record<string, { unitCode: string; suffix: string }> = {
   POUNDS: { unitCode: "LBR", suffix: "lb" },
 };
 
-function dayRange(range: { min: number; max: number }) {
-  return {
-    "@type": "QuantitativeValue" as const,
-    minValue: range.min,
-    maxValue: range.max,
-    unitCode: MERCHANT_SHIPPING.unitCode,
-  };
-}
-
-export function offerShippingDetails() {
-  return {
-    "@type": "OfferShippingDetails" as const,
-    shippingDestination: {
-      "@type": "DefinedRegion" as const,
-      addressCountry: MERCHANT_SHIPPING.country,
-    },
-    shippingRate: {
-      "@type": "MonetaryAmount" as const,
-      value: MERCHANT_SHIPPING.rate,
-      currency: MERCHANT_SHIPPING.currency,
-    },
-    deliveryTime: {
-      "@type": "ShippingDeliveryTime" as const,
-      handlingTime: dayRange(MERCHANT_SHIPPING.handlingDays),
-      transitTime: dayRange(MERCHANT_SHIPPING.transitDays),
-    },
-  };
-}
-
 export function merchantReturnPolicy(siteUrl: string) {
   const origin = siteUrl.replace(/\/$/, "");
   return {
     "@type": "MerchantReturnPolicy" as const,
-    applicableCountry: MERCHANT_SHIPPING.country,
+    applicableCountry: RETURN_COUNTRY,
     returnPolicyCategory: RETURN_NOT_PERMITTED,
     merchantReturnLink: `${origin}/returns`,
   };
@@ -91,7 +52,6 @@ export function merchantReturnPolicy(siteUrl: string) {
 /** Same policy on every product, so Organization can carry it too. */
 export function organizationCommerceFields(siteUrl: string) {
   return {
-    shippingDetails: offerShippingDetails(),
     hasMerchantReturnPolicy: merchantReturnPolicy(siteUrl),
   };
 }
