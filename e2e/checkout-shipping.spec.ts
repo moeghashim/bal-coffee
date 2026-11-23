@@ -121,8 +121,10 @@ test("checkout shows a non-zero USPS rate for a Houston address", async ({
     .filter(Boolean);
   const rateLines: string[] = [];
   for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
     if (
-      !/usps|priority mail|ground advantage|shipping method/i.test(lines[index])
+      !line ||
+      !/usps|priority mail|ground advantage|shipping method/i.test(line)
     ) {
       continue;
     }
@@ -134,9 +136,7 @@ test("checkout shows a non-zero USPS rate for a Houston address", async ({
       .filter((line) => !/^\$/.test(line))
       .join(", ");
     rateLines.push(
-      detail
-        ? `${lines[index]} — ${detail} — ${money}`
-        : `${lines[index]} — ${money}`,
+      detail ? `${line} — ${detail} — ${money}` : `${line} — ${money}`,
     );
   }
   const summaryIndex = lines.findIndex(
