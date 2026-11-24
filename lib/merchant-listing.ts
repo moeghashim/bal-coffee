@@ -1,15 +1,22 @@
 /**
- * Merchant-listing JSON-LD, built only from facts the site already states.
+ * Merchant-listing JSON-LD.
  *
- * /shipping: rates are calculated at checkout, there is no flat rate, and
- * delivery takes 2–3 business days in the US. Handling time is not stated.
- * /returns: all sales are final. BAL does not accept returns. Do not invent
- * shippingRate, handlingTime, merchantReturnDays, returnFees, returnMethod,
- * or priceValidUntil.
+ * /returns: all sales are final. BAL does not accept returns. Damaged or
+ * wrong items are handled by emailing judy@balcoffee.com. Do not add a return
+ * window, fee, or method.
+ *
+ * Shipping is carrier-calculated: live USPS Priority Mail from Houston, TX
+ * 77043. Google Merchant Center supplies the rate. Google's merchant listing
+ * docs require shippingRate on OfferShippingDetails, so this markup does not
+ * publish shippingDetails or a flat rate.
+ * Do not invent merchantReturnDays, returnFees, returnMethod, or
+ * priceValidUntil.
  */
 
 export const RETURN_NOT_PERMITTED =
   "https://schema.org/MerchantReturnNotPermitted";
+
+const RETURN_COUNTRY = "US";
 
 export const BRAND_NAME = "BAL Coffee";
 export const CONDITION_LABEL = "New";
@@ -32,30 +39,11 @@ const WEIGHT_UNITS: Record<string, { unitCode: string; suffix: string }> = {
   POUNDS: { unitCode: "LBR", suffix: "lb" },
 };
 
-export function offerShippingDetails() {
-  return {
-    "@type": "OfferShippingDetails" as const,
-    shippingDestination: {
-      "@type": "DefinedRegion" as const,
-      addressCountry: "US",
-    },
-    deliveryTime: {
-      "@type": "ShippingDeliveryTime" as const,
-      transitTime: {
-        "@type": "QuantitativeValue" as const,
-        minValue: 2,
-        maxValue: 3,
-        unitCode: "DAY",
-      },
-    },
-  };
-}
-
 export function merchantReturnPolicy(siteUrl: string) {
   const origin = siteUrl.replace(/\/$/, "");
   return {
     "@type": "MerchantReturnPolicy" as const,
-    applicableCountry: "US",
+    applicableCountry: RETURN_COUNTRY,
     returnPolicyCategory: RETURN_NOT_PERMITTED,
     merchantReturnLink: `${origin}/returns`,
   };
@@ -64,7 +52,6 @@ export function merchantReturnPolicy(siteUrl: string) {
 /** Same policy on every product, so Organization can carry it too. */
 export function organizationCommerceFields(siteUrl: string) {
   return {
-    shippingDetails: offerShippingDetails(),
     hasMerchantReturnPolicy: merchantReturnPolicy(siteUrl),
   };
 }

@@ -129,7 +129,8 @@ function recordCollect(request: Request) {
 
 async function dataLayerSnapshot(page: Page) {
   return page.evaluate(() => {
-    const layer = window.dataLayer ?? [];
+    const layer =
+      (window as Window & { dataLayer?: unknown[] }).dataLayer ?? [];
     return layer.map((entry) => {
       const command = entry as { 0?: unknown; 1?: unknown; 2?: unknown };
       const name = command[1];
