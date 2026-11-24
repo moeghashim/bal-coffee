@@ -30,7 +30,7 @@ test("products page lists the live catalog", async ({ page }) => {
   const response = await page.goto("/products");
   expect(response?.ok()).toBeTruthy();
   await expect(page).toHaveTitle(
-    "Shop Date Seed Coffee: Espresso, Drip & Turkish | BAL",
+    "Shop Date Seed Coffee | Espresso, Drip & Cezve, $26.99",
   );
   await expect(
     page.getByRole("heading", { name: "Shop date seed coffee", level: 1 }),
@@ -44,9 +44,9 @@ test("products page lists the live catalog", async ({ page }) => {
 });
 
 const productTitles = {
-  datespresso: "DateSpresso | Date Seed Espresso Alternative | BAL Coffee",
-  groundate: "GrounDate | Drip & French Press Date Seed Coffee | BAL",
-  "eastern-brew": "Eastern Brew | Turkish-Style Date Seed Coffee | BAL Coffee",
+  datespresso: "DateSpresso | Caffeine-Free Date Espresso | BAL Coffee",
+  groundate: "GrounDate | Caffeine-Free Drip Date Seed Coffee | BAL",
+  "eastern-brew": "Eastern Brew | Turkish-Style Coffee, Caffeine-Free | BAL",
 } as const;
 
 for (const slug of productSlugs) {

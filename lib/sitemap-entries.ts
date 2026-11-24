@@ -20,17 +20,17 @@ export const CONTENT_PATHS = [
 ] as const;
 
 const CONTENT_LAST_MODIFIED: Record<(typeof CONTENT_PATHS)[number], string> = {
-  "": "2026-10-31",
-  "/products": "2026-11-12",
-  "/date-seed-coffee": "2026-11-16",
-  "/date-seed-coffee-vs-coffee": "2026-11-16",
-  "/how-to-make-date-seed-coffee": "2026-11-16",
-  "/caffeine-free-latte": "2026-11-16",
-  "/about": "2026-10-31",
+  "": "2026-11-24",
+  "/products": "2026-11-24",
+  "/date-seed-coffee": "2026-11-24",
+  "/date-seed-coffee-vs-coffee": "2026-11-24",
+  "/how-to-make-date-seed-coffee": "2026-11-24",
+  "/caffeine-free-latte": "2026-11-24",
+  "/about": "2026-11-24",
   "/faq": "2026-11-16",
   "/shipping": "2026-11-16",
   "/returns": "2026-11-16",
-  "/contact": "2026-10-31",
+  "/contact": "2026-11-24",
   "/privacy": "2026-11-14",
   "/terms": "2026-11-14",
 };

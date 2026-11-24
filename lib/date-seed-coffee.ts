@@ -39,6 +39,17 @@ export const whatIs = [
   "It isn't new. Date seeds have been roasted and brewed for generations in the Middle East and North Africa, where nothing from the date palm went to waste. BAL brings that tradition to a modern kitchen, with no coffee beans, no blends and nothing added. The only ingredient in every bag is roasted date seeds.",
 ] as const;
 
+export const pitCoffeeTitle = "Date pit coffee is date seed coffee";
+
+export const pitCoffee = [
+  "Date pit coffee and date seed coffee are two names for the same drink. The pit is the seed: the hard center of a date. Roast it, grind it, and brew it, and the cup is date pit coffee. BAL's bags are 100% roasted date seeds, naturally caffeine-free and acid-free, with no additives or preservatives.",
+] as const;
+
+export const priceTitle = "Date seed coffee price";
+
+export const priceBody =
+  "A 12 oz bag is $26.99. You get one grind of 100% roasted date seeds, naturally caffeine-free and acid-free, roasted in small batches, with no additives or preservatives. US shipping takes 2-3 business days, and the rate is calculated at checkout.";
+
 export const tasteIntro = [
   "Date seed coffee tastes roasted, smooth and earthy. It is coffee-inspired rather than a copy of coffee: you still get a dark cup and a toasty aroma, but it drinks smoother than most coffee. It's made from the seed, not the fruit, so it isn't a sweet date drink. If you like it sweeter, add a little date syrup, honey or vanilla.",
   "Each BAL bag is roasted and ground for its own cup:",
@@ -162,6 +173,12 @@ export const faqs: { id: string; question: string; answer: string }[] = [
     question: 'Is date seed coffee sweet? Is it the same as "date coffee"?',
     answer:
       "No. Date seed coffee is made from the seed, not the fruit, so it isn't sweet on its own. Recipes called \"date coffee\" usually mean regular coffee sweetened with dates or date syrup. You can add date syrup to date seed coffee if you'd like it sweeter.",
+  },
+  {
+    id: "faq-price",
+    question: "How much does date seed coffee cost?",
+    answer:
+      "A 12 oz bag is $26.99. That is one grind of 100% roasted date seeds, naturally caffeine-free and acid-free, roasted in small batches. DateSpresso is for espresso, GrounDate is for drip and French press, and Eastern Brew is for a Turkish-style cup. US shipping takes 2-3 business days and is calculated at checkout.",
   },
   {
     id: "faq-where",

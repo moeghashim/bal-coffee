@@ -160,11 +160,11 @@ test("date seed coffee landing page is indexable", async ({
   const response = await page.goto("/date-seed-coffee");
   expect(response?.ok()).toBeTruthy();
   await expect(page).toHaveTitle(
-    "Date Seed Coffee: Caffeine-Free Brew from Date Pits | BAL",
+    "Date Pit Coffee & Date Seed Coffee, Caffeine-Free | BAL",
   );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
-    "Date seed coffee is brewed from roasted date seeds, also called date pits. Naturally caffeine-free and acid-free, with no coffee beans. Find your brew.",
+    "Date pit coffee and date seed coffee are the same drink: roasted date seeds, naturally caffeine-free and acid-free. A 12 oz bag is $26.99. Three grinds.",
   );
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     "href",

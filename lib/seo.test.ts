@@ -14,6 +14,8 @@ import {
   ingredientsLine,
   intro,
   makeSteps,
+  pitCoffee,
+  priceBody,
   tasteBullets,
   tasteClose,
   tasteIntro,
@@ -31,22 +33,22 @@ const seoSource = readFileSync(new URL("./seo.ts", import.meta.url), "utf8");
 const pageSeo = {
   home: {
     primary: "BAL Coffee; caffeine-free coffee alternative",
-    title: "BAL Coffee | Caffeine-Free Coffee Alternative from Houston",
+    title: "BAL Coffee | Caffeine-Free Coffee Alternative, 12 oz",
     description:
-      "BAL Coffee roasts date seeds into a naturally caffeine-free coffee alternative. Three brew styles in 12 oz bags, shipped from Houston across the US.",
+      "A naturally caffeine-free coffee alternative roasted from 100% date seeds. Acid-free, no additives, three 12 oz bags. Shipped from Houston, TX.",
   },
   dateSeedCoffee: {
     primary: "date seed coffee",
-    title: "Date Seed Coffee: Caffeine-Free Brew from Date Pits | BAL",
+    title: "Date Pit Coffee & Date Seed Coffee, Caffeine-Free | BAL",
     description:
-      "Date seed coffee is brewed from roasted date seeds, also called date pits. Naturally caffeine-free and acid-free, with no coffee beans. Find your brew.",
+      "Date pit coffee and date seed coffee are the same drink: roasted date seeds, naturally caffeine-free and acid-free. A 12 oz bag is $26.99. Three grinds.",
     h1: "Date seed coffee: a caffeine-free cup roasted from date seeds",
   },
   products: {
     primary: "buy date seed coffee",
-    title: "Shop Date Seed Coffee: Espresso, Drip & Turkish | BAL",
+    title: "Shop Date Seed Coffee | Espresso, Drip & Cezve, $26.99",
     description:
-      "Shop BAL date seed coffee by brew method: DateSpresso for espresso, GrounDate for drip and French press, Eastern Brew for a cezve. 12 oz bags.",
+      "Three 12 oz bags of date seed coffee, $26.99 each. Espresso, drip and French press, or Turkish-style. Naturally caffeine-free, acid-free, no additives.",
   },
   faq: {
     title: "BAL Coffee FAQ: Orders, Shipping, Caffeine & Brewing",
@@ -55,13 +57,13 @@ const pageSeo = {
     h1: "BAL Coffee FAQ",
   },
   datespresso: {
-    title: "DateSpresso | Date Seed Espresso Alternative | BAL Coffee",
+    title: "DateSpresso | Caffeine-Free Date Espresso | BAL Coffee",
   },
   groundate: {
-    title: "GrounDate | Drip & French Press Date Seed Coffee | BAL",
+    title: "GrounDate | Caffeine-Free Drip Date Seed Coffee | BAL",
   },
   "eastern-brew": {
-    title: "Eastern Brew | Turkish-Style Date Seed Coffee | BAL Coffee",
+    title: "Eastern Brew | Turkish-Style Coffee, Caffeine-Free | BAL",
   },
 } as const;
 
@@ -77,6 +79,8 @@ test("landing page copy stays inside the allowed claims", () => {
     tasteClose,
     makeSteps,
     ingredientsLine,
+    pitCoffee,
+    priceBody,
     caffeine,
     chooseIntro,
     chooseNote,
@@ -126,14 +130,14 @@ test("approved titles are the strings shipped in lib/seo.ts", () => {
 test("date seed coffee metadata matches the approved title and description", () => {
   assert.equal(
     pageSeo.dateSeedCoffee.title,
-    "Date Seed Coffee: Caffeine-Free Brew from Date Pits | BAL",
+    "Date Pit Coffee & Date Seed Coffee, Caffeine-Free | BAL",
   );
-  assert.equal(pageSeo.dateSeedCoffee.title.length, 57);
+  assert.equal(pageSeo.dateSeedCoffee.title.length, 55);
   assert.equal(
     pageSeo.dateSeedCoffee.description,
-    "Date seed coffee is brewed from roasted date seeds, also called date pits. Naturally caffeine-free and acid-free, with no coffee beans. Find your brew.",
+    "Date pit coffee and date seed coffee are the same drink: roasted date seeds, naturally caffeine-free and acid-free. A 12 oz bag is $26.99. Three grinds.",
   );
-  assert.equal(pageSeo.dateSeedCoffee.description.length, 151);
+  assert.equal(pageSeo.dateSeedCoffee.description.length, 152);
   assert.equal(
     pageSeo.dateSeedCoffee.h1,
     "Date seed coffee: a caffeine-free cup roasted from date seeds",
@@ -144,14 +148,14 @@ test("date seed coffee metadata matches the approved title and description", () 
 test("home, shop, and faq titles are retargeted and product titles stay", () => {
   assert.equal(
     pageSeo.home.title,
-    "BAL Coffee | Caffeine-Free Coffee Alternative from Houston",
+    "BAL Coffee | Caffeine-Free Coffee Alternative, 12 oz",
   );
-  assert.equal(pageSeo.home.title.length, 58);
+  assert.equal(pageSeo.home.title.length, 52);
   assert.equal(
     pageSeo.home.description,
-    "BAL Coffee roasts date seeds into a naturally caffeine-free coffee alternative. Three brew styles in 12 oz bags, shipped from Houston across the US.",
+    "A naturally caffeine-free coffee alternative roasted from 100% date seeds. Acid-free, no additives, three 12 oz bags. Shipped from Houston, TX.",
   );
-  assert.equal(pageSeo.home.description.length, 148);
+  assert.equal(pageSeo.home.description.length, 143);
   assert.equal(
     pageSeo.home.primary,
     "BAL Coffee; caffeine-free coffee alternative",
@@ -159,14 +163,14 @@ test("home, shop, and faq titles are retargeted and product titles stay", () => 
 
   assert.equal(
     pageSeo.products.title,
-    "Shop Date Seed Coffee: Espresso, Drip & Turkish | BAL",
+    "Shop Date Seed Coffee | Espresso, Drip & Cezve, $26.99",
   );
-  assert.equal(pageSeo.products.title.length, 53);
+  assert.equal(pageSeo.products.title.length, 54);
   assert.equal(
     pageSeo.products.description,
-    "Shop BAL date seed coffee by brew method: DateSpresso for espresso, GrounDate for drip and French press, Eastern Brew for a cezve. 12 oz bags.",
+    "Three 12 oz bags of date seed coffee, $26.99 each. Espresso, drip and French press, or Turkish-style. Naturally caffeine-free, acid-free, no additives.",
   );
-  assert.equal(pageSeo.products.description.length, 142);
+  assert.equal(pageSeo.products.description.length, 151);
   assert.equal(pageSeo.products.primary, "buy date seed coffee");
 
   assert.equal(
@@ -183,15 +187,15 @@ test("home, shop, and faq titles are retargeted and product titles stay", () => 
 
   assert.equal(
     pageSeo.datespresso.title,
-    "DateSpresso | Date Seed Espresso Alternative | BAL Coffee",
+    "DateSpresso | Caffeine-Free Date Espresso | BAL Coffee",
   );
   assert.equal(
     pageSeo.groundate.title,
-    "GrounDate | Drip & French Press Date Seed Coffee | BAL",
+    "GrounDate | Caffeine-Free Drip Date Seed Coffee | BAL",
   );
   assert.equal(
     pageSeo["eastern-brew"].title,
-    "Eastern Brew | Turkish-Style Date Seed Coffee | BAL Coffee",
+    "Eastern Brew | Turkish-Style Coffee, Caffeine-Free | BAL",
   );
 });
 
@@ -241,7 +245,7 @@ test("landing JSON-LD is WebPage, breadcrumb, item list, and FAQ only", () => {
 
   const faq = faqPageJsonLd(faqs);
   assert.equal(faq["@type"], "FAQPage");
-  assert.equal(faq.mainEntity.length, 7);
+  assert.equal(faq.mainEntity.length, 8);
   assert.deepEqual(
     faq.mainEntity.map((item) => item.name),
     faqs.map((item) => item.question),

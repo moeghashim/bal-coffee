@@ -24,7 +24,7 @@ export const intro =
 export const heroActions = [
   {
     href: "/products/datespresso",
-    label: "Shop DateSpresso",
+    label: "Shop DateSpresso for a caffeine-free latte",
     variant: "solid",
   },
 ] as const;
@@ -105,7 +105,10 @@ export const methodSections: readonly MethodSection[] = [
       },
       ".",
     ],
-    cta: { href: "/products/groundate", label: "Shop GrounDate" },
+    cta: {
+      href: "/products/groundate",
+      label: "Shop GrounDate for a drip latte",
+    },
   },
 ];
 
@@ -141,7 +144,12 @@ export const decafCompare: RichText[] = [
 
 export const taste: RichText[] = [
   [
-    "DateSpresso is rich, bold and indulgent, with espresso-style depth and a naturally roasted flavor. Milk softens it into a smooth, toasty latte. It's coffee-inspired rather than an exact copy of a coffee latte, and it isn't sweet on its own, so add vanilla, caramel or honey if you like a sweeter cup. ",
+    "DateSpresso is rich, bold and indulgent, with espresso-style depth and a naturally roasted flavor. Milk softens it into a smooth, toasty latte. It's coffee-inspired rather than an exact copy of a coffee latte, and it isn't sweet on its own, so add vanilla, caramel or honey if you like a sweeter cup. The bag is ",
+    {
+      href: "/products/datespresso",
+      label: "DateSpresso, caffeine-free date espresso",
+    },
+    ". ",
     {
       href: "/date-seed-coffee#taste",
       label: "What does date seed coffee taste like?",
@@ -166,7 +174,10 @@ export const about: RichText[] = [
 ];
 
 export const aboutActions = [
-  { href: "/products/datespresso", label: "Shop DateSpresso" },
+  {
+    href: "/products/datespresso",
+    label: "Shop DateSpresso for date espresso",
+  },
   { href: "/products", label: "See all three bags" },
 ] as const;
 
@@ -203,7 +214,7 @@ export const faqs = [
 ] as const;
 
 export const closeTitle = "Shop DateSpresso";
-export const closeLabel = "Shop DateSpresso";
+export const closeLabel = "Shop DateSpresso for a caffeine-free latte";
 export const closeHref = "/products/datespresso";
 export const closeSecondary = {
   href: "/products",

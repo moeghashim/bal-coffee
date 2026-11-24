@@ -22,6 +22,10 @@ import {
   ingredientsLine,
   intro,
   makeSteps,
+  pitCoffee,
+  pitCoffeeTitle,
+  priceBody,
+  priceTitle,
   shopLink,
   tasteBullets,
   tasteClose,
@@ -293,6 +297,33 @@ export default async function DateSeedCoffeePage() {
 
         <Prose title="What is date seed coffee?">
           <Paragraphs text={whatIs} />
+        </Prose>
+
+        <Prose title={pitCoffeeTitle}>
+          <Paragraphs text={pitCoffee} />
+        </Prose>
+
+        <Prose title={priceTitle}>
+          <p>{priceBody}</p>
+          <p style={{ marginTop: 16 }}>
+            Choose{" "}
+            <a href="/products/datespresso" style={linkStyle}>
+              DateSpresso for date espresso
+            </a>
+            ,{" "}
+            <a href="/products/groundate" style={linkStyle}>
+              GrounDate for drip and French press
+            </a>
+            , or{" "}
+            <a href="/products/eastern-brew" style={linkStyle}>
+              Eastern Brew for Turkish-style coffee
+            </a>
+            . Brewing steps for each bag are in{" "}
+            <a href="/how-to-make-date-seed-coffee" style={linkStyle}>
+              how to make date seed coffee
+            </a>
+            .
+          </p>
         </Prose>
 
         <Prose id="taste" title="What does date seed coffee taste like?">
