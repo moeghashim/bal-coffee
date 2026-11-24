@@ -26,7 +26,7 @@ export type Product = {
   slug: string;
   shopifyHandle: string;
   type: string;
-  category: "coffee" | "drink" | "other";
+  category: "coffee" | "drink" | "sample" | "other";
   badge: string;
   blurb: string;
   price: string;

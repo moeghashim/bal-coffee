@@ -304,7 +304,7 @@ test("sitemap entries always have lastModified and skip noindex paths", () => {
   );
   assert.equal(
     entries.find((entry) => entry.url.endsWith("/shipping"))?.lastModified,
-    "2026-11-16",
+    "2026-11-24",
   );
   assert.equal(
     entries.some((entry) => entry.url.endsWith("/cart")),

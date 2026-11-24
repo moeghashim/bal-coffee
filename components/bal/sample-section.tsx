@@ -1,7 +1,23 @@
-export function SubscriptionCTA() {
+import { SamplePicker } from "components/bal/sample-cta";
+import { getSampleOffers } from "lib/catalog";
+import { SAMPLE_TERMS } from "lib/sample";
+
+/**
+ * Homepage sample section (replaces the old "subscription isn't available"
+ * strip). Hidden entirely while no sample is available to buy.
+ */
+export async function SampleSection() {
+  let offers: Awaited<ReturnType<typeof getSampleOffers>> = [];
+  try {
+    offers = await getSampleOffers();
+  } catch {
+    offers = [];
+  }
+  if (offers.length === 0) return null;
+
   return (
     <section
-      id="subscription"
+      id="sample"
       className="bal-subscription"
       style={{
         background: "var(--terra)",
@@ -31,7 +47,7 @@ export function SubscriptionCTA() {
               color: "var(--cream)",
             }}
           >
-            Order when you want
+            Try a 20g sample first
           </h3>
           <p
             style={{
@@ -39,33 +55,14 @@ export function SubscriptionCTA() {
               fontSize: 13.5,
               lineHeight: 1.55,
               color: "rgba(244,239,230,0.9)",
-              maxWidth: 460,
+              maxWidth: 520,
             }}
           >
-            A recurring subscription isn&apos;t available yet. Shop a bag
-            whenever you like. Shipping is calculated at checkout.
+            Pick a blend and taste it before you buy a bag: 100% date seeds,
+            naturally caffeine-free, roasted in small batches. {SAMPLE_TERMS}
           </p>
         </div>
-        <a
-          href="/products"
-          className="mono"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "16px 28px",
-            background: "var(--cream)",
-            color: "var(--ink)",
-            fontSize: 11,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            borderRadius: 2,
-            fontWeight: 500,
-            whiteSpace: "nowrap",
-          }}
-        >
-          Shop the coffee
-        </a>
+        <SamplePicker offers={offers} />
       </div>
     </section>
   );

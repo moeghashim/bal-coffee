@@ -38,6 +38,18 @@ export default function ShippingPage() {
         className="serif"
         style={{ fontSize: 26, marginTop: 28, color: "var(--ink)" }}
       >
+        20g samples
+      </h2>
+      <p style={{ marginTop: 12 }}>
+        A 20g sample is $0, and you pay the shipping. Samples ship by USPS
+        Ground Advantage at the rate shown at checkout. A sample ships
+        separately from any bags in the same order, with its own shipping
+        charge. One sample per order.
+      </p>
+      <h2
+        className="serif"
+        style={{ fontSize: 26, marginTop: 28, color: "var(--ink)" }}
+      >
         Tracking your order
       </h2>
       <p style={{ marginTop: 12 }}>

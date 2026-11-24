@@ -134,6 +134,12 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
     ),
   },
   {
+    id: "sample",
+    question: "Can I try a sample before buying a bag?",
+    answer:
+      "Yes. A 20g sample is $0, and you pay the shipping. Samples ship by USPS Ground Advantage at the rate shown at checkout, separately from any bags in the same order. One sample per order.",
+  },
+  {
     id: "where",
     question: "Where does BAL ship?",
     answer:

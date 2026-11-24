@@ -13,6 +13,13 @@ import {
 } from "lib/products";
 import { formatPhrase, sizeFromOptions } from "lib/merchant-listing";
 import { htmlToLines } from "lib/plain-text";
+import {
+  SAMPLE_HANDLE,
+  isSampleShopifyProduct,
+  pickSampleOffer,
+  pickSampleOffers,
+  type SampleOffer,
+} from "lib/sample";
 import type { ShopifyImage, ShopifyProduct, ShopifyVariant } from "lib/shopify";
 
 /**
@@ -23,6 +30,10 @@ import type { ShopifyImage, ShopifyProduct, ShopifyVariant } from "lib/shopify";
  * Café drinks (isCafeDrink) are sold only at events and POS. They are kept out
  * of the public catalog: listings, related products, the sitemap, and JSON-LD.
  * Product pages call notFound() when category is "drink".
+ *
+ * The 20g sample (lib/sample.ts) gets category "sample". It is sold only
+ * through the sample call to action, so it is kept out of the same places as
+ * café drinks and its product page also 404s.
  */
 
 function normalizeDescription(description: string) {
@@ -134,8 +145,15 @@ function toCatalogProduct(
     editorial?.description ||
     "";
   const descriptionLines = descriptionLinesFrom(shopifyProduct, editorial);
-  const drink = forceDrink || isCafeDrink(shopifyProduct);
-  const category = editorial ? editorial.category : drink ? "drink" : "other";
+  const sample = !editorial && isSampleShopifyProduct(shopifyProduct);
+  const drink = !sample && (forceDrink || isCafeDrink(shopifyProduct));
+  const category: Product["category"] = editorial
+    ? editorial.category
+    : sample
+      ? "sample"
+      : drink
+        ? "drink"
+        : "other";
   const minMoney =
     min !== undefined
       ? { amount: String(min), currencyCode: currency }
@@ -231,7 +249,7 @@ const getCatalog = cache(async () => {
 });
 
 function isPublicCatalogProduct(product: Product) {
-  return product.category !== "drink";
+  return product.category !== "drink" && product.category !== "sample";
 }
 
 export const getProducts = cache(async () => {
@@ -306,4 +324,29 @@ export async function getRelatedProductsWithShopify(slug: string) {
       return aSame - bSame;
     })
     .slice(0, 3);
+}
+
+const getSampleShopifyProduct = cache(async () => {
+  try {
+    const byHandle = await getStorefrontProductsByHandles([SAMPLE_HANDLE]);
+    return byHandle.get(SAMPLE_HANDLE) ?? undefined;
+  } catch {
+    return undefined;
+  }
+});
+
+/**
+ * The 20g sample variant for a bag (by Shopify handle), or undefined when the
+ * sample is a draft, unpublished, sold out, or has no variant for that blend.
+ * Callers hide the sample call to action when this is undefined.
+ */
+export async function getSampleVariantFor(
+  bagHandle: string,
+): Promise<SampleOffer | undefined> {
+  return pickSampleOffer(await getSampleShopifyProduct(), bagHandle);
+}
+
+/** Every available sample, in bag order. Empty hides the homepage section. */
+export async function getSampleOffers(): Promise<SampleOffer[]> {
+  return pickSampleOffers(await getSampleShopifyProduct());
 }

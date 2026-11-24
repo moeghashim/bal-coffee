@@ -15,6 +15,8 @@ export type AddToCartProduct = {
   amount: string;
   currencyCode: string;
   availableForSale?: boolean;
+  /** GA4 item_category, e.g. "sample". */
+  gaCategory?: string;
 };
 
 function SubmitButton({
@@ -58,6 +60,7 @@ function AddToCartForm({
   itemId,
   itemName,
   price,
+  itemCategory,
 }: {
   label: string;
   compact: boolean;
@@ -65,6 +68,7 @@ function AddToCartForm({
   itemId: string;
   itemName: string;
   price: string;
+  itemCategory?: string;
 }) {
   const { register, formProps, pending, selectedVariant, errors } =
     useProductForm();
@@ -85,6 +89,7 @@ function AddToCartForm({
             itemName,
             price,
             quantity,
+            itemCategory,
           });
           if (item) trackEcommerce("add_to_cart", [item]);
         },
@@ -222,6 +227,7 @@ export function AddToCartButton({
         itemId={product.merchandiseId}
         itemName={product.title}
         price={product.amount}
+        itemCategory={product.gaCategory}
       />
     </ProductProvider>
   );
