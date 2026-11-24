@@ -33,7 +33,7 @@ const seoSource = readFileSync(new URL("./seo.ts", import.meta.url), "utf8");
 const pageSeo = {
   home: {
     primary: "BAL Coffee; caffeine-free coffee alternative",
-    title: "BAL Coffee | Caffeine-Free Coffee Alternative, 12 oz",
+    title: "BAL Coffee | Caffeine-Free Coffee Alternative from Houston",
     description:
       "A naturally caffeine-free coffee alternative roasted from 100% date seeds. Acid-free, no additives, three 12 oz bags. Shipped from Houston, TX.",
   },
@@ -148,9 +148,9 @@ test("date seed coffee metadata matches the approved title and description", () 
 test("home, shop, and faq titles are retargeted and product titles stay", () => {
   assert.equal(
     pageSeo.home.title,
-    "BAL Coffee | Caffeine-Free Coffee Alternative, 12 oz",
+    "BAL Coffee | Caffeine-Free Coffee Alternative from Houston",
   );
-  assert.equal(pageSeo.home.title.length, 52);
+  assert.equal(pageSeo.home.title.length, 58);
   assert.equal(
     pageSeo.home.description,
     "A naturally caffeine-free coffee alternative roasted from 100% date seeds. Acid-free, no additives, three 12 oz bags. Shipped from Houston, TX.",

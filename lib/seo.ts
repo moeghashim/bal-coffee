@@ -24,7 +24,7 @@ export const pageSeo = {
     primary: "BAL Coffee; caffeine-free coffee alternative",
     intent:
       "Brand page for the caffeine-free coffee alternative. The date seed coffee explainer lives on /date-seed-coffee.",
-    title: "BAL Coffee | Caffeine-Free Coffee Alternative, 12 oz",
+    title: "BAL Coffee | Caffeine-Free Coffee Alternative from Houston",
     description:
       "A naturally caffeine-free coffee alternative roasted from 100% date seeds. Acid-free, no additives, three 12 oz bags. Shipped from Houston, TX.",
   },

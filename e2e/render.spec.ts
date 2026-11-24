@@ -10,7 +10,7 @@ test("homepage renders with nav and hero", async ({ page }) => {
   const response = await page.goto("/");
   expect(response?.ok()).toBeTruthy();
   await expect(page).toHaveTitle(
-    "BAL Coffee | Caffeine-Free Coffee Alternative, 12 oz",
+    "BAL Coffee | Caffeine-Free Coffee Alternative from Houston",
   );
   const description = await page
     .locator('meta[name="description"]')
