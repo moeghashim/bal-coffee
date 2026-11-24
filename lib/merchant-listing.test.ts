@@ -12,7 +12,6 @@ import {
   formatPhrase,
   gtinFromBarcode,
   merchantReturnPolicy,
-  offerShippingDetails,
   organizationCommerceFields,
   RETURN_NOT_PERMITTED,
   schemaPrice,
@@ -65,8 +64,6 @@ function coffee(overrides: Partial<Product> = {}): Product {
 }
 
 const INVENTED = [
-  "shippingRate",
-  "handlingTime",
   "priceValidUntil",
   "merchantReturnDays",
   "returnFees",
@@ -77,29 +74,11 @@ const INVENTED = [
   "MerchantReturnUnlimitedWindow",
   "aggregateRating",
   "organic",
+  "free shipping",
+  "shippingDetails",
+  "shippingRate",
+  "OfferShippingDetails",
 ];
-
-test("shipping details are US transit of 2–3 days and do not invent a rate or handling time", () => {
-  const shipping = offerShippingDetails();
-  assert.deepEqual(shipping, {
-    "@type": "OfferShippingDetails",
-    shippingDestination: {
-      "@type": "DefinedRegion",
-      addressCountry: "US",
-    },
-    deliveryTime: {
-      "@type": "ShippingDeliveryTime",
-      transitTime: {
-        "@type": "QuantitativeValue",
-        minValue: 2,
-        maxValue: 3,
-        unitCode: "DAY",
-      },
-    },
-  });
-  assert.equal("shippingRate" in shipping, false);
-  assert.equal("handlingTime" in (shipping.deliveryTime as object), false);
-});
 
 test("return policy is not permitted in the US and has no fee or method", () => {
   const policy = merchantReturnPolicy(SITE);
@@ -115,10 +94,12 @@ test("return policy is not permitted in the US and has no fee or method", () => 
   assert.equal(JSON.stringify(policy).includes("returnMethod"), false);
 });
 
-test("organization shipping and returns match the offer policy", () => {
+test("organization JSON-LD carries the return policy and no shipping rate", () => {
   const fields = organizationCommerceFields(`${SITE}/`);
-  assert.deepEqual(fields.shippingDetails, offerShippingDetails());
-  assert.deepEqual(fields.hasMerchantReturnPolicy, merchantReturnPolicy(SITE));
+  assert.deepEqual(fields, {
+    hasMerchantReturnPolicy: merchantReturnPolicy(SITE),
+  });
+  assert.equal("shippingDetails" in fields, false);
 });
 
 test("product JSON-LD uses live price, stock, size, and weight without invented fields", () => {
@@ -147,7 +128,7 @@ test("product JSON-LD uses live price, stock, size, and weight without invented 
   assert.equal(offers.availability, "https://schema.org/InStock");
   assert.equal(offers.itemCondition, "https://schema.org/NewCondition");
   assert.equal(offers.priceValidUntil, undefined);
-  assert.deepEqual(offers.shippingDetails, offerShippingDetails());
+  assert.equal(offers.shippingDetails, undefined);
   assert.deepEqual(offers.hasMerchantReturnPolicy, merchantReturnPolicy(SITE));
   assert.match(String(data.description), /espresso-style/);
   assert.equal(String(data.description).includes("SEO description"), false);
@@ -218,8 +199,39 @@ test("a real SKU is kept and a price range does not gain a shipping rate", () =>
   assert.equal(offers["@type"], "AggregateOffer");
   assert.equal(offers.lowPrice, "26.99");
   assert.equal(offers.highPrice, "48.00");
-  assert.equal("shippingRate" in (offers.shippingDetails as object), false);
+  assert.equal(offers.shippingDetails, undefined);
+  assert.deepEqual(offers.hasMerchantReturnPolicy, merchantReturnPolicy(SITE));
   assert.equal(offers.itemCondition, "https://schema.org/NewCondition");
+});
+
+test("product script JSON-LD parses and carries merchant fields for each bag", () => {
+  const bags = [
+    ["datespresso", "datespresso", "DateSpresso"],
+    ["groundate", "groundate", "GrounDate"],
+    ["eastern-brew", "arabica", "Eastern Brew"],
+  ] as const;
+
+  for (const [slug, handle, name] of bags) {
+    const data = productJsonLd(
+      coffee({ name, slug, shopifyHandle: handle }),
+      `${SITE}/products/${slug}`,
+    );
+    const payload = JSON.stringify(data).replace(/</g, "\\u003c");
+    const parsed = JSON.parse(payload) as {
+      offers: {
+        hasMerchantReturnPolicy: ReturnType<typeof merchantReturnPolicy>;
+      };
+    };
+    assert.equal("shippingDetails" in parsed.offers, false, slug);
+    assert.equal(payload.includes("shippingRate"), false, slug);
+    assert.equal(payload.includes("8.00"), false, slug);
+    assert.deepEqual(
+      parsed.offers.hasMerchantReturnPolicy,
+      merchantReturnPolicy(SITE),
+    );
+    assert.equal(payload.includes("free shipping"), false, slug);
+    assert.equal(payload.includes("merchantReturnDays"), false, slug);
+  }
 });
 
 test("gtin, size, and format helpers refuse values Shopify did not provide", () => {

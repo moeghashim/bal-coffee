@@ -19,7 +19,8 @@ type GaParams = {
 
 async function gaEvents(page: Page) {
   return page.evaluate(() => {
-    const layer = window.dataLayer ?? [];
+    const layer =
+      (window as Window & { dataLayer?: unknown[] }).dataLayer ?? [];
     const events: { name: string; params: GaParams }[] = [];
     for (const entry of layer) {
       const command = entry as { 0?: unknown; 1?: unknown; 2?: GaParams };
@@ -125,7 +126,8 @@ test("GA4 loads and ecommerce events fire with the measurement id", async ({
     link.click();
     window.removeEventListener("click", onClick);
 
-    const layer = window.dataLayer ?? [];
+    const layer =
+      (window as Window & { dataLayer?: unknown[] }).dataLayer ?? [];
     let params: GaParams | null = null;
     let checkoutClicks = 0;
     let beginCheckout = 0;
