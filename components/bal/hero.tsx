@@ -72,7 +72,7 @@ function HeroImage() {
     >
       <Image
         src="/product-ritual.svg"
-        alt="Illustration of a BAL Coffee bag beside a filled mug and date seeds"
+        alt="Illustrated BAL Coffee bag beside a filled glass mug and a small pile of whole dates"
         fill
         sizes="(max-width: 1024px) calc(100vw - 48px), 55vw"
         priority

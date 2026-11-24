@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   CONTENT_PATHS,
@@ -284,7 +285,7 @@ test("sitemap entries always have lastModified and skip noindex paths", () => {
   assert.equal(
     entries.find((entry) => entry.url.endsWith("/date-seed-coffee"))
       ?.lastModified,
-    "2026-11-16",
+    "2026-11-24",
   );
   for (const path of [
     "/date-seed-coffee-vs-coffee",
@@ -293,7 +294,7 @@ test("sitemap entries always have lastModified and skip noindex paths", () => {
   ]) {
     assert.equal(
       entries.find((entry) => entry.url.endsWith(path))?.lastModified,
-      "2026-11-16",
+      "2026-11-24",
       path,
     );
   }
@@ -305,6 +306,21 @@ test("sitemap entries always have lastModified and skip noindex paths", () => {
     entries.find((entry) => entry.url.endsWith("/shipping"))?.lastModified,
     "2026-11-16",
   );
+  assert.equal(
+    entries.some((entry) => entry.url.endsWith("/cart")),
+    false,
+  );
+  const cart = readFileSync(
+    new URL("../app/cart/page.tsx", import.meta.url),
+    "utf8",
+  );
+  const robots = readFileSync(
+    new URL("../app/robots.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(cart, /index:\s*false/);
+  assert.match(robots, /disallow:\s*\["\/api\/", "\/event"\]/);
+  assert.doesNotMatch(robots, /disallow:\s*\[[^\]]*\/cart/);
   for (const path of NOINDEX_PATHS) {
     assert.equal(
       CONTENT_PATHS.some(

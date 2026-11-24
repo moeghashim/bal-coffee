@@ -110,17 +110,17 @@ export const tasteIntro: RichText[] = [
 export const tasteBags = [
   {
     href: "/products/datespresso",
-    name: "DateSpresso",
+    name: "DateSpresso for date espresso",
     text: "is rich, bold and indulgent, with espresso-style depth.",
   },
   {
     href: "/products/groundate",
-    name: "GrounDate",
+    name: "GrounDate for drip and French press",
     text: "is smooth, balanced and mellow, an everyday cup.",
   },
   {
     href: "/products/eastern-brew",
-    name: "Eastern Brew",
+    name: "Eastern Brew for Turkish-style coffee",
     text: "is warm and roasted, ground fine for a Turkish-style cup.",
   },
 ] as const;
@@ -143,17 +143,17 @@ export const grindMatches = [
   {
     method: "Espresso machine",
     href: "/products/datespresso",
-    bag: "DateSpresso",
+    bag: "DateSpresso for date espresso",
   },
   {
     method: "Drip machine, French press, pour-over or cold brew",
     href: "/products/groundate",
-    bag: "GrounDate",
+    bag: "GrounDate for drip and French press",
   },
   {
     method: "Cezve or dallah (Turkish coffee pot)",
     href: "/products/eastern-brew",
-    bag: "Eastern Brew",
+    bag: "Eastern Brew for Turkish-style coffee",
   },
 ] as const;
 
@@ -174,7 +174,22 @@ export const which: RichText[] = [
 
 export const whereToStart: RichText[] = [
   [
-    "Pick the bag that matches how you already make coffee. If you brew with a drip machine or French press, start with GrounDate. If you have an espresso machine, choose DateSpresso. Every bag is 12 oz of 100% roasted date seeds, shipped from Houston to addresses across the US. ",
+    "Pick the bag that matches how you already make coffee. If you brew with a drip machine or French press, start with ",
+    {
+      href: "/products/groundate",
+      label: "GrounDate for drip and French press",
+    },
+    ". If you have an espresso machine, choose ",
+    {
+      href: "/products/datespresso",
+      label: "DateSpresso for date espresso",
+    },
+    ". For a cezve, choose ",
+    {
+      href: "/products/eastern-brew",
+      label: "Eastern Brew for Turkish-style coffee",
+    },
+    ". Every bag is 12 oz of 100% roasted date seeds, shipped from Houston to addresses across the US. ",
     {
       href: "/shipping",
       label: "Shipping is calculated at checkout",

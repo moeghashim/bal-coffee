@@ -65,7 +65,7 @@ export function Founder() {
         >
           <Image
             src="/founder.png"
-            alt="Judy Ghashim, founder of BAL Coffee"
+            alt="Portrait of Judy Ghashim, founder of BAL Coffee"
             fill
             sizes="(max-width: 1024px) 100vw, 40vw"
             style={{ objectFit: "cover", objectPosition: "center" }}

@@ -51,18 +51,18 @@ export default function AboutPage() {
             href="/products/datespresso"
             style={{ color: "var(--terra-deep)" }}
           >
-            DateSpresso
+            DateSpresso for date espresso
           </a>
           ,{" "}
           <a href="/products/groundate" style={{ color: "var(--terra-deep)" }}>
-            GrounDate
+            GrounDate for drip and French press
           </a>
           , and{" "}
           <a
             href="/products/eastern-brew"
             style={{ color: "var(--terra-deep)" }}
           >
-            Eastern Brew
+            Eastern Brew for Turkish-style coffee
           </a>
           . More on caffeine and brewing is in the{" "}
           <a href="/faq" style={{ color: "var(--terra-deep)" }}>

@@ -41,21 +41,21 @@ export const brewerRows = [
   {
     brewer: "Espresso machine",
     href: "/products/datespresso",
-    bag: "DateSpresso",
+    bag: "DateSpresso for date espresso",
     start:
       "Any espresso machine; a dual-wall filter or a stronger setting than for fresh ground espresso",
   },
   {
     brewer: "Traditional coffee machine, French press, pour-over, or cold brew",
     href: "/products/groundate",
-    bag: "GrounDate",
+    bag: "GrounDate for drip and French press",
     start:
       "Use like regular ground coffee in a machine or pour-over. For cold brew, 1:4 grounds to water, steep 12-24 hours",
   },
   {
     brewer: "Cezve, dallah, or any small pot",
     href: "/products/eastern-brew",
-    bag: "Eastern Brew",
+    bag: "Eastern Brew for Turkish-style coffee",
     start:
       "One small 2 oz cup of water and one heaping teaspoon per serving; boil 1-2 minutes",
   },
@@ -87,7 +87,10 @@ export const methodSections: readonly MethodSection[] = [
       },
       ".",
     ],
-    cta: { href: "/products/datespresso", label: "Shop DateSpresso" },
+    cta: {
+      href: "/products/datespresso",
+      label: "Shop DateSpresso for date espresso",
+    },
   },
   {
     id: "drip",
@@ -96,6 +99,14 @@ export const methodSections: readonly MethodSection[] = [
       {
         text: "Use your BAL Coffee grounds in any traditional coffee machine, the same way you'd use regular ground coffee. Enjoy!",
       },
+    ],
+    note: [
+      "The bag for drip, French press, and pour-over is ",
+      {
+        href: "/products/groundate",
+        label: "GrounDate for drip and French press",
+      },
+      ".",
     ],
   },
   {
@@ -129,7 +140,10 @@ export const methodSections: readonly MethodSection[] = [
         rest: "Steep 12-24 hours, then strain and enjoy.",
       },
     ],
-    cta: { href: "/products/groundate", label: "Shop GrounDate" },
+    cta: {
+      href: "/products/groundate",
+      label: "Shop GrounDate for drip and cold brew",
+    },
   },
   {
     id: "cezve",
@@ -154,7 +168,7 @@ export const methodSections: readonly MethodSection[] = [
     ],
     cta: {
       href: "/products/eastern-brew",
-      label: "Shop Eastern Brew",
+      label: "Shop Eastern Brew for Turkish-style coffee",
       secondary: true,
     },
   },

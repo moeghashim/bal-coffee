@@ -371,7 +371,7 @@ export function MethodSections({
             <p>
               Eastern Brew is sold out right now.{" "}
               <a href={section.cta.href} style={linkStyle}>
-                See Eastern Brew
+                See Eastern Brew for Turkish-style coffee
               </a>
               .
             </p>

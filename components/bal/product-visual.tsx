@@ -156,6 +156,19 @@ function drinkTitleLines(name: string) {
   return lines.slice(0, 3);
 }
 
+function coffeeIllustrationAlt(product: Product) {
+  if (product.slug === "datespresso") {
+    return "Illustrated dark DateSpresso bag beside a cup and a bowl of dates";
+  }
+  if (product.slug === "groundate") {
+    return "Illustrated light GrounDate bag beside a cup and a bowl of dates";
+  }
+  if (product.slug === "eastern-brew") {
+    return "Illustrated green Eastern Brew bag beside a cup and a bowl of dates";
+  }
+  return `Illustrated ${product.name} bag beside a cup and a bowl of dates`;
+}
+
 export function ProductVisual({
   product,
   compact = false,
@@ -219,7 +232,7 @@ export function ProductVisual({
       width="100%"
       height="100%"
       role="img"
-      aria-label={`${product.name}, illustrated bag of date-seed coffee`}
+      aria-label={coffeeIllustrationAlt(product)}
       style={{ display: "block" }}
     >
       <defs>

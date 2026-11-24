@@ -198,8 +198,28 @@ export default async function ProductsPage() {
                 }}
               >
                 Three roasted date seed coffees, each ground for a different
-                brew. DateSpresso, GrounDate, and Eastern Brew are naturally
-                caffeine-free. New to it? Read{" "}
+                brew.{" "}
+                <a
+                  href="/products/datespresso"
+                  style={{ color: "var(--terra-deep)" }}
+                >
+                  DateSpresso for date espresso
+                </a>
+                ,{" "}
+                <a
+                  href="/products/groundate"
+                  style={{ color: "var(--terra-deep)" }}
+                >
+                  GrounDate for drip and French press
+                </a>
+                , and{" "}
+                <a
+                  href="/products/eastern-brew"
+                  style={{ color: "var(--terra-deep)" }}
+                >
+                  Eastern Brew for Turkish-style coffee
+                </a>{" "}
+                are naturally caffeine-free. New to it? Read{" "}
                 <a
                   href="/date-seed-coffee"
                   style={{ color: "var(--terra-deep)" }}

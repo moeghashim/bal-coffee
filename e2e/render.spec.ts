@@ -16,7 +16,7 @@ test("homepage renders with nav and hero", async ({ page }) => {
     .locator('meta[name="description"]')
     .getAttribute("content");
   expect(description).toBe(
-    "BAL Coffee roasts date seeds into a naturally caffeine-free coffee alternative. Three brew styles in 12 oz bags, shipped from Houston across the US.",
+    "A naturally caffeine-free coffee alternative roasted from 100% date seeds. Acid-free, no additives, three 12 oz bags. Shipped from Houston, TX.",
   );
   expect(description?.length ?? 999).toBeLessThanOrEqual(155);
   await expect(page.locator("h1")).toContainText(

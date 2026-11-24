@@ -28,6 +28,7 @@ import {
   pageMetadata,
   productJsonLd,
 } from "lib/seo";
+import { productImageAlt } from "lib/products";
 import { baseUrl } from "lib/utils";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
@@ -63,7 +64,7 @@ export async function generateMetadata({
     image: shareImage?.url
       ? {
           url: shareImage.url,
-          alt: `${product.name}, roasted date seed coffee`,
+          alt: productImageAlt(product, shareImage),
         }
       : undefined,
   });
@@ -200,7 +201,7 @@ function StoryBand() {
         <div style={{ height: 190, overflow: "hidden" }}>
           <img
             src="/product-ritual.svg"
-            alt="A warm tabletop scene with a Bal Coffee bag, a filled mug, date seeds, and soft morning light."
+            alt="Illustrated kraft coffee bag beside a filled mug and whole dates"
             style={{
               display: "block",
               width: "100%",
@@ -248,13 +249,13 @@ function StoryBand() {
               href="/date-seed-coffee"
               style={{ color: "var(--ink)", fontSize: 14 }}
             >
-              What is date seed coffee? →
+              What date seed coffee is, including date pit coffee →
             </a>
             <a
               href="/how-to-make-date-seed-coffee"
               style={{ color: "var(--ink)", fontSize: 14 }}
             >
-              Brewing guide →
+              How to make date seed coffee →
             </a>
           </p>
         </div>
@@ -666,6 +667,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 >
                   {seo?.brewHeading ?? "How to make"}
                 </h2>
+                {seo?.brewNote ? (
+                  <p
+                    style={{
+                      marginTop: 14,
+                      fontSize: 13,
+                      lineHeight: 1.45,
+                      color: "var(--ink-2)",
+                    }}
+                  >
+                    {seo.brewNote}
+                  </p>
+                ) : null}
                 <div
                   style={{
                     marginTop: 18,
@@ -699,25 +712,41 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     </div>
                   ))}
                 </div>
-                {product.slug === "datespresso" ? (
-                  <p
-                    style={{
-                      marginTop: 14,
-                      fontSize: 13,
-                      lineHeight: 1.45,
-                      color: "var(--ink-2)",
-                    }}
+                <p
+                  style={{
+                    marginTop: 14,
+                    fontSize: 13,
+                    lineHeight: 1.45,
+                    color: "var(--ink-2)",
+                  }}
+                >
+                  Step-by-step for this bag and the other grinds is in{" "}
+                  <a
+                    href="/how-to-make-date-seed-coffee"
+                    style={{ color: "var(--ink)" }}
                   >
-                    Making a latte? See{" "}
-                    <a
-                      href="/caffeine-free-latte"
-                      style={{ color: "var(--ink)" }}
-                    >
-                      how to make a caffeine-free latte
-                    </a>
-                    , hot or iced.
-                  </p>
-                ) : null}
+                    how to make date seed coffee
+                  </a>
+                  . The drink itself, including why date pit coffee is the same
+                  thing, is on{" "}
+                  <a href="/date-seed-coffee" style={{ color: "var(--ink)" }}>
+                    the date seed coffee guide
+                  </a>
+                  .
+                  {product.slug === "datespresso" ? (
+                    <>
+                      {" "}
+                      For a milk drink, see{" "}
+                      <a
+                        href="/caffeine-free-latte"
+                        style={{ color: "var(--ink)" }}
+                      >
+                        how to make a caffeine-free latte
+                      </a>
+                      , hot or iced.
+                    </>
+                  ) : null}
+                </p>
               </section>
 
               <section

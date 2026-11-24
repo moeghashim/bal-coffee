@@ -26,81 +26,87 @@ export const pageSeo = {
       "Brand page for the caffeine-free coffee alternative. The date seed coffee explainer lives on /date-seed-coffee.",
     title: "BAL Coffee | Caffeine-Free Coffee Alternative from Houston",
     description:
-      "BAL Coffee roasts date seeds into a naturally caffeine-free coffee alternative. Three brew styles in 12 oz bags, shipped from Houston across the US.",
+      "A naturally caffeine-free coffee alternative roasted from 100% date seeds. Acid-free, no additives, three 12 oz bags. Shipped from Houston, TX.",
   },
   dateSeedCoffee: {
     primary: "date seed coffee",
     intent:
       "Explain date seed coffee, then send shoppers to the bag that matches how they brew.",
-    title: "Date Seed Coffee: Caffeine-Free Brew from Date Pits | BAL",
+    title: "Date Pit Coffee & Date Seed Coffee, Caffeine-Free | BAL",
     description:
-      "Date seed coffee is brewed from roasted date seeds, also called date pits. Naturally caffeine-free and acid-free, with no coffee beans. Find your brew.",
+      "Date pit coffee and date seed coffee are the same drink: roasted date seeds, naturally caffeine-free and acid-free. A 12 oz bag is $26.99. Three grinds.",
     h1: "Date seed coffee: a caffeine-free cup roasted from date seeds",
   },
   dateSeedCoffeeVsCoffee: {
     primary: "date seed coffee vs coffee",
     intent:
       "Compare date seed coffee with regular coffee and decaf, then send readers back to the explainer and the bags.",
-    title: "Date Seed Coffee vs Coffee: Caffeine, Taste & Brewing | BAL",
+    title: "Decaf vs Caffeine-Free: Date Seed Coffee vs Coffee",
     description:
-      "How date seed coffee compares with regular coffee and decaf: what it's made from, caffeine, taste and brewing. Naturally caffeine-free, no coffee beans.",
+      "Decaf vs caffeine-free: decaf starts with coffee beans. Date seed coffee never had caffeine. Compare taste, acidity, and how each one is brewed.",
     h1: "Date seed coffee vs regular coffee: what's actually different",
   },
   howToMakeDateSeedCoffee: {
     primary: "how to make date seed coffee",
     intent:
       "Brewing steps for each grind. Amounts that are not printed on the bag stay as adjust to taste.",
-    title: "How to Make Date Seed Coffee: Espresso, Drip & Cezve | BAL",
+    title: "How to Make Date Seed Coffee: Step-by-Step Brews | BAL",
     description:
-      "How to make date seed coffee in an espresso machine, coffee machine, pour-over, cold brew or cezve, with the right BAL grind and steps for each. Caffeine-free.",
+      "How to make date seed coffee at home: espresso, drip, French press, pour-over, cold brew, or a cezve. The right grind for each method, step by step.",
     h1: "How to make date seed coffee, step by step",
   },
   caffeineFreeLatte: {
     primary: "caffeine-free latte",
     intent:
       "Hot and iced latte steps with DateSpresso. The product page stays the buy URL.",
-    title: "Caffeine-Free Latte at Home: Hot or Iced | BAL Coffee",
+    title: "Caffeine-Free Latte at Home: Hot, Iced, No Machine | BAL",
     description:
-      "Make a caffeine-free latte at home, hot or iced, with DateSpresso: espresso-style date seed coffee with no coffee beans and no caffeine. Steps inside.",
+      "Make a caffeine-free latte at home, hot or iced, with DateSpresso. No coffee beans and no caffeine. No espresso machine? A GrounDate option is included.",
     h1: "How to make a caffeine-free latte at home",
   },
   products: {
     primary: "buy date seed coffee",
     intent: "Shop the three bags by brew method.",
-    title: "Shop Date Seed Coffee: Espresso, Drip & Turkish | BAL",
+    title: "Shop Date Seed Coffee | Espresso, Drip & Cezve, $26.99",
     description:
-      "Shop BAL date seed coffee by brew method: DateSpresso for espresso, GrounDate for drip and French press, Eastern Brew for a cezve. 12 oz bags.",
+      "Three 12 oz bags of date seed coffee, $26.99 each. Espresso, drip and French press, or Turkish-style. Naturally caffeine-free, acid-free, no additives.",
   },
   datespresso: {
     primary: "date seed espresso alternative",
     intent: "Buy the espresso-style bag.",
-    title: "DateSpresso | Date Seed Espresso Alternative | BAL Coffee",
+    title: "DateSpresso | Caffeine-Free Date Espresso | BAL Coffee",
     description:
-      "DateSpresso is roasted date seed coffee for espresso machines, lattes and iced drinks. Naturally caffeine-free, 100% date seeds, 12 oz bag.",
+      "DateSpresso is caffeine-free date espresso roasted from 100% date seeds. Acid-free, no additives, for espresso machines and lattes. 12 oz bag, $26.99.",
     h1: "DateSpresso: roasted date seed coffee for espresso",
     brewHeading: "How to make DateSpresso",
     brewLink: "DateSpresso, for espresso",
+    brewNote:
+      "DateSpresso is caffeine-free date espresso: 100% roasted date seeds ground for an espresso machine, with no coffee beans and no additives or preservatives.",
   },
   groundate: {
     primary: "drip and French press date seed coffee",
     intent:
       "Buy the everyday drip, French press, and pour-over bag. Title and meta lead with GrounDate: the page already ranks near position 2 and needs a clearer snippet.",
-    title: "GrounDate | Drip & French Press Date Seed Coffee | BAL",
+    title: "GrounDate | Caffeine-Free Drip Date Seed Coffee | BAL",
     description:
-      "GrounDate by BAL Coffee: roasted date seed coffee for drip, French press, and pour-over. Naturally caffeine-free, 100% date seeds, 12 oz bag.",
+      "GrounDate is date seed coffee for drip, French press, pour-over, and cold brew. Naturally caffeine-free, acid-free, 100% date seeds. 12 oz bag, $26.99.",
     h1: "GrounDate: roasted date seed coffee for drip and French press",
     brewHeading: "How to make GrounDate",
     brewLink: "GrounDate, for drip and French press",
+    brewNote:
+      "GrounDate is the everyday bag for drip, French press, pour-over, and cold brew. It is 100% roasted date seeds, naturally caffeine-free and acid-free.",
   },
   "eastern-brew": {
     primary: "Turkish-style date seed coffee",
     intent: "Buy the fine grind for a cezve.",
-    title: "Eastern Brew | Turkish-Style Date Seed Coffee | BAL Coffee",
+    title: "Eastern Brew | Turkish-Style Coffee, Caffeine-Free | BAL",
     description:
-      "Eastern Brew is roasted date seed coffee for Turkish-style brewing in a cezve. Naturally caffeine-free, 100% date seeds, 12 oz bag.",
+      "Eastern Brew is Turkish-style coffee made from roasted date seeds for a cezve. Naturally caffeine-free, acid-free, 100% date seeds. 12 oz bag, $26.99.",
     h1: "Eastern Brew: roasted date seed coffee for Turkish-style brewing",
     brewHeading: "How to make Eastern Brew",
     brewLink: "Eastern Brew, for a Turkish-style cup",
+    brewNote:
+      "Eastern Brew is Turkish-style coffee ground from roasted date seeds for a cezve or dallah. It is 100% date seeds, naturally caffeine-free and acid-free.",
   },
   faq: {
     primary: "BAL Coffee orders and shipping",
@@ -115,9 +121,9 @@ export const pageSeo = {
     primary: "BAL Coffee founder",
     intent:
       "Tell Judy Ghashim's story for shoppers who want to know who makes it.",
-    title: "About BAL Coffee | Roasted Date Seed Coffee by Judy Ghashim",
+    title: "About BAL Coffee | Judy Ghashim's Date Seed Coffee",
     description:
-      "Meet Judy Ghashim, the Houston-based founder of BAL Coffee, and the story behind our naturally caffeine-free roasted date seed coffee.",
+      "Judy Ghashim started BAL Coffee in Houston to roast date seed coffee. 100% date seeds, naturally caffeine-free, acid-free, and roasted in small batches.",
   },
   shipping: {
     primary: "shipping cost at checkout",
@@ -138,9 +144,9 @@ export const pageSeo = {
   contact: {
     primary: "contact BAL Coffee",
     intent: "Reach the company about an order, tracking, or wholesale.",
-    title: "Contact BAL Coffee | Orders, Wholesale & Questions",
+    title: "Contact BAL Coffee | Orders, Tracking, and Wholesale",
     description:
-      "Email BAL Coffee about orders, tracking, wholesale or questions. BAL is an online-only coffee company based in Houston, Texas.",
+      "Email judy@balcoffee.com about a BAL Coffee order, tracking, or wholesale. Date seed coffee ships from Houston across the US in 2-3 business days.",
   },
 } as const;
 

@@ -25,23 +25,23 @@ const forbidden =
   /\borganic\b|free shipping|best seller|prebiotic|digestion|\bdigest\b|\bgut\b|pregnan|blood sugar|antioxidant|\bvegan\b|weight loss|cholesterol|reflux|\breviews?\b|\[CONFIRM\]|1-2 tsp|1 to 2 teaspoons?|18 to 20 grams|6 oz|\$\d/i;
 
 const titles = [
-  ["Date Seed Coffee vs Coffee: Caffeine, Taste & Brewing | BAL", 59],
-  ["How to Make Date Seed Coffee: Espresso, Drip & Cezve | BAL", 58],
-  ["Caffeine-Free Latte at Home: Hot or Iced | BAL Coffee", 53],
+  ["Decaf vs Caffeine-Free: Date Seed Coffee vs Coffee", 50],
+  ["How to Make Date Seed Coffee: Step-by-Step Brews | BAL", 54],
+  ["Caffeine-Free Latte at Home: Hot, Iced, No Machine | BAL", 56],
 ] as const;
 
 const descriptions = [
   [
-    "How date seed coffee compares with regular coffee and decaf: what it's made from, caffeine, taste and brewing. Naturally caffeine-free, no coffee beans.",
+    "Decaf vs caffeine-free: decaf starts with coffee beans. Date seed coffee never had caffeine. Compare taste, acidity, and how each one is brewed.",
+    144,
+  ],
+  [
+    "How to make date seed coffee at home: espresso, drip, French press, pour-over, cold brew, or a cezve. The right grind for each method, step by step.",
+    148,
+  ],
+  [
+    "Make a caffeine-free latte at home, hot or iced, with DateSpresso. No coffee beans and no caffeine. No espresso machine? A GrounDate option is included.",
     152,
-  ],
-  [
-    "How to make date seed coffee in an espresso machine, coffee machine, pour-over, cold brew or cezve, with the right BAL grind and steps for each. Caffeine-free.",
-    159,
-  ],
-  [
-    "Make a caffeine-free latte at home, hot or iced, with DateSpresso: espresso-style date seed coffee with no coffee beans and no caffeine. Steps inside.",
-    150,
   ],
 ] as const;
 
@@ -131,7 +131,7 @@ test("new page copy avoids banned claims and unconfirmed amounts", () => {
 test("official brew amounts appear only where Moe confirmed them", () => {
   const groundRow = howTo.brewerRows[1];
   const easternRow = howTo.brewerRows[2];
-  assert.equal(groundRow?.bag, "GrounDate");
+  assert.equal(groundRow?.bag, "GrounDate for drip and French press");
   assert.match(groundRow?.start ?? "", /regular ground coffee/i);
   assert.match(groundRow?.start ?? "", /1:4/);
   assert.match(groundRow?.start ?? "", /12-24 hours/);
@@ -139,7 +139,7 @@ test("official brew amounts appear only where Moe confirmed them", () => {
     groundRow?.start ?? "",
     /1-2 tsp|1 to 2 teaspoon|just off the boil/i,
   );
-  assert.equal(easternRow?.bag, "Eastern Brew");
+  assert.equal(easternRow?.bag, "Eastern Brew for Turkish-style coffee");
   assert.match(easternRow?.start ?? "", /heaping teaspoon/i);
   assert.match(easternRow?.start ?? "", /2 oz/);
   assert.match(easternRow?.start ?? "", /1-2 minutes/);
@@ -349,5 +349,6 @@ test("page files render the same copy the schema is built from", () => {
     assert.match(faqPage, new RegExp(`href="${route}"`));
   }
   assert.match(productPage, /href="\/how-to-make-date-seed-coffee"/);
-  assert.match(productPage, /Brewing guide/);
+  assert.match(productPage, /how to make date seed coffee/);
+  assert.match(productPage, /href="\/date-seed-coffee"/);
 });

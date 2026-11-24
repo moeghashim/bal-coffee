@@ -76,16 +76,81 @@ export function variantLabel(variant: ProductVariant) {
   return meaningful.map((option) => option.value).join(" · ");
 }
 
+const PHOTO_ALT_BY_FILE: Record<string, string> = {
+  "image00006.jpg":
+    "Espresso machine pouring a shot of DateSpresso into a small glass cup, with the bag and whole dates behind it",
+  "image00008.jpg":
+    "DateSpresso bag on a kitchen counter next to whole dates, an empty glass cup, and an espresso machine",
+  "image00015.jpg":
+    "Espresso machine pulling a DateSpresso shot with crema, the bag and a cluster of dates in the background",
+  "image00017.jpg":
+    "DateSpresso bag on a stone counter with whole dates in front and part of an espresso machine at the right",
+  "image00001.jpg":
+    "GrounDate bag on a wooden table beside a glass mug of brewed coffee, a carafe, whole dates, and a milk pitcher",
+  "image00002.jpg":
+    "GrounDate poured from a glass carafe into a mug, with the bag, a gooseneck kettle, and dates behind the cup",
+  "image00003.jpg":
+    "Hot water from a kettle pouring through a GrounDate pour-over, with the bag standing behind the server",
+  "image00004.jpg":
+    "A hand pouring water over a GrounDate pour-over, with the bag, whole dates, an empty glass mug, and a scoop of grounds",
+  "image00028.jpg":
+    "Eastern Brew bag standing behind a small patterned glass of Turkish-style coffee",
+  "image00029.jpg":
+    "A copper cezve pouring Eastern Brew into a patterned glass, with the bag, whole dates, and loose date seeds on a tray",
+  "image00033.jpg":
+    "Eastern Brew bag beside a copper cezve, a filled glass cup, and whole dates on a wooden board",
+  "image00037.jpg":
+    "Eastern Brew bag with a copper cezve, a glass cup, and whole dates in the foreground",
+};
+
+const COFFEE_ALT_FALLBACK: Record<string, string> = {
+  datespresso:
+    "DateSpresso bag of roasted date seeds ground for an espresso machine",
+  groundate:
+    "GrounDate bag of roasted date seeds for drip, French press, and pour-over",
+  "eastern-brew":
+    "Eastern Brew bag of roasted date seeds ground fine for a cezve",
+};
+
+function imageFileName(url: string) {
+  try {
+    return (
+      new URL(url, "https://www.balcoffee.com").pathname.split("/").pop() ?? ""
+    );
+  } catch {
+    return "";
+  }
+}
+
+function isGenericProductAlt(alt: string, name: string) {
+  const normalized = alt.trim().toLowerCase();
+  const product = name.trim().toLowerCase();
+  return (
+    normalized === product ||
+    normalized === `${product}, caffeine-free date-seed coffee` ||
+    normalized === `${product}, roasted date seed coffee`
+  );
+}
+
 export function productImageAlt(
-  product: Pick<Product, "name" | "category" | "type">,
+  product: Pick<Product, "name" | "category" | "type" | "slug">,
   image?: ShopifyImage | null,
 ) {
+  const known = image?.url
+    ? PHOTO_ALT_BY_FILE[imageFileName(image.url)]
+    : undefined;
+  if (known) return known;
   const fromShopify = image?.altText?.trim();
-  if (fromShopify) return fromShopify;
+  if (fromShopify && !isGenericProductAlt(fromShopify, product.name)) {
+    return fromShopify;
+  }
   if (product.category === "drink") {
     return `${product.name} café drink`;
   }
-  return `${product.name}, caffeine-free date-seed coffee`;
+  return (
+    COFFEE_ALT_FALLBACK[product.slug] ??
+    `${product.name} bag of roasted date seeds`
+  );
 }
 
 export const products: Product[] = [
