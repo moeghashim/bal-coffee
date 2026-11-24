@@ -3,7 +3,8 @@
  * call to action, and the cart (client). No server-only imports here.
  *
  * Shopify: product handle `sample`, tagged `sample`, one variant per blend
- * (option "Blend"), $0, SKUs BAL-SMP-*. It ships from its own "Samples"
+ * (option "Blend"), $0, SKUs BAL-SMP-*. Each is 20g, enough for one cup; the
+ * three are the same date seeds in different grinds. One of each per order. It ships from its own "Samples"
  * delivery profile, so the customer pays a separate USPS Ground Advantage rate
  * at checkout. The sample stays out of the public catalog, the sitemap,
  * product JSON-LD, and Merchant Center. The call to action only renders when
@@ -15,11 +16,15 @@ export const SAMPLE_HANDLE = "sample";
 export const SAMPLE_TAG = "sample";
 export const SAMPLE_SKU_PREFIX = "BAL-SMP-";
 export const SAMPLE_GA_CATEGORY = "sample";
-/** Customer-facing terms. Never say "free shipping": shipping is paid. */
+/**
+ * Customer-facing terms. Never say "free shipping": shipping is paid. The
+ * grind facts below are quoted from lib/products.ts and the Shopify bag
+ * descriptions; do not add grind claims that are not there.
+ */
 export const SAMPLE_TERMS =
-  "The sample is $0. You pay the USPS Ground Advantage shipping rate shown at checkout, and the sample ships separately from any bags. One sample per order.";
-/** One sample line, quantity one, per order. */
-export const SAMPLE_LIMIT_PER_ORDER = 1;
+  "Each sample is 20g, enough for one cup. All three are the same 100% date seeds; the only difference is the grind size. Each sample is $0, and you pay the USPS Ground Advantage shipping rate shown at checkout. Samples ship separately from any bags. One of each blend per order.";
+/** Quantity allowed for each blend's sample in one order. */
+export const SAMPLE_LIMIT_PER_BLEND = 1;
 
 /** Bag handle to the sample variant's "Blend" option value. */
 export const SAMPLE_BLENDS: Readonly<Record<string, string>> = {
@@ -28,10 +33,21 @@ export const SAMPLE_BLENDS: Readonly<Record<string, string>> = {
   arabica: "Eastern Brew",
 };
 
+/** Max sample lines per order: one of each blend. */
+export const SAMPLE_MAX_PER_ORDER = Object.keys(SAMPLE_BLENDS).length;
+
+/** Grind and brew method per bag handle, as written on the bag pages. */
+export const SAMPLE_GRINDS: Readonly<Record<string, string>> = {
+  datespresso: "ground for espresso machines",
+  groundate: "ground for traditional coffee machines and pour-over",
+  arabica: "ground fine for a Turkish-style cup in a cezve or dallah",
+};
+
 export type SampleOffer = {
   merchandiseId: string;
   blend: string;
   bagHandle: string;
+  grind: string;
   amount: string;
   currencyCode: string;
 };
@@ -94,6 +110,7 @@ export function pickSampleOffer(
     merchandiseId: variant.id,
     blend,
     bagHandle,
+    grind: SAMPLE_GRINDS[bagHandle] ?? "",
     amount: variant.price.amount,
     currencyCode: variant.price.currencyCode,
   };
@@ -112,6 +129,7 @@ export function pickSampleOffers(
 type SampleCartLine = {
   quantity?: number | null;
   merchandise?: {
+    id?: string | null;
     sku?: string | null;
     product?: { handle?: string | null } | null;
   } | null;
@@ -135,11 +153,34 @@ export function cartHasSample(lines: readonly SampleCartLine[]): boolean {
   return sampleUnitsInCart(lines) > 0;
 }
 
-/** True when the cart breaks the one-sample-per-order rule. */
+/** Variant ids of the samples already in the cart. */
+export function sampleVariantIdsInCart(
+  lines: readonly SampleCartLine[],
+): Set<string> {
+  const ids = new Set<string>();
+  for (const line of lines) {
+    const id = line.merchandise?.id;
+    if (id && isSampleCartLine(line)) ids.add(id);
+  }
+  return ids;
+}
+
+/**
+ * True when the cart breaks the one-of-each-blend rule: a sample line above
+ * quantity 1, the same blend on two lines, or more than three sample lines.
+ */
 export function cartExceedsSampleLimit(
   lines: readonly SampleCartLine[],
 ): boolean {
-  return sampleUnitsInCart(lines) > SAMPLE_LIMIT_PER_ORDER;
+  const samples = lines.filter(isSampleCartLine);
+  if (samples.length > SAMPLE_MAX_PER_ORDER) return true;
+  if (samples.some((line) => (line.quantity ?? 0) > SAMPLE_LIMIT_PER_BLEND)) {
+    return true;
+  }
+  const ids = samples
+    .map((line) => line.merchandise?.id)
+    .filter((id): id is string => Boolean(id));
+  return new Set(ids).size !== ids.length;
 }
 
 /** Bag handle for a sample line's blend, used to link back to the full bag. */

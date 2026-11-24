@@ -16,7 +16,7 @@ import {
   getProducts,
   getProductWithShopify,
   getRelatedProductsWithShopify,
-  getSampleVariantFor,
+  getSampleOffers,
 } from "lib/catalog";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
 import { GaViewItem } from "components/bal/ga-events";
@@ -298,8 +298,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
     (item) => item.category !== "drink",
   );
   const shopAnalytics = await getShopAnalytics();
-  const sampleOffer = await getSampleVariantFor(product.shopifyHandle).catch(
-    () => undefined,
+  const sampleOffers = await getSampleOffers().catch(() => []);
+  const sampleOffer = sampleOffers.find(
+    (offer) => offer.bagHandle === product.shopifyHandle,
   );
   const reviewSummary = await reviewSummaryPromise;
   const seo = coffeeSeo(product.slug);
@@ -553,7 +554,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     }}
                     showQuantity
                   />
-                  <SampleCta offer={sampleOffer} />
+                  <SampleCta offer={sampleOffer} offers={sampleOffers} />
                 </div>
 
                 <div

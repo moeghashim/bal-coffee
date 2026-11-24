@@ -15,7 +15,8 @@ import { cartLinesToGaItems, trackCheckoutClick } from "lib/ga";
 import { formatPrice } from "lib/commerce/money";
 import { getProductByShopifyHandle, type Product } from "lib/products";
 import {
-  SAMPLE_LIMIT_PER_ORDER,
+  SAMPLE_LIMIT_PER_BLEND,
+  SAMPLE_GRINDS,
   bagHandleForBlend,
   cartExceedsSampleLimit,
   cartHasSample,
@@ -30,12 +31,16 @@ const SAMPLE_SHIPPING_NOTE =
 
 function displayProductForSampleLine(line: CartLine): Product {
   const blend = line.merchandise?.title ?? "";
-  const bag = getProductByShopifyHandle(bagHandleForBlend(blend) ?? "");
+  const bagHandle = bagHandleForBlend(blend) ?? "";
+  const bag = getProductByShopifyHandle(bagHandle);
+  const grind = SAMPLE_GRINDS[bagHandle];
   const base = displayProductForLine(line, false);
   return {
     ...(bag ?? base),
     name: blend ? `20g sample: ${blend}` : "20g sample",
-    type: "Sample, one per order",
+    type: grind
+      ? `20g, one cup. Same date seeds, ${grind}.`
+      : "20g, enough for one cup",
     notes: [SAMPLE_SHIPPING_NOTE],
     // Link to the full bag; the sample has no product page.
     slug: bag?.slug ?? "",
@@ -160,7 +165,7 @@ function CartLineRow({ line }: { line: CartLine }) {
       }}
     >
       {/* Hidden set-quantity submit + line identity (progressive enhancement). */}
-      {isSample && line.quantity > SAMPLE_LIMIT_PER_ORDER ? null : (
+      {isSample && line.quantity > SAMPLE_LIMIT_PER_BLEND ? null : (
         <button {...register("set")} style={{ display: "none" }} />
       )}
       <input type="hidden" {...register("lineId", { value: line.id })} />
@@ -238,7 +243,7 @@ function CartLineRow({ line }: { line: CartLine }) {
         <div className="bal-cart-quantity" style={{ fontSize: 13 }}>
           <input
             type="hidden"
-            {...register("quantity", { value: SAMPLE_LIMIT_PER_ORDER })}
+            {...register("quantity", { value: SAMPLE_LIMIT_PER_BLEND })}
           />
           <span style={{ fontSize: 14, color: "var(--ink)" }}>
             {line.quantity}
@@ -246,9 +251,9 @@ function CartLineRow({ line }: { line: CartLine }) {
           <span
             style={{ display: "block", fontSize: 11, color: "var(--ink-2)" }}
           >
-            One per order
+            One of each per order
           </span>
-          {line.quantity > SAMPLE_LIMIT_PER_ORDER ? (
+          {line.quantity > SAMPLE_LIMIT_PER_BLEND ? (
             <button
               {...register("set")}
               className="mono"
@@ -467,8 +472,8 @@ function OrderSummary() {
         </div>
         {hasSample ? (
           <p style={{ fontSize: 13, lineHeight: 1.5, color: "var(--ink-2)" }}>
-            Your 20g sample ships separately, with its own USPS Ground Advantage
-            shipping rate shown at checkout.
+            Samples ship separately from bags, with their own USPS Ground
+            Advantage shipping rate shown at checkout.
           </p>
         ) : null}
         {tooManySamples ? (
@@ -480,7 +485,8 @@ function OrderSummary() {
               color: "var(--terra-deep)",
             }}
           >
-            Only one sample per order. Remove the extra sample to check out.
+            One sample of each blend per order. Remove the extra sample to check
+            out.
           </p>
         ) : null}
         <div

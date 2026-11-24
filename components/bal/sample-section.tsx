@@ -1,4 +1,4 @@
-import { SamplePicker } from "components/bal/sample-cta";
+import { GrindList, SamplePicker } from "components/bal/sample-cta";
 import { getSampleOffers } from "lib/catalog";
 import { SAMPLE_TERMS } from "lib/sample";
 
@@ -58,9 +58,10 @@ export async function SampleSection() {
               maxWidth: 520,
             }}
           >
-            Pick a blend and taste it before you buy a bag: 100% date seeds,
-            naturally caffeine-free, roasted in small batches. {SAMPLE_TERMS}
+            Taste BAL before you buy a bag. Pick one blend or try all three.{" "}
+            {SAMPLE_TERMS}
           </p>
+          <GrindList offers={offers} tone="dark" />
         </div>
         <SamplePicker offers={offers} />
       </div>
