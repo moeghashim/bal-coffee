@@ -7,6 +7,7 @@ import { Nav } from "components/bal/nav";
 import { ProductCard } from "components/bal/product-card";
 import { ProductMedia } from "components/bal/product-media";
 import { ProductFacts } from "components/bal/product-facts";
+import { SampleCta } from "components/bal/sample-cta";
 import {
   ProductRatingSummary,
   ProductReviews,
@@ -15,6 +16,7 @@ import {
   getProducts,
   getProductWithShopify,
   getRelatedProductsWithShopify,
+  getSampleOffers,
 } from "lib/catalog";
 import { getShopAnalytics } from "lib/commerce/analytics-shop";
 import { GaViewItem } from "components/bal/ga-events";
@@ -49,7 +51,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const product = await getProductWithShopify(slug);
 
-  if (!product || product.category === "drink") {
+  if (
+    !product ||
+    product.category === "drink" ||
+    product.category === "sample"
+  ) {
     return {};
   }
 
@@ -269,8 +275,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const product = await getProductWithShopify(slug);
 
   // category "drink" is set by isCafeDrink in lib/catalog.ts. Prepared drinks
-  // are event/POS only and must not render on the public site.
-  if (!product || product.category === "drink") {
+  // are event/POS only and must not render on the public site. The 20g sample
+  // (category "sample") is sold only through the sample call to action.
+  if (
+    !product ||
+    product.category === "drink" ||
+    product.category === "sample"
+  ) {
     notFound();
   }
 
@@ -287,6 +298,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
     (item) => item.category !== "drink",
   );
   const shopAnalytics = await getShopAnalytics();
+  const sampleOffers = await getSampleOffers().catch(() => []);
+  const sampleOffer = sampleOffers.find(
+    (offer) => offer.bagHandle === product.shopifyHandle,
+  );
   const reviewSummary = await reviewSummaryPromise;
   const seo = coffeeSeo(product.slug);
   const productImages =
@@ -539,6 +554,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     }}
                     showQuantity
                   />
+                  <SampleCta offer={sampleOffer} offers={sampleOffers} />
                 </div>
 
                 <div

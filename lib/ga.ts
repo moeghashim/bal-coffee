@@ -15,6 +15,8 @@
  * not change Shopify or the GA4 domain list.
  */
 
+import { SAMPLE_GA_CATEGORY, isSampleCartLine } from "./sample";
+
 export const GA_CURRENCY = "USD" as const;
 
 const MEASUREMENT_ID = /^G-[A-Z0-9]+$/i;
@@ -25,6 +27,8 @@ export type GaItem = {
   price: number;
   quantity: number;
   currency: typeof GA_CURRENCY;
+  /** "sample" for the $0 20g sample, so reports can filter it out. */
+  item_category?: string;
 };
 
 export type GaEcommerceParams = {
@@ -52,9 +56,11 @@ type GaCartLine = {
   merchandise?: {
     id?: string | null;
     title?: string | null;
+    sku?: string | null;
     product?: {
       id?: string | null;
       title?: string | null;
+      handle?: string | null;
     } | null;
   } | null;
   cost?: {
@@ -76,10 +82,12 @@ export function toGaItem(input: {
   itemName?: string | null;
   price?: number | string | null;
   quantity?: number | null;
+  itemCategory?: string | null;
 }): GaItem | null {
   const itemId = input.itemId?.trim();
   const itemName = input.itemName?.trim();
   if (!itemId || !itemName) return null;
+  const itemCategory = input.itemCategory?.trim();
 
   return {
     item_id: itemId,
@@ -87,6 +95,7 @@ export function toGaItem(input: {
     price: normalizePrice(input.price),
     quantity: normalizeQuantity(input.quantity),
     currency: GA_CURRENCY,
+    ...(itemCategory ? { item_category: itemCategory } : {}),
   };
 }
 
@@ -109,6 +118,7 @@ export function cartLinesToGaItems(lines: readonly GaCartLine[]): GaItem[] {
       itemName: line.merchandise?.product?.title || line.merchandise?.title,
       price: line.cost?.amountPerQuantity?.amount,
       quantity: line.quantity,
+      itemCategory: isSampleCartLine(line) ? SAMPLE_GA_CATEGORY : undefined,
     });
     if (item) items.push(item);
   }

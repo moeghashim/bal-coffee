@@ -14,11 +14,43 @@ import { useCart, useCartForm, type CartLine } from "lib/commerce/cart-client";
 import { cartLinesToGaItems, trackCheckoutClick } from "lib/ga";
 import { formatPrice } from "lib/commerce/money";
 import { getProductByShopifyHandle, type Product } from "lib/products";
+import {
+  SAMPLE_LIMIT_PER_BLEND,
+  SAMPLE_GRINDS,
+  bagHandleForBlend,
+  cartExceedsSampleLimit,
+  cartHasSample,
+  isSampleCartLine,
+} from "lib/sample";
 import type { ShopifyImage } from "lib/shopify";
 
 type Money = { amount: string; currencyCode: string };
 
-function displayProductForLine(line: CartLine): Product {
+const SAMPLE_SHIPPING_NOTE =
+  "Ships separately, with its own USPS Ground Advantage shipping shown at checkout.";
+
+function displayProductForSampleLine(line: CartLine): Product {
+  const blend = line.merchandise?.title ?? "";
+  const bagHandle = bagHandleForBlend(blend) ?? "";
+  const bag = getProductByShopifyHandle(bagHandle);
+  const grind = SAMPLE_GRINDS[bagHandle];
+  const base = displayProductForLine(line, false);
+  return {
+    ...(bag ?? base),
+    name: blend ? `20g sample: ${blend}` : "20g sample",
+    type: grind
+      ? `20g, one cup. Same date seeds, ${grind}.`
+      : "20g, enough for one cup",
+    notes: [SAMPLE_SHIPPING_NOTE],
+    // Link to the full bag; the sample has no product page.
+    slug: bag?.slug ?? "",
+  };
+}
+
+function displayProductForLine(line: CartLine, checkSample = true): Product {
+  if (checkSample && isSampleCartLine(line)) {
+    return displayProductForSampleLine(line);
+  }
   const handle = line.merchandise?.product?.handle ?? "";
   const matched = getProductByShopifyHandle(handle);
   if (matched) return matched;
@@ -108,6 +140,8 @@ function CartLineRow({ line }: { line: CartLine }) {
   const lineError = useCart((state) => state.errors.lines.get(line.id));
 
   const product = displayProductForLine(line);
+  const isSample = isSampleCartLine(line);
+  const productHref = product.slug ? `/products/${product.slug}` : "/products";
   const unitPrice = line.cost?.amountPerQuantity as Money | undefined;
   const lineTotal = line.cost?.totalAmount as Money | undefined;
   const notes =
@@ -131,7 +165,9 @@ function CartLineRow({ line }: { line: CartLine }) {
       }}
     >
       {/* Hidden set-quantity submit + line identity (progressive enhancement). */}
-      <button {...register("set")} style={{ display: "none" }} />
+      {isSample && line.quantity > SAMPLE_LIMIT_PER_BLEND ? null : (
+        <button {...register("set")} style={{ display: "none" }} />
+      )}
       <input type="hidden" {...register("lineId", { value: line.id })} />
 
       <div
@@ -145,7 +181,7 @@ function CartLineRow({ line }: { line: CartLine }) {
         }}
       >
         <a
-          href={`/products/${product.slug}`}
+          href={productHref}
           aria-label={`View ${product.name}`}
           style={{
             display: "block",
@@ -167,7 +203,7 @@ function CartLineRow({ line }: { line: CartLine }) {
               color: "var(--ink)",
             }}
           >
-            <a href={`/products/${product.slug}`}>{product.name}</a>
+            <a href={productHref}>{product.name}</a>
           </h2>
           <p
             style={{
@@ -203,64 +239,98 @@ function CartLineRow({ line }: { line: CartLine }) {
         </div>
       </div>
 
-      <div
-        className="bal-cart-quantity"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "31px 1fr 31px",
-          alignItems: "center",
-          minHeight: 42,
-          border: "1px solid rgba(77,56,36,0.2)",
-          borderRadius: 10,
-          background: "rgba(255,252,246,0.76)",
-        }}
-      >
-        <button
-          type="submit"
-          {...register("decrease")}
-          aria-label={`Decrease ${product.name} quantity`}
+      {isSample ? (
+        <div className="bal-cart-quantity" style={{ fontSize: 13 }}>
+          <input
+            type="hidden"
+            {...register("quantity", { value: SAMPLE_LIMIT_PER_BLEND })}
+          />
+          <span style={{ fontSize: 14, color: "var(--ink)" }}>
+            {line.quantity}
+          </span>
+          <span
+            style={{ display: "block", fontSize: 11, color: "var(--ink-2)" }}
+          >
+            One of each per order
+          </span>
+          {line.quantity > SAMPLE_LIMIT_PER_BLEND ? (
+            <button
+              {...register("set")}
+              className="mono"
+              style={{
+                marginTop: 6,
+                fontSize: 11,
+                textDecoration: "underline",
+                color: "var(--terra-deep)",
+              }}
+            >
+              Change to 1
+            </button>
+          ) : null}
+        </div>
+      ) : (
+        <div
+          className="bal-cart-quantity"
           style={{
-            display: "inline-flex",
-            width: 31,
-            height: 31,
+            display: "grid",
+            gridTemplateColumns: "31px 1fr 31px",
             alignItems: "center",
-            justifyContent: "center",
-            color: "var(--ink)",
+            minHeight: 42,
+            border: "1px solid rgba(77,56,36,0.2)",
+            borderRadius: 10,
+            background: "rgba(255,252,246,0.76)",
           }}
         >
-          <MinusIcon width={14} />
-        </button>
-        <input
-          {...register("quantity", { value: line.quantity, interactive: true })}
-          aria-label={`${product.name} quantity`}
-          className={isPending ? "bal-cart-qty-pending" : undefined}
-          style={{
-            width: "100%",
-            textAlign: "center",
-            fontSize: 14,
-            lineHeight: 1,
-            color: "var(--ink)",
-            background: "transparent",
-            border: "none",
-            ...pendingStyle,
-          }}
-        />
-        <button
-          type="submit"
-          {...register("increase")}
-          aria-label={`Increase ${product.name} quantity`}
-          style={{
-            display: "inline-flex",
-            width: 31,
-            height: 31,
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--ink)",
-          }}
-        >
-          <PlusIcon width={14} />
-        </button>
-      </div>
+          <button
+            type="submit"
+            {...register("decrease")}
+            aria-label={`Decrease ${product.name} quantity`}
+            style={{
+              display: "inline-flex",
+              width: 31,
+              height: 31,
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--ink)",
+            }}
+          >
+            <MinusIcon width={14} />
+          </button>
+          <input
+            {...register("quantity", {
+              value: line.quantity,
+              interactive: true,
+            })}
+            aria-label={`${product.name} quantity`}
+            className={isPending ? "bal-cart-qty-pending" : undefined}
+            style={{
+              width: "100%",
+              textAlign: "center",
+              fontSize: 14,
+              lineHeight: 1,
+              color: "var(--ink)",
+              background: "transparent",
+              border: "none",
+              ...pendingStyle,
+            }}
+          />
+          <button
+            type="submit"
+            {...register("increase")}
+            aria-label={`Increase ${product.name} quantity`}
+            style={{
+              display: "inline-flex",
+              width: 31,
+              height: 31,
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--ink)",
+            }}
+          >
+            <PlusIcon width={14} />
+          </button>
+        </div>
+      )}
 
       <p
         className="serif bal-cart-price"
@@ -361,6 +431,9 @@ function OrderSummary() {
     | null
     | undefined;
   const lines = useCart((state) => state.data.lines.nodes) as CartLine[];
+  const hasSample = cartHasSample(lines);
+  const tooManySamples = cartExceedsSampleLimit(lines);
+  const canCheckout = Boolean(checkoutUrl) && !tooManySamples;
 
   return (
     <aside
@@ -397,6 +470,25 @@ function OrderSummary() {
             Calculated at checkout
           </span>
         </div>
+        {hasSample ? (
+          <p style={{ fontSize: 13, lineHeight: 1.5, color: "var(--ink-2)" }}>
+            Samples ship separately from bags, with their own USPS Ground
+            Advantage shipping rate shown at checkout.
+          </p>
+        ) : null}
+        {tooManySamples ? (
+          <p
+            role="alert"
+            style={{
+              fontSize: 13,
+              lineHeight: 1.5,
+              color: "var(--terra-deep)",
+            }}
+          >
+            One sample of each blend per order. Remove the extra sample to check
+            out.
+          </p>
+        ) : null}
         <div
           style={{ display: "flex", justifyContent: "space-between", gap: 20 }}
         >
@@ -437,9 +529,13 @@ function OrderSummary() {
       </div>
 
       <a
-        href={checkoutUrl || "#"}
-        aria-disabled={checkoutUrl ? undefined : true}
-        onClick={() => {
+        href={canCheckout ? checkoutUrl || "#" : "#"}
+        aria-disabled={canCheckout ? undefined : true}
+        onClick={(event) => {
+          if (!canCheckout) {
+            event.preventDefault();
+            return;
+          }
           // Follow the href. preventDefault plus location.assign(checkoutUrl)
           // drops the _gl param gtag writes onto this anchor and can send a
           // stale checkout URL. checkout_click uses beacon transport, and is
@@ -459,8 +555,8 @@ function OrderSummary() {
           color: "#fff4e8",
           fontSize: 13,
           letterSpacing: 0,
-          pointerEvents: checkoutUrl ? undefined : "none",
-          opacity: checkoutUrl ? 1 : 0.6,
+          pointerEvents: canCheckout ? undefined : "none",
+          opacity: canCheckout ? 1 : 0.6,
         }}
       >
         Proceed to Checkout

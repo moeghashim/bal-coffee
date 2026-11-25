@@ -7,7 +7,7 @@ import { Grain } from "components/bal/grain";
 import { Hero } from "components/bal/hero";
 import { Nav } from "components/bal/nav";
 import { Process } from "components/bal/process";
-import { SubscriptionCTA } from "components/bal/subscription-cta";
+import { SampleSection } from "components/bal/sample-section";
 import { pageMetadata, pageSeo } from "lib/seo";
 
 export const metadata = pageMetadata({
@@ -26,7 +26,7 @@ export default async function HomePage() {
       <Process />
       <EndOfDay />
       <Founder />
-      <SubscriptionCTA />
+      <SampleSection />
       <Footer />
       <Grain />
     </>

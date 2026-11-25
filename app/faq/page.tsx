@@ -134,6 +134,12 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
     ),
   },
   {
+    id: "sample",
+    question: "Can I try a sample before buying a bag?",
+    answer:
+      "Yes. Each sample is 20g, enough for one cup, and is $0. DateSpresso, GrounDate, and Eastern Brew are the same 100% date seeds; the only difference is the grind size. DateSpresso is ground for espresso machines, GrounDate is ground for traditional coffee machines and pour-over, and Eastern Brew is ground fine for a Turkish-style cup in a cezve or dallah. Pick one or try all three, one of each per order. You pay the shipping: samples ship by USPS Ground Advantage at the rate shown at checkout, separately from any bags.",
+  },
+  {
     id: "where",
     question: "Where does BAL ship?",
     answer:
