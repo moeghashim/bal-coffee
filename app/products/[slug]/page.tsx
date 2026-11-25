@@ -528,7 +528,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
 
                 <div
-                  className="bal-product-add-to-cart"
                   style={{
                     marginTop: 22,
                     borderTop: "1px solid rgba(77,56,36,0.16)",
@@ -544,17 +543,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   >
                     Quantity
                   </p>
-                  <AddToCartButton
-                    product={{
-                      merchandiseId: product.merchandiseId,
-                      handle: product.shopifyHandle,
-                      title: product.name,
-                      amount: String(product.priceAmount ?? 0),
-                      currencyCode: product.currencyCode ?? "USD",
-                      availableForSale: product.availableForSale,
-                    }}
-                    showQuantity
-                  />
+                  <div className="bal-product-add-to-cart">
+                    <AddToCartButton
+                      product={{
+                        merchandiseId: product.merchandiseId,
+                        handle: product.shopifyHandle,
+                        title: product.name,
+                        amount: String(product.priceAmount ?? 0),
+                        currencyCode: product.currencyCode ?? "USD",
+                        availableForSale: product.availableForSale,
+                      }}
+                      showQuantity
+                    />
+                  </div>
                   <SampleCta offer={sampleOffer} offers={sampleOffers} />
                 </div>
 
