@@ -29,10 +29,10 @@ export default function ReturnsPage() {
       <p style={{ marginTop: 12 }}>
         If something arrives damaged or isn&apos;t what you ordered, contact{" "}
         <a
-          href="mailto:judy@balcoffee.com"
+          href="mailto:info@balcoffee.com"
           style={{ color: "var(--terra-deep)" }}
         >
-          judy@balcoffee.com
+          info@balcoffee.com
         </a>{" "}
         as soon as you can and include a photo if you have one.
       </p>

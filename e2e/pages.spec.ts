@@ -110,7 +110,7 @@ test("footer points at real pages and hides unknown socials", async ({
   ).toHaveAttribute("href", "/about");
   await expect(page.getByRole("link", { name: "Email" })).toHaveAttribute(
     "href",
-    "mailto:judy@balcoffee.com",
+    "mailto:info@balcoffee.com",
   );
   await expect(page.getByRole("link", { name: "Instagram" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "TikTok" })).toHaveCount(0);

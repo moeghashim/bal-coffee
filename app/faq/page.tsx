@@ -149,7 +149,7 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
     id: "track",
     question: "How do I track an order?",
     answer:
-      "When an order ships, the tracking details are in the shipping email. If that email doesn't arrive, write to judy@balcoffee.com and include your order number.",
+      "When an order ships, the tracking details are in the shipping email. If that email doesn't arrive, write to info@balcoffee.com and include your order number.",
   },
   {
     id: "checkout",
@@ -213,10 +213,10 @@ export default function FaqPage() {
           </a>
           . Still stuck? Email{" "}
           <a
-            href="mailto:judy@balcoffee.com"
+            href="mailto:info@balcoffee.com"
             style={{ color: "var(--terra-deep)" }}
           >
-            judy@balcoffee.com
+            info@balcoffee.com
           </a>
           .
         </p>

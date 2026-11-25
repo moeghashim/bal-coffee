@@ -26,11 +26,11 @@ export default function ContactPage() {
         </p>
         <p>
           <a
-            href="mailto:judy@balcoffee.com"
+            href="mailto:info@balcoffee.com"
             className="serif"
             style={{ fontSize: 28, color: "var(--terra-deep)" }}
           >
-            judy@balcoffee.com
+            info@balcoffee.com
           </a>
         </p>
         <p style={{ marginTop: 12 }}>

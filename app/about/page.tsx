@@ -79,10 +79,10 @@ export default function AboutPage() {
         <p style={{ marginTop: 12 }}>
           Email{" "}
           <a
-            href="mailto:judy@balcoffee.com"
+            href="mailto:info@balcoffee.com"
             style={{ color: "var(--terra-deep)" }}
           >
-            judy@balcoffee.com
+            info@balcoffee.com
           </a>{" "}
           or visit the{" "}
           <a href="/contact" style={{ color: "var(--terra-deep)" }}>

@@ -146,7 +146,7 @@ export const pageSeo = {
     intent: "Reach the company about an order, tracking, or wholesale.",
     title: "Contact BAL Coffee | Orders, Tracking, and Wholesale",
     description:
-      "Email judy@balcoffee.com about a BAL Coffee order, tracking, or wholesale. Date seed coffee ships from Houston across the US in 2-3 business days.",
+      "Email info@balcoffee.com about a BAL Coffee order, tracking, or wholesale. Date seed coffee ships from Houston across the US in 2-3 business days.",
   },
 } as const;
 
@@ -218,7 +218,7 @@ export function organizationJsonLd(url: string) {
     "@id": `${url}/#organization`,
     name: "BAL Coffee",
     url,
-    email: "judy@balcoffee.com",
+    email: "info@balcoffee.com",
     logo: `${url}/favicon.ico`,
     description:
       "BAL Coffee makes roasted date seed coffee, a caffeine-free coffee alternative, and ships across the United States from Houston, Texas.",
@@ -239,7 +239,7 @@ export function organizationJsonLd(url: string) {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer support",
-      email: "judy@balcoffee.com",
+      email: "info@balcoffee.com",
     },
     ...organizationCommerceFields(url),
   };

@@ -2,7 +2,7 @@
  * Merchant-listing JSON-LD.
  *
  * /returns: all sales are final. BAL does not accept returns. Damaged or
- * wrong items are handled by emailing judy@balcoffee.com. Do not add a return
+ * wrong items are handled by emailing info@balcoffee.com. Do not add a return
  * window, fee, or method.
  *
  * Shipping is carrier-calculated: live USPS Priority Mail from Houston, TX
