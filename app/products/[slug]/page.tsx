@@ -528,6 +528,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
 
                 <div
+                  className="bal-product-add-to-cart"
                   style={{
                     marginTop: 22,
                     borderTop: "1px solid rgba(77,56,36,0.16)",
