@@ -1,12 +1,19 @@
-import { gaMeasurementId, gtagBootstrapSource } from "lib/ga";
+import {
+  gaMeasurementId,
+  gtagBootstrapSource,
+  gtagDeferredLoaderSource,
+} from "lib/ga";
 
 /**
- * Loads gtag.js and queues `js` + `config` while the document parses.
+ * Queues the gtag stub plus `js` and `config` while the document parses, then
+ * fetches gtag.js after the first user interaction or a short timeout.
  * Renders nothing when NEXT_PUBLIC_GA_MEASUREMENT_ID is unset.
  *
- * `@next/third-parties` GoogleAnalytics uses next/script afterInteractive, which
- * injects config from a parent effect. Product and cart view effects run first
- * and push ecommerce events ahead of config, so gtag.js drops them.
+ * The library is deferred so it does not compete with first paint or first
+ * input. The inline bootstrap still runs immediately: `@next/third-parties`
+ * GoogleAnalytics and next/script afterInteractive inject config from a parent
+ * effect, and product/cart view effects can then push ecommerce events ahead
+ * of config, which gtag.js drops.
  */
 export function GaScripts() {
   const gaId = gaMeasurementId();
@@ -14,13 +21,12 @@ export function GaScripts() {
   return (
     <>
       <script
-        async
-        id="_next-ga"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-      />
-      <script
         id="_next-ga-init"
         dangerouslySetInnerHTML={{ __html: gtagBootstrapSource(gaId) }}
+      />
+      <script
+        id="_next-ga-loader"
+        dangerouslySetInnerHTML={{ __html: gtagDeferredLoaderSource(gaId) }}
       />
     </>
   );

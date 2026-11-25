@@ -62,9 +62,11 @@ test("GA4 loads and ecommerce events fire with the measurement id", async ({
   const response = await page.goto("/products/datespresso");
   expect(response?.ok()).toBeTruthy();
   await expect(page.locator("h1")).toBeVisible();
+  // The library is deferred until interaction or a 3s timeout. Give it
+  // long enough to appear without a click, then continue with events.
   await expect(
     page.locator(`script[src*="googletagmanager.com/gtag/js?id=${GA_ID}"]`),
-  ).toHaveCount(1);
+  ).toHaveCount(1, { timeout: 10_000 });
 
   const viewed = await waitForGaEvent(page, "view_item");
   expect(viewed.currency).toBe("USD");

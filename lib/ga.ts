@@ -143,6 +143,10 @@ export function shouldShowAnalyticsNote(policyHtml: string | null): boolean {
  * Inline bootstrap for the document head. Runs during HTML parse, before React
  * effects, and queues `js` then `config` once. gtag.js drops ecommerce events
  * that sit ahead of `config` in dataLayer, which is how view_item was lost.
+ *
+ * The gtag.js library itself is not fetched here. `gtagDeferredLoaderSource`
+ * loads it after the first interaction or a short timeout so it does not
+ * compete with first paint. Events stay on dataLayer until then.
  */
 export function gtagBootstrapSource(measurementId: string): string {
   if (!MEASUREMENT_ID.test(measurementId)) {
@@ -157,6 +161,49 @@ export function gtagBootstrapSource(measurementId: string): string {
     `window.gtag('config',${id});` +
     `window.${GA_CONFIG_FLAG}=${id};` +
     "}"
+  );
+}
+
+/**
+ * Milliseconds to wait before fetching gtag.js if the visitor has not
+ * interacted. Short enough that most sessions still get a page_view; long
+ * enough that the library should miss first paint and first input.
+ */
+export const GTAG_LOAD_TIMEOUT_MS = 3000;
+
+/**
+ * Inline scheduler for the document head. Does not fetch gtag.js immediately.
+ * The first pointer, key, touch, or scroll event loads it; if none arrives,
+ * a timeout of `GTAG_LOAD_TIMEOUT_MS` does. Safe to include next to the
+ * bootstrap: it is a no-op when already scheduled or when `#_next-ga` exists.
+ */
+export function gtagDeferredLoaderSource(measurementId: string): string {
+  if (!MEASUREMENT_ID.test(measurementId)) {
+    throw new Error("Invalid GA4 measurement id");
+  }
+  const src = JSON.stringify(
+    `https://www.googletagmanager.com/gtag/js?id=${measurementId}`,
+  );
+  return (
+    "(function(){" +
+    "if(window.__balGaLoaderScheduled)return;" +
+    "window.__balGaLoaderScheduled=true;" +
+    "var loaded=false;" +
+    "function load(){" +
+    "if(loaded)return;" +
+    "loaded=true;" +
+    'if(document.getElementById("_next-ga"))return;' +
+    'var s=document.createElement("script");' +
+    's.id="_next-ga";' +
+    "s.async=true;" +
+    `s.src=${src};` +
+    "(document.head||document.documentElement).appendChild(s);" +
+    "}" +
+    '["pointerdown","keydown","touchstart","scroll"].forEach(function(ev){' +
+    "window.addEventListener(ev,load,{once:true,passive:true});" +
+    "});" +
+    `window.setTimeout(load,${GTAG_LOAD_TIMEOUT_MS});` +
+    "})();"
   );
 }
 

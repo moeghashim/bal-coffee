@@ -11,6 +11,7 @@ async function expectNoGa(page: Page) {
   ).toHaveCount(0);
   await expect(page.locator('script[id="_next-ga"]')).toHaveCount(0);
   await expect(page.locator('script[id="_next-ga-init"]')).toHaveCount(0);
+  await expect(page.locator('script[id="_next-ga-loader"]')).toHaveCount(0);
   const queued = await page.evaluate(() => {
     const layer =
       (window as Window & { dataLayer?: unknown[] }).dataLayer ?? [];
