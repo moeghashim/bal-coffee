@@ -97,10 +97,10 @@ export default async function PrivacyPage() {
       <p style={{ marginTop: 28 }}>
         Questions about privacy? Email{" "}
         <a
-          href="mailto:judy@balcoffee.com"
+          href="mailto:info@balcoffee.com"
           style={{ color: "var(--terra-deep)" }}
         >
-          judy@balcoffee.com
+          info@balcoffee.com
         </a>
         .
       </p>

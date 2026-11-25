@@ -154,7 +154,7 @@ const socialLinks: {
   { label: "TikTok", href: null, icon: <TikTokIcon /> },
   {
     label: "Email",
-    href: "mailto:judy@balcoffee.com",
+    href: "mailto:info@balcoffee.com",
     icon: <MailIcon />,
   },
 ];

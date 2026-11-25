@@ -271,9 +271,10 @@ test("product page sends exactly one view_item g/collect hit", async ({
   expect(price).toBeGreaterThan(0);
   await expect(page.locator("h1")).toContainText(productName);
 
-  // Related-product cards lower on the page have their own merchandise inputs.
+  // Related-product cards and the sample CTA have their own merchandise
+  // inputs. The bag add-to-cart is the variant sent as item_id.
   const itemId = page
-    .locator(".bal-product-detail-section")
+    .locator(".bal-product-add-to-cart")
     .locator('input[name="merchandiseId"]');
   await expect(itemId).toHaveCount(1);
   await expect(itemId).not.toHaveValue("");

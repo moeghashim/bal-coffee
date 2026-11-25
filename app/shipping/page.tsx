@@ -56,10 +56,10 @@ export default function ShippingPage() {
         When an order ships, tracking is sent by email. If you can&apos;t find
         it, email{" "}
         <a
-          href="mailto:judy@balcoffee.com"
+          href="mailto:info@balcoffee.com"
           style={{ color: "var(--terra-deep)" }}
         >
-          judy@balcoffee.com
+          info@balcoffee.com
         </a>{" "}
         with your order number.
       </p>
