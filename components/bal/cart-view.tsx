@@ -432,6 +432,13 @@ function OrderSummary() {
     | undefined;
   const lines = useCart((state) => state.data.lines.nodes) as CartLine[];
   const hasSample = cartHasSample(lines);
+  const hasBag = lines.some((line) => !isSampleCartLine(line));
+  const bagQuantity = lines.reduce(
+    (sum, line) => (isSampleCartLine(line) ? sum : sum + (line.quantity ?? 0)),
+    0,
+  );
+  const bagShipping =
+    bagQuantity >= 2 ? "$12.99" : bagQuantity >= 1 ? "$9.99" : null;
   const tooManySamples = cartExceedsSampleLimit(lines);
   const canCheckout = Boolean(checkoutUrl) && !tooManySamples;
 
@@ -467,9 +474,14 @@ function OrderSummary() {
         >
           <span style={{ fontSize: 14, color: "var(--ink-2)" }}>Shipping</span>
           <span style={{ fontSize: 15, color: "var(--ink-2)" }}>
-            Calculated at checkout
+            {bagShipping ?? "Calculated at checkout"}
           </span>
         </div>
+        {hasBag ? (
+          <p style={{ fontSize: 13, lineHeight: 1.5, color: "var(--ink-2)" }}>
+            US shipping: $9.99 for one bag, $12.99 for 2 or more.
+          </p>
+        ) : null}
         {hasSample ? (
           <p style={{ fontSize: 13, lineHeight: 1.5, color: "var(--ink-2)" }}>
             Samples ship separately from bags, with their own USPS Ground

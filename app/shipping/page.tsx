@@ -12,15 +12,17 @@ export default function ShippingPage() {
     <PageShell
       eyebrow="Help"
       title="Shipping & delivery"
-      intro="Shipping costs are calculated at checkout."
+      intro="US shipping: $9.99 for one bag, $12.99 for 2 or more."
     >
       <h2 className="serif" style={{ fontSize: 26, color: "var(--ink)" }}>
         Shipping rates
       </h2>
       <p style={{ marginTop: 12 }}>
-        This page does not list a flat rate. Checkout is on
-        checkout.balcoffee.com, and that is where the shipping cost for your
-        address is shown before you pay.
+        US shipping is $9.99 for one 12 oz bag, and $12.99 for 2 or more, by
+        USPS Ground Advantage. Priority Mail is available at checkout as a paid
+        faster option, at the carrier rate for your address. Checkout is on
+        checkout.balcoffee.com, and that is where you confirm the method before
+        you pay.
       </p>
       <h2
         className="serif"
@@ -30,9 +32,9 @@ export default function ShippingPage() {
       </h2>
       <p style={{ marginTop: 12 }}>
         BAL is an online-only company based in Houston, Texas. We ship date seed
-        coffee to addresses across the United States. Delivery takes 2–3
-        business days within the US. Checkout confirms the methods available for
-        your address.
+        coffee to addresses across the United States. Bags ship in 1–2 business
+        days; most orders arrive in 2–5 business days. Checkout confirms the
+        methods available for your address.
       </p>
       <h2
         className="serif"

@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Cart",
   description:
-    "Review your BAL Coffee cart. Shipping is calculated at checkout.",
+    "Review your BAL Coffee cart. US shipping: $9.99 for one bag, $12.99 for 2 or more.",
   robots: { index: false, follow: true },
 };
 

@@ -231,7 +231,9 @@ test("product page does not offer a fake subscription", async ({ page }) => {
   await expect(page.getByText(/subscribe & save/i)).toHaveCount(0);
   await expect(page.getByText(/free shipping/i)).toHaveCount(0);
   await expect(
-    page.getByText(/shipping is calculated at checkout/i).first(),
+    page
+      .getByText(/US shipping: \$9\.99 for one bag, \$12\.99 for 2 or more/i)
+      .first(),
   ).toBeVisible();
   const canonical = page.locator('link[rel="canonical"]');
   await expect(canonical).toHaveAttribute("href", /\/products\/datespresso$/);

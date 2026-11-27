@@ -33,7 +33,10 @@ test("add to cart succeeds and checkout points to Shopify", async ({
   ).toBeVisible();
   await expect(page.getByText(/free shipping/i)).toHaveCount(0);
   await expect(page.getByText(/you have unlocked/i)).toHaveCount(0);
-  await expect(page.getByText(/calculated at checkout/i)).toBeVisible();
+  await expect(page.getByText(/^\$9\.99$/)).toBeVisible();
+  await expect(
+    page.getByText(/US shipping: \$9\.99 for one bag, \$12\.99 for 2 or more/i),
+  ).toBeVisible();
 
   // Checkout link exists and targets a Shopify-hosted checkout host.
   const checkout = page.getByRole("link", { name: /proceed to checkout/i });

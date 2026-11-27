@@ -192,7 +192,7 @@ export const whereToStart: RichText[] = [
     ". Every bag is 12 oz of 100% roasted date seeds, shipped from Houston to addresses across the US. ",
     {
       href: "/shipping",
-      label: "Shipping is calculated at checkout",
+      label: "See US shipping rates for 12 oz bags",
     },
     ".",
   ],

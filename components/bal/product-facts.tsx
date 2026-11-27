@@ -33,8 +33,9 @@ export function ProductFacts({ product }: { product: Product }) {
           color: "var(--ink-soft)",
         }}
       >
-        Shipping is calculated at checkout. Delivery takes 2–3 business days
-        within the US. All sales are final.{" "}
+        US shipping: $9.99 for one bag, $12.99 for 2 or more. Ships in 1–2
+        business days; most orders arrive in 2–5 business days. All sales are
+        final.{" "}
         <a href="/shipping" style={{ color: "var(--ink)" }}>
           Shipping
         </a>
