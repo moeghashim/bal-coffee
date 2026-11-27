@@ -116,6 +116,7 @@ input {
 #shop,
 #process,
 #about,
+#sample,
 #subscription,
 #contact {
   scroll-margin-top: 88px;
@@ -133,9 +134,7 @@ input {
     grid-template-columns: 1fr !important;
     gap: 32px !important;
   }
-  .bal-hero-grid > :last-child {
-    order: -1;
-  }
+  /* Homepage refresh: keep the headline and CTAs above the photo on small screens. */
   .bal-hero-copy {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -343,8 +342,8 @@ input {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     color: var(--ink);
   }
   .bal-nav-links.bal-nav-links-open {
@@ -360,6 +359,9 @@ input {
     border-bottom: 1px solid var(--line-soft);
   }
   .bal-nav-links.bal-nav-links-open a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
     padding: 12px 0;
     border-bottom: 1px solid var(--line-soft);
     font-size: 15px !important;
@@ -1258,4 +1260,508 @@ input {
 
 .bal-event-login {
   margin-top: 8px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Homepage refresh: typography, motion, shop, ticker, trust, 44px targets    */
+/* -------------------------------------------------------------------------- */
+
+.bal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  text-align: center;
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.bal-btn-solid {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.bal-btn-outline {
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  background: transparent;
+}
+
+.bal-hero {
+  position: relative;
+  padding: 28px 56px 48px;
+  overflow: hidden;
+}
+
+.bal-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.bal-hero-eyebrow {
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.15;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--terra-deep);
+}
+
+.bal-hero-title {
+  margin-top: 10px;
+  font-size: clamp(40px, 5.4vw, 68px);
+  line-height: 0.98;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.bal-hero-lead {
+  margin-top: 22px;
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.45;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.bal-hero-meta {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 460px;
+}
+
+.bal-hero-buttons {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.bal-hero-visual {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--cream-2);
+  box-shadow: 0 30px 60px -30px rgba(42, 31, 23, 0.35);
+}
+
+.bal-hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.bal-kicker {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.bal-ticker {
+  background: var(--ink);
+  color: var(--cream);
+  overflow: hidden;
+  border-top: 1px solid rgba(244, 239, 230, 0.08);
+  border-bottom: 1px solid rgba(244, 239, 230, 0.08);
+}
+
+.bal-ticker-viewport {
+  display: flex;
+  width: max-content;
+  gap: 0;
+}
+
+.bal-ticker-track {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 14px 0;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bal-ticker-track li {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px 0 0;
+}
+
+.bal-ticker-dot {
+  display: inline-block;
+  margin: 0 18px;
+  color: var(--terra);
+}
+
+.bal-shop {
+  padding: 72px 56px 64px;
+  background: var(--cream);
+}
+
+.bal-shop-intro {
+  max-width: 1280px;
+  margin: 0 auto 36px;
+}
+
+.bal-shop-title {
+  margin-top: 10px;
+  font-size: clamp(36px, 4.5vw, 58px);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.bal-shop-lead {
+  margin-top: 14px;
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.bal-shop-grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.bal-shop-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(77, 56, 36, 0.16);
+  border-radius: 16px;
+  background: rgba(255, 252, 246, 0.95);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.bal-shop-card-media {
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--cream-2);
+}
+
+.bal-shop-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  transition: transform 0.6s ease;
+}
+
+.bal-shop-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 18px 16px;
+  flex: 1;
+}
+
+.bal-shop-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.bal-shop-card-top h3 {
+  font-size: 26px;
+  line-height: 1.05;
+  font-weight: 500;
+}
+
+.bal-shop-card-price {
+  flex: 0 0 auto;
+  font-size: 20px;
+  line-height: 1.1;
+  text-align: right;
+}
+
+.bal-shop-card-price span {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-inter-tight);
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: normal;
+}
+
+.bal-shop-card-taste {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink-2);
+  min-height: 40px;
+}
+
+.bal-shop-card .bal-add-to-cart-row button {
+  min-height: 44px;
+}
+
+.bal-shop-shipping {
+  max-width: 1280px;
+  margin: 22px auto 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.bal-trust {
+  padding: 36px 56px 48px;
+  background: var(--cream-2);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.bal-trust-grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.bal-trust-title {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.bal-trust-body {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.bal-process-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.bal-process-links a {
+  color: #f1eacf;
+  font-size: 14px;
+  line-height: 1.4;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bal-sample-cta button,
+.bal-subscription button,
+.bal-subscription [role="radio"] {
+  min-height: 44px;
+}
+
+/* Motion: never hide LCP (hero title + hero image stay visible). */
+@media (prefers-reduced-motion: no-preference) {
+  .bal-hero-visual .bal-hero-image {
+    transform: scale(1.03);
+    animation: bal-hero-settle 1.1s ease-out forwards;
+    transform-origin: center;
+  }
+
+  .bal-hero-eyebrow,
+  .bal-hero-lead,
+  .bal-hero-meta,
+  .bal-hero-buttons {
+    animation: bal-fade-up 0.55s ease both;
+  }
+
+  .bal-hero-lead {
+    animation-delay: 0.06s;
+  }
+  .bal-hero-meta {
+    animation-delay: 0.12s;
+  }
+  .bal-hero-buttons {
+    animation-delay: 0.16s;
+  }
+
+  .bal-ticker-viewport {
+    animation: bal-ticker 32s linear infinite;
+  }
+
+  .bal-ticker:hover .bal-ticker-viewport,
+  .bal-ticker:focus-within .bal-ticker-viewport {
+    animation-play-state: paused;
+  }
+
+  .bal-btn-solid:hover {
+    background: var(--terra-deep);
+    transform: translateY(-1px);
+  }
+
+  .bal-btn-outline:hover {
+    background: var(--ink);
+    color: var(--cream);
+    transform: translateY(-1px);
+  }
+
+  .bal-btn:active {
+    transform: scale(0.98);
+  }
+
+  .bal-shop-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 40px -24px rgba(42, 31, 23, 0.45);
+  }
+
+  .bal-shop-card:hover .bal-shop-card-image {
+    transform: scale(1.04);
+  }
+
+  .bal-shop-card:active {
+    transform: translateY(-2px);
+  }
+
+  @supports (animation-timeline: view()) {
+    .bal-shop,
+    .bal-trust,
+    .bal-process,
+    .bal-founder,
+    .bal-subscription {
+      animation: bal-reveal 0.7s ease both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 28%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bal-hero-image,
+  .bal-hero-eyebrow,
+  .bal-hero-lead,
+  .bal-hero-meta,
+  .bal-hero-buttons,
+  .bal-ticker-viewport,
+  .bal-shop,
+  .bal-trust,
+  .bal-process,
+  .bal-founder,
+  .bal-subscription,
+  .bal-shop-card,
+  .bal-shop-card-image,
+  .bal-btn {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+@keyframes bal-hero-settle {
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes bal-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bal-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes bal-reveal {
+  from {
+    opacity: 0.72;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .bal-hero {
+    padding: 24px 24px 40px !important;
+  }
+
+  .bal-hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .bal-shop {
+    padding: 56px 24px 48px;
+  }
+
+  .bal-shop-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .bal-trust {
+    padding: 32px 24px 40px;
+  }
+
+  .bal-trust-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+}
+
+@media (max-width: 640px) {
+  .bal-hero-title {
+    font-size: clamp(36px, 11vw, 48px);
+  }
+
+  .bal-hero-buttons {
+    flex-direction: column;
+  }
+
+  .bal-hero-buttons .bal-btn {
+    width: 100%;
+  }
+
+  .bal-shop-title {
+    font-size: clamp(32px, 10vw, 44px);
+  }
+
+  .bal-trust-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bal-shop-card-top h3 {
+    font-size: 24px;
+  }
 }

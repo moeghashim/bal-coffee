@@ -1,6 +1,6 @@
 import { GrindList, SamplePicker } from "components/bal/sample-cta";
 import { getSampleOffers } from "lib/catalog";
-import { SAMPLE_TERMS } from "lib/sample";
+import { SAMPLE_TERMS_SHORT } from "lib/sample";
 
 /**
  * Homepage sample section (replaces the old "subscription isn't available"
@@ -37,7 +37,7 @@ export async function SampleSection() {
         }}
       >
         <div>
-          <h3
+          <h2
             className="serif"
             style={{
               fontSize: "clamp(26px, 2.4vw, 34px)",
@@ -48,7 +48,7 @@ export async function SampleSection() {
             }}
           >
             Try a 20g sample first
-          </h3>
+          </h2>
           <p
             style={{
               marginTop: 10,
@@ -58,8 +58,7 @@ export async function SampleSection() {
               maxWidth: 520,
             }}
           >
-            Taste BAL before you buy a bag. Pick one blend or try all three.{" "}
-            {SAMPLE_TERMS}
+            Taste BAL before you buy a bag. {SAMPLE_TERMS_SHORT}
           </p>
           <GrindList offers={offers} tone="dark" />
         </div>

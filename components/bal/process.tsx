@@ -133,25 +133,25 @@ const steps = [
     num: "1",
     title: "Seed",
     icon: <StepSeed />,
-    body: "We start with date seeds,\na natural byproduct with\nincredible potential.",
+    body: "We start with date seeds,\nnot coffee beans.",
   },
   {
     num: "2",
     title: "Roast",
     icon: <StepRoast />,
-    body: "Slow-roasted to unlock\ndeep, toasty notes and\nsmooth complexity.",
+    body: "Small-batch roasted for\na smooth, toasty cup.",
   },
   {
     num: "3",
     title: "Grind",
     icon: <StepGrind />,
-    body: "Milled to perfection for\nthe brew method\nyou love.",
+    body: "Milled for espresso, drip,\nor a cezve.",
   },
   {
     num: "4",
     title: "Brew",
     icon: <StepBrew />,
-    body: "Brew your moment.\nPour a cup and\ntake your time.",
+    body: "Pour a cup, any time\nof day.",
   },
 ];
 
@@ -206,20 +206,11 @@ export function Process() {
           >
             How date seed coffee is made
           </h2>
-          <a
-            href="/date-seed-coffee"
-            style={{
-              display: "inline-block",
-              marginTop: 18,
-              color: "#f1eacf",
-              fontSize: 14,
-              lineHeight: 1.4,
-              textDecoration: "underline",
-              textUnderlineOffset: 3,
-            }}
-          >
-            More about date seed coffee
-          </a>
+          <div className="bal-process-links">
+            <a href="/date-seed-coffee">What is date seed coffee?</a>
+            <a href="/how-to-make-date-seed-coffee">How to make it</a>
+            <a href="/date-seed-coffee-vs-coffee">Date seed coffee vs coffee</a>
+          </div>
         </div>
         <div
           className="bal-process-divider"

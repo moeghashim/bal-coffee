@@ -35,6 +35,7 @@ export function Founder() {
   return (
     <section
       id="about"
+      className="bal-founder"
       style={{
         position: "relative",
         background: "var(--cream)",
@@ -64,10 +65,10 @@ export function Founder() {
           }}
         >
           <Image
-            src="/founder.png"
+            src="/founder.jpg"
             alt="Portrait of Judy Ghashim, founder of BAL Coffee"
             fill
-            sizes="(max-width: 1024px) 100vw, 40vw"
+            sizes="(max-width: 1024px) 100vw, 480px"
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
         </div>
