@@ -52,6 +52,16 @@ test("rate limiter allows a burst and then blocks within the window", () => {
   assert.equal(limiter.allow("ip:1", start + 1001), true);
 });
 
+test("rate limiter evicts expired keys", () => {
+  const limiter = createRateLimiter({ limit: 2, windowMs: 1000 });
+  const start = 1_000_000;
+  assert.equal(limiter.allow("ip:old", start), true);
+  assert.equal(limiter.allow("ip:also-old", start), true);
+  assert.equal(limiter.size(), 2);
+  assert.equal(limiter.allow("ip:new", start + 1001), true);
+  assert.equal(limiter.size(), 1);
+});
+
 test("isAdminConfigured requires a shop domain and admin token", () => {
   assert.equal(isAdminConfigured({}), false);
   assert.equal(

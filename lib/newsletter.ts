@@ -140,18 +140,27 @@ export function createRateLimiter(
   const windowMs = options.windowMs ?? 10 * 60 * 1000;
   const hits = new Map<string, number[]>();
 
+  function evictExpired(now: number) {
+    for (const [key, times] of hits) {
+      const recent = times.filter((time) => now - time < windowMs);
+      if (recent.length === 0) hits.delete(key);
+      else hits.set(key, recent);
+    }
+  }
+
   return {
     allow(key: string, now = Date.now()) {
-      const recent = (hits.get(key) ?? []).filter(
-        (time) => now - time < windowMs,
-      );
+      evictExpired(now);
+      const recent = hits.get(key) ?? [];
       if (recent.length >= limit) {
-        hits.set(key, recent);
         return false;
       }
       recent.push(now);
       hits.set(key, recent);
       return true;
+    },
+    size() {
+      return hits.size;
     },
   };
 }
