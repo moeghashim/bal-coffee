@@ -277,7 +277,7 @@ export const closeHref = "/products";
 export const closeBody: RichText = [
   {
     href: "/shipping",
-    label: "12 oz bags have flat shipping in the US",
+    label: "See US shipping rates for 12 oz bags",
   },
   ".",
 ];

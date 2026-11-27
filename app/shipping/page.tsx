@@ -12,16 +12,17 @@ export default function ShippingPage() {
     <PageShell
       eyebrow="Help"
       title="Shipping & delivery"
-      intro="$9.99 flat shipping in the US for 12 oz bags."
+      intro="US shipping: $9.99 for one bag, $12.99 for 2 or more."
     >
       <h2 className="serif" style={{ fontSize: 26, color: "var(--ink)" }}>
         Shipping rates
       </h2>
       <p style={{ marginTop: 12 }}>
-        12 oz bags have $9.99 flat shipping in the US, by USPS Ground Advantage.
-        Priority Mail is available at checkout as a paid faster option, at the
-        carrier rate for your address. Checkout is on checkout.balcoffee.com,
-        and that is where you confirm the method before you pay.
+        US shipping is $9.99 for one 12 oz bag, and $12.99 for 2 or more, by
+        USPS Ground Advantage. Priority Mail is available at checkout as a paid
+        faster option, at the carrier rate for your address. Checkout is on
+        checkout.balcoffee.com, and that is where you confirm the method before
+        you pay.
       </p>
       <h2
         className="serif"

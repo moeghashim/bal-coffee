@@ -124,10 +124,10 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
     question: "How much is shipping?",
     answer: (
       <>
-        12 oz bags have $9.99 flat shipping in the US, by USPS Ground Advantage,
-        shown before you pay. Priority Mail is available at checkout as a paid
-        faster option. Bags ship in 1–2 business days; most orders arrive in 2–5
-        business days. See{" "}
+        US shipping is $9.99 for one 12 oz bag, and $12.99 for 2 or more, by
+        USPS Ground Advantage, shown before you pay. Priority Mail is available
+        at checkout as a paid faster option. Bags ship in 1–2 business days;
+        most orders arrive in 2–5 business days. See{" "}
         <a href="/shipping" style={{ color: "var(--terra-deep)" }}>
           shipping and delivery
         </a>{" "}

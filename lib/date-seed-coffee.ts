@@ -48,7 +48,7 @@ export const pitCoffee = [
 export const priceTitle = "Date seed coffee price";
 
 export const priceBody =
-  "A 12 oz bag is $26.99. You get one grind of 100% roasted date seeds, naturally caffeine-free and acid-free, roasted in small batches, with no additives or preservatives. US shipping is $9.99 flat. Bags ship in 1-2 business days; most orders arrive in 2-5 business days.";
+  "A 12 oz bag is $26.99. You get one grind of 100% roasted date seeds, naturally caffeine-free and acid-free, roasted in small batches, with no additives or preservatives. US shipping is $9.99 for one bag, $12.99 for 2 or more. Bags ship in 1-2 business days; most orders arrive in 2-5 business days.";
 
 export const tasteIntro = [
   "Date seed coffee tastes roasted, smooth and earthy. It is coffee-inspired rather than a copy of coffee: you still get a dark cup and a toasty aroma, but it drinks smoother than most coffee. It's made from the seed, not the fruit, so it isn't a sweet date drink. If you like it sweeter, add a little date syrup, honey or vanilla.",
@@ -178,13 +178,13 @@ export const faqs: { id: string; question: string; answer: string }[] = [
     id: "faq-price",
     question: "How much does date seed coffee cost?",
     answer:
-      "A 12 oz bag is $26.99. That is one grind of 100% roasted date seeds, naturally caffeine-free and acid-free, roasted in small batches. DateSpresso is for espresso, GrounDate is for drip and French press, and Eastern Brew is for a Turkish-style cup. US shipping is $9.99 flat. Bags ship in 1-2 business days; most orders arrive in 2-5 business days.",
+      "A 12 oz bag is $26.99. That is one grind of 100% roasted date seeds, naturally caffeine-free and acid-free, roasted in small batches. DateSpresso is for espresso, GrounDate is for drip and French press, and Eastern Brew is for a Turkish-style cup. US shipping is $9.99 for one bag, $12.99 for 2 or more. Bags ship in 1-2 business days; most orders arrive in 2-5 business days.",
   },
   {
     id: "faq-where",
     question: "Where can I buy date seed coffee in the US?",
     answer:
-      "BAL sells its three date seed coffees online and ships from Houston to addresses across the United States. 12 oz bags have $9.99 flat shipping in the US. Shop date seed coffee.",
+      "BAL sells its three date seed coffees online and ships from Houston to addresses across the United States. US shipping is $9.99 for one bag, $12.99 for 2 or more. Shop date seed coffee.",
   },
 ];
 

@@ -5,8 +5,9 @@
  * wrong items are handled by emailing info@balcoffee.com. Do not add a return
  * window, fee, or method.
  *
- * 12 oz bags have $9.99 flat Standard Shipping (USPS Ground Advantage) from
- * Houston, TX 77043, with carrier-calculated Priority Mail as a paid upgrade.
+ * 12 oz bags have Standard Shipping (USPS Ground Advantage) from Houston, TX
+ * 77043: $9.99 for one bag, $12.99 when the discounted merchandise total is
+ * $53.98 or more (2 bags at full price). Priority Mail is a paid upgrade.
  * Google's merchant listing docs require shippingRate on OfferShippingDetails.
  * This markup still does not publish shippingDetails or a flat rate, so
  * Merchant Center remains the source for feed shipping.

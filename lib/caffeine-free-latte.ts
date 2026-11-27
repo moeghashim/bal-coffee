@@ -162,7 +162,7 @@ export const about: RichText[] = [
     "BAL is based in Houston and roasts 100% date seeds in small batches. It's acid-free, naturally caffeine-free and sold in 12 oz bags, shipped to addresses across the US. ",
     {
       href: "/shipping",
-      label: "12 oz bags have flat shipping in the US",
+      label: "See US shipping rates for 12 oz bags",
     },
     ".",
   ],

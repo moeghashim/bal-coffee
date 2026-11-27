@@ -126,12 +126,12 @@ export const pageSeo = {
       "Judy Ghashim started BAL Coffee in Houston to roast date seed coffee. 100% date seeds, naturally caffeine-free, acid-free, and roasted in small batches.",
   },
   shipping: {
-    primary: "flat shipping for 12 oz bags",
+    primary: "US shipping for 12 oz bags",
     intent:
-      "Explain that 12 oz bags have $9.99 flat shipping in the US and most orders arrive in 2–5 business days.",
+      "Explain that US shipping is $9.99 for one bag, $12.99 for 2 or more, and most orders arrive in 2–5 business days.",
     title: "Shipping & Delivery | BAL Coffee",
     description:
-      "How BAL Coffee ships date seed coffee across the US. 12 oz bags have $9.99 flat shipping in the US. Most orders arrive in 2–5 business days. Tracking is sent by email.",
+      "How BAL Coffee ships date seed coffee across the US. US shipping is $9.99 for one bag, $12.99 for 2 or more. Most orders arrive in 2–5 business days. Tracking is sent by email.",
   },
   returns: {
     primary: "all sales are final",
