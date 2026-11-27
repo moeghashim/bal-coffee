@@ -432,6 +432,7 @@ function OrderSummary() {
     | undefined;
   const lines = useCart((state) => state.data.lines.nodes) as CartLine[];
   const hasSample = cartHasSample(lines);
+  const hasBag = lines.some((line) => !isSampleCartLine(line));
   const tooManySamples = cartExceedsSampleLimit(lines);
   const canCheckout = Boolean(checkoutUrl) && !tooManySamples;
 
@@ -467,7 +468,9 @@ function OrderSummary() {
         >
           <span style={{ fontSize: 14, color: "var(--ink-2)" }}>Shipping</span>
           <span style={{ fontSize: 15, color: "var(--ink-2)" }}>
-            Calculated at checkout
+            {hasBag
+              ? "$9.99 flat shipping in the US"
+              : "Calculated at checkout"}
           </span>
         </div>
         {hasSample ? (

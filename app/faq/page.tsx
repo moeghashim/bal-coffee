@@ -124,8 +124,10 @@ const questions: { id: string; question: string; answer: ReactNode }[] = [
     question: "How much is shipping?",
     answer: (
       <>
-        Shipping costs are calculated at checkout, before you pay. Delivery
-        takes 2–3 business days within the US. See{" "}
+        12 oz bags have $9.99 flat shipping in the US, by USPS Ground Advantage,
+        shown before you pay. Priority Mail is available at checkout as a paid
+        faster option. Bags ship in 1–2 business days; most orders arrive in 2–5
+        business days. See{" "}
         <a href="/shipping" style={{ color: "var(--terra-deep)" }}>
           shipping and delivery
         </a>{" "}

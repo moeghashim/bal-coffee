@@ -5,10 +5,11 @@
  * wrong items are handled by emailing info@balcoffee.com. Do not add a return
  * window, fee, or method.
  *
- * Shipping is carrier-calculated: live USPS Priority Mail from Houston, TX
- * 77043. Google Merchant Center supplies the rate. Google's merchant listing
- * docs require shippingRate on OfferShippingDetails, so this markup does not
- * publish shippingDetails or a flat rate.
+ * 12 oz bags have $9.99 flat Standard Shipping (USPS Ground Advantage) from
+ * Houston, TX 77043, with carrier-calculated Priority Mail as a paid upgrade.
+ * Google's merchant listing docs require shippingRate on OfferShippingDetails.
+ * This markup still does not publish shippingDetails or a flat rate, so
+ * Merchant Center remains the source for feed shipping.
  * Do not invent merchantReturnDays, returnFees, returnMethod, or
  * priceValidUntil.
  */
