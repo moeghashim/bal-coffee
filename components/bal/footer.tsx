@@ -1,6 +1,8 @@
 "use client";
 
-import { FormEvent, ReactNode } from "react";
+import { ReactNode } from "react";
+
+import { NewsletterForm } from "./newsletter-form";
 
 const linkColumns: {
   title: string;
@@ -160,9 +162,6 @@ const socialLinks: {
 ];
 
 export function Footer() {
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
   const year = new Date().getFullYear();
 
   return (
@@ -300,48 +299,9 @@ export function Footer() {
               marginBottom: 16,
             }}
           >
-            Join our community for brewing tips, stories, and exclusive offers.
+            Get brewing tips and new roast news.
           </p>
-          <form
-            onSubmit={onSubmit}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto",
-              border: "1px solid rgba(238,216,185,0.22)",
-              borderRadius: 8,
-              overflow: "hidden",
-              background: "rgba(255,246,231,0.05)",
-            }}
-          >
-            <input
-              type="email"
-              required
-              placeholder="Enter your email"
-              aria-label="Email address"
-              style={{
-                border: "none",
-                outline: "none",
-                padding: "12px 14px",
-                fontSize: 13.5,
-                background: "transparent",
-                color: "#f1d9b6",
-              }}
-            />
-            <button
-              type="submit"
-              className="mono"
-              style={{
-                padding: "12px 20px",
-                background: "#77783a",
-                color: "#fff4e8",
-                fontSize: 11,
-                letterSpacing: 0,
-                borderRadius: 0,
-              }}
-            >
-              Subscribe
-            </button>
-          </form>
+          <NewsletterForm />
         </div>
       </div>
 
