@@ -23,6 +23,9 @@ export const SAMPLE_GA_CATEGORY = "sample";
  */
 export const SAMPLE_TERMS =
   "Each sample is 20g, enough for one cup. All three are the same 100% date seeds; the only difference is the grind size. Each sample is $0, and you pay the USPS Ground Advantage shipping rate shown at checkout. Samples ship separately from any bags. One of each blend per order.";
+/** Shorter homepage line. Product pages keep the full terms above. */
+export const SAMPLE_TERMS_SHORT =
+  "Enough for one cup. The sample is $0; you pay shipping at checkout. Try one blend, or all three.";
 /** Quantity allowed for each blend's sample in one order. */
 export const SAMPLE_LIMIT_PER_BLEND = 1;
 

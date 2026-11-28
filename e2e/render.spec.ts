@@ -22,19 +22,35 @@ test("homepage renders with nav and hero", async ({ page }) => {
   await expect(page.locator("h1")).toContainText(
     "Roasted date seed coffee, naturally caffeine-free",
   );
-  const evening = page.getByRole("heading", {
-    level: 2,
-    name: "The perfect end to your day",
-  });
-  await expect(evening).toBeVisible();
-  expect(await evening.evaluate((el) => el.textContent ?? "")).toContain(
-    "perfect end",
+  await expect(
+    page.getByRole("link", { name: "Shop the bags" }),
+  ).toHaveAttribute("href", "#shop");
+  await expect(
+    page.getByRole("link", { name: "Try a 20g sample" }).first(),
+  ).toHaveAttribute("href", "#sample");
+  await expect(page.locator("body")).toContainText(
+    "$9.99 for one bag, $12.99 for 2 or more",
   );
+  await expect(
+    page.getByRole("heading", { level: 2, name: "Same seeds. Three grinds." }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { level: 2, name: "Try a 20g sample first" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      level: 2,
+      name: "The perfect end to your day",
+    }),
+  ).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "What is date seed coffee?" }).first(),
   ).toHaveAttribute("href", "/date-seed-coffee");
-  // Primary nav shop link is present
   await expect(page.getByRole("link", { name: "Shop" }).first()).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Try a sample" }).first(),
+  ).toHaveAttribute("href", "/#sample");
+  await expect(page.getByText(/\borganic\b/i)).toHaveCount(0);
 });
 
 const editorialRoutes = ["/journal", "/privacy", "/terms"];

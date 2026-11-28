@@ -9,6 +9,10 @@ const linkColumns: {
   {
     title: "Shop",
     links: [
+      { label: "DateSpresso", href: "/products/datespresso" },
+      { label: "GrounDate", href: "/products/groundate" },
+      { label: "Eastern Brew", href: "/products/eastern-brew" },
+      { label: "All Products", href: "/products" },
       { label: "What is date seed coffee?", href: "/date-seed-coffee" },
       {
         label: "How to make date seed coffee",
@@ -19,10 +23,6 @@ const linkColumns: {
         href: "/date-seed-coffee-vs-coffee",
       },
       { label: "Caffeine-free latte", href: "/caffeine-free-latte" },
-      { label: "All Products", href: "/products" },
-      { label: "Eastern Brew", href: "/products/eastern-brew" },
-      { label: "GrounDate", href: "/products/groundate" },
-      { label: "DateSpresso", href: "/products/datespresso" },
     ],
   },
   {
@@ -300,7 +300,7 @@ export function Footer() {
               marginBottom: 16,
             }}
           >
-            Join our community for brewing tips, stories, and exclusive offers.
+            Brewing tips and new roast news. No spam.
           </p>
           <form
             onSubmit={onSubmit}

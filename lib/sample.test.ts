@@ -5,6 +5,7 @@ import {
   SAMPLE_GRINDS,
   SAMPLE_MAX_PER_ORDER,
   SAMPLE_TERMS,
+  SAMPLE_TERMS_SHORT,
   bagHandleForBlend,
   cartExceedsSampleLimit,
   cartHasSample,
@@ -167,4 +168,11 @@ test("sample copy never promises free shipping or uses banned claims", () => {
   assert.match(SAMPLE_TERMS, /only difference is the grind size/);
   assert.match(SAMPLE_TERMS, /One of each blend per order/);
   assert.doesNotMatch(SAMPLE_TERMS, /free shipping|ships free|organic/i);
+});
+
+test("homepage sample terms stay short and within claim rules", () => {
+  assert.match(SAMPLE_TERMS_SHORT, /Enough for one cup/);
+  assert.match(SAMPLE_TERMS_SHORT, /\$0/);
+  assert.match(SAMPLE_TERMS_SHORT, /you pay shipping at checkout/);
+  assert.doesNotMatch(SAMPLE_TERMS_SHORT, /free shipping|ships free|organic/i);
 });

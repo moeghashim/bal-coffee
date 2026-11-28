@@ -49,8 +49,8 @@ function CartIcon({ count = 0 }: { count?: number }) {
       aria-label="View cart"
       style={{
         position: "relative",
-        width: 36,
-        height: 36,
+        width: 44,
+        height: 44,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -111,9 +111,8 @@ export function Nav() {
 
   const links = [
     { href: "/products", label: "Shop" },
-    { href: "/date-seed-coffee", label: "Date Seed Coffee" },
+    { href: "/#sample", label: "Try a sample" },
     { href: "/about", label: "About" },
-    { href: "/#process", label: "Process" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -152,6 +151,8 @@ export function Nav() {
           <a
             key={l.label}
             href={l.href}
+            className="bal-nav-link"
+            onClick={() => setMobileOpen(false)}
             style={{
               transition: "color .2s ease",
             }}
