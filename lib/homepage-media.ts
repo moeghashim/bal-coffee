@@ -2,9 +2,9 @@
 
 export const heroPhoto = {
   src: "/homepage/hero-bags.jpg",
-  alt: "12 oz bags of DateSpresso, GrounDate, and Eastern Brew, roasted from date seeds",
-  width: 2000,
-  height: 839,
+  alt: "12 oz bags of DateSpresso, GrounDate, and Eastern Brew, roasted from date seeds, with dates in front",
+  width: 2400,
+  height: 1600,
 } as const;
 
 export const bagCardPhotos: Record<
@@ -30,6 +30,20 @@ export const bagCardPhotos: Record<
     height: 1500,
   },
 };
+
+export const samplePhoto = {
+  src: "/homepage/sample-pour.jpg",
+  alt: "GrounDate date seed coffee poured over ice, with the bag and dates beside the cup",
+  width: 2000,
+  height: 1333,
+} as const;
+
+export const processPhoto = {
+  src: "/homepage/process-seeds.jpg",
+  alt: "Whole dates, raw and roasted date seeds, and a tablespoon of ground date seed coffee",
+  width: 2000,
+  height: 1500,
+} as const;
 
 /** Short taste + brew lines. Allowed claims only; no health language. */
 export const bagTasteLines: Record<string, string> = {

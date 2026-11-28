@@ -1,3 +1,6 @@
+import Image from "next/image";
+import { processPhoto } from "lib/homepage-media";
+
 const iconStroke = "#cdb892";
 
 function StepSeed() {
@@ -169,94 +172,106 @@ export function Process() {
       }}
     >
       <BotanicalRight />
-      <div
-        className="bal-process-grid"
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "0.9fr 1px repeat(4, 1fr)",
-          gap: 28,
-          alignItems: "start",
-          position: "relative",
-        }}
-      >
-        <div>
-          <p
-            className="mono"
-            style={{
-              fontSize: 10,
-              letterSpacing: "0.24em",
-              textTransform: "uppercase",
-              color: "#bdb08a",
-            }}
-          >
-            The ritual
-          </p>
-          <h2
-            className="serif"
-            style={{
-              marginTop: 14,
-              fontSize: "clamp(32px, 3vw, 44px)",
-              lineHeight: 1.05,
-              fontWeight: 500,
-              letterSpacing: "-0.01em",
-              color: "#f1eacf",
-            }}
-          >
-            How date seed coffee is made
-          </h2>
-          <div className="bal-process-links">
-            <a href="/date-seed-coffee">What is date seed coffee?</a>
-            <a href="/how-to-make-date-seed-coffee">How to make it</a>
-            <a href="/date-seed-coffee-vs-coffee">Date seed coffee vs coffee</a>
-          </div>
-        </div>
+      <div className="bal-process-inner">
         <div
-          className="bal-process-divider"
+          className="bal-process-grid"
           style={{
-            width: 1,
-            height: "100%",
-            background: "rgba(255,255,255,0.18)",
+            display: "grid",
+            gridTemplateColumns: "0.9fr 1px repeat(4, 1fr)",
+            gap: 28,
+            alignItems: "start",
+            position: "relative",
           }}
-        />
-        {steps.map((s) => (
-          <div key={s.num}>
-            <div style={{ marginBottom: 14 }}>{s.icon}</div>
-            <h3
+        >
+          <div>
+            <p
+              className="mono"
+              style={{
+                fontSize: 10,
+                letterSpacing: "0.24em",
+                textTransform: "uppercase",
+                color: "#bdb08a",
+              }}
+            >
+              The ritual
+            </p>
+            <h2
               className="serif"
               style={{
-                fontSize: 22,
+                marginTop: 14,
+                fontSize: "clamp(32px, 3vw, 44px)",
+                lineHeight: 1.05,
                 fontWeight: 500,
+                letterSpacing: "-0.01em",
                 color: "#f1eacf",
-                marginBottom: 10,
               }}
             >
-              <span
-                className="mono"
+              How date seed coffee is made
+            </h2>
+            <div className="bal-process-links">
+              <a href="/date-seed-coffee">What is date seed coffee?</a>
+              <a href="/how-to-make-date-seed-coffee">How to make it</a>
+              <a href="/date-seed-coffee-vs-coffee">
+                Date seed coffee vs coffee
+              </a>
+            </div>
+          </div>
+          <div
+            className="bal-process-divider"
+            style={{
+              width: 1,
+              height: "100%",
+              background: "rgba(255,255,255,0.18)",
+            }}
+          />
+          {steps.map((s) => (
+            <div key={s.num}>
+              <div style={{ marginBottom: 14 }}>{s.icon}</div>
+              <h3
+                className="serif"
                 style={{
-                  fontSize: 14,
-                  marginRight: 8,
-                  color: "#bdb08a",
-                  letterSpacing: "0.04em",
+                  fontSize: 22,
+                  fontWeight: 500,
+                  color: "#f1eacf",
+                  marginBottom: 10,
                 }}
               >
-                {s.num}.
-              </span>
-              {s.title}
-            </h3>
-            <p
-              style={{
-                fontSize: 13,
-                lineHeight: 1.6,
-                color: "#cfc6a8",
-                whiteSpace: "pre-line",
-              }}
-            >
-              {s.body}
-            </p>
-          </div>
-        ))}
+                <span
+                  className="mono"
+                  style={{
+                    fontSize: 14,
+                    marginRight: 8,
+                    color: "#bdb08a",
+                    letterSpacing: "0.04em",
+                  }}
+                >
+                  {s.num}.
+                </span>
+                {s.title}
+              </h3>
+              <p
+                style={{
+                  fontSize: 13,
+                  lineHeight: 1.6,
+                  color: "#cfc6a8",
+                  whiteSpace: "pre-line",
+                }}
+              >
+                {s.body}
+              </p>
+            </div>
+          ))}
+        </div>
+        <figure className="bal-process-photo">
+          <Image
+            src={processPhoto.src}
+            alt={processPhoto.alt}
+            width={processPhoto.width}
+            height={processPhoto.height}
+            sizes="(max-width: 1180px) calc(100vw - 48px), 1180px"
+            className="bal-process-photo-image"
+          />
+        </figure>
       </div>
     </section>
   );
